@@ -21,7 +21,7 @@ public abstract class Account {
         if(amount > 0) {
             this.balance += amount;
         } else {
-            //DO STUFF?
+            //TODO
         }
     }
     
