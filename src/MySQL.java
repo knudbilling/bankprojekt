@@ -50,6 +50,22 @@ public class MySQL implements Persistance {
 
     @Override
     public boolean updateCustomer(Customer customer) {
+        // Update customer
+        String query = "update customers set firstname = ? ,lastname = ?, address = ?, phone = ? where customerID=?;";
+        try {
+            PreparedStatement pst = connection.prepareStatement(query);
+            pst.setString(1, customer.firstName);
+            pst.setString(2, customer.lastName);
+            pst.setString(3, customer.address);
+            pst.setString(4, customer.phoneNo);
+            pst.setInt(5, customer.idNo);
+            pst.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        // TODO: delete all customer account refs
+        // TODO: add back customer account refs
         return true;
     }
 
@@ -76,7 +92,7 @@ public class MySQL implements Persistance {
             try {
                 PreparedStatement pst = connection.prepareStatement(query);
                 pst.setInt(1, customer.idNo);
-                pst.setString(2, a.accountnr);
+//                pst.setString(2, a.accountnr);
                 pst.executeUpdate();
             } catch (SQLException e) {
                 e.printStackTrace();
