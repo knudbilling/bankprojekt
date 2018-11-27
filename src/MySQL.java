@@ -55,6 +55,8 @@ public class MySQL implements Persistance {
 
     @Override
     public boolean addCustomer(Customer customer) {
+
+        // Add customer
         String query = "insert into customers (customerID,firstname,lastname,address,phone) values (?,?,?,?,?);";
         try {
             PreparedStatement pst = connection.prepareStatement(query);
@@ -66,6 +68,20 @@ public class MySQL implements Persistance {
             pst.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+
+        // Add account connections
+        for(Account a:customer.accountList){
+            query = "insert into customerAccounts (c_id, a_id) values (?,?);";
+            try {
+                PreparedStatement pst = connection.prepareStatement(query);
+                pst.setInt(1, customer.idNo);
+                pst.setString(2, a.accountnr);
+                pst.executeUpdate();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
         }
         return true;
     }
