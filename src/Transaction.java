@@ -49,6 +49,7 @@ public class Transaction {
         if(AccountNumber.isLocal(bank,toAccountString)) {
             this.toAccount = AccountNumber.getAccount(bank, toAccountString);
         } else {
+            // TODO: check if account exists in foreign bank
             this.note=toAccountString;
  // TODO           toAccount=bank.interBankAccount;
         }
