@@ -87,7 +87,7 @@ public class MySQL implements Persistance {
         }
 
         // Add account connections
-        for(Account a:customer.accountList){
+        for (Account a : customer.accountList) {
             query = "insert into customerAccounts (c_id, a_id) values (?,?);";
             try {
                 PreparedStatement pst = connection.prepareStatement(query);
