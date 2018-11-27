@@ -8,13 +8,24 @@ public class CustomerMainTestJohannesA {
 
         System.out.println(firstCustomer.toString());
 
-        Customer secondCustomer = new Customer("Johannes", "Linde-Hansen", "My home", "12345678");
+        Account firstAccountFirstCustomer = new Account("First Account");
+        firstCustomer.addAccount(firstAccountFirstCustomer);
 
-        System.out.println(secondCustomer.toString());
+        firstCustomer.printAccountList();
 
-        Customer thirdCustomer = new Customer("Johannes", "Linde-Hansen", "My home", "12345678");
 
-        System.out.println(thirdCustomer.toString());
+
+
+
+
+
+        //Customer secondCustomer = new Customer("Johannes", "Linde-Hansen", "My home", "12345678");
+
+       // System.out.println(secondCustomer.toString());
+
+        //Customer thirdCustomer = new Customer("Johannes", "Linde-Hansen", "My home", "12345678");
+
+        //System.out.println(thirdCustomer.toString());
 
     }
 }

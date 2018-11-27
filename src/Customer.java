@@ -23,7 +23,9 @@ public class Customer {
         this.phoneNo = phoneNo;
     }
     //default constructor.
-    public Customer() {idNo = nextidNo++}
+    public Customer() {
+        idNo = nextidNo++;
+    }
 
 
     //Methods
@@ -40,12 +42,15 @@ public class Customer {
                 + this.address + "phone number: " + this.phoneNo + " idNo: " + this.idNo;
     }
 
-    private void addAccount(Account){
+    public void addAccount(Account ac){
         // this.Account
-        accountListt.add(Account);
-
+        accountList.add(ac);
     }
-
+    public void printAccountList(){
+        for(int i = 0; i < accountList.size(); i++) {
+            System.out.println(accountList.get(i).toString() + "   ");
+        }
+    }
 
 
 
