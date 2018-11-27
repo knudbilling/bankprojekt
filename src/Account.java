@@ -1,5 +1,4 @@
 public abstract class Account {
-
     protected final String accountNo;
     protected long balance;
     protected long overdraftAllowed;
@@ -21,10 +20,10 @@ public abstract class Account {
         if(amount > 0) {
             this.balance += amount;
         } else {
-            //TODO
+            //DO STUFF?
         }
     }
-
+    
     /**
      * Abstract method to be implemented by subclasses.
      * Handling withdrawal of money from accounts.
@@ -36,6 +35,7 @@ public abstract class Account {
     public long getBalance() { return this.balance; }
     public long getOverdraftAllowed() { return this.overdraftAllowed; }
     public int getInterestRate() { return this.interestRate; }
+
 
     public void setOverdraftAllowed(long overdraftAllowed) {
         this.overdraftAllowed = overdraftAllowed;

@@ -1,15 +1,11 @@
-
-
-import static org.junit.Assert.fail;
-
+import static org.junit.Assert.*;
 import org.junit.Test;
 
+class TestBank {
 
-public class TestBank {
-
-	@Test
-	void test() {
-		fail("Not yet implemented");
-	}
+    @Test
+    void test() {
+        fail("Not yet implemented");
+    }
 
 }
