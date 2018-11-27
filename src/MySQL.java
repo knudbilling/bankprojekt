@@ -4,22 +4,21 @@ import java.util.List;
 
 public class MySQL implements Persistance {
 
-    private static final String DB_HOSTNAME="localhost";
-    private static final String DB_PORT="3306";
-    private static final String DB_USERNAME="user";
-    private static final String DB_PASSWORD="1234";
-    private static final String DB_SCHEMA="bank";
+    private static final String DB_HOSTNAME = "localhost";
+    private static final String DB_PORT = "3306";
+    private static final String DB_USERNAME = "user";
+    private static final String DB_PASSWORD = "1234";
+    private static final String DB_SCHEMA = "bank";
 
-    private static final String MYSQL_BACKUP="backup.sql";
+    private static final String MYSQL_BACKUP = "backup.sql";
 
     private static Connection connection;
     private static ResultSet resultSet;
 
 
-
-    public MySQL(){
+    public MySQL() {
         // Make connection if it does not already exists
-        if(connection==null) {
+        if (connection == null) {
             String DB_Url = "jdbc:mysql://" + DB_HOSTNAME + ":" + DB_PORT + "/" + "?serverTimeZone=CET";
 
             // Check that correct driver exists
@@ -40,80 +39,130 @@ public class MySQL implements Persistance {
             }
 
             // Connect to the right schema
-            update("use "+DB_SCHEMA+";");
+            update("use " + DB_SCHEMA + ";");
         }
     }
 
     @Override
-    public boolean updateBank(Bank bank){
-        return true;
-    }
-    @Override
-    public boolean updateCustomer(Customer customer){
-        return true;
-    }
-    @Override
-    public boolean addCustomer(Customer customer){
-        return true;
-    }
-    @Override
-    public boolean updateAccount(Account account){
-        return true;
-    }
-    @Override
-    public boolean addAccount(Account account){
-        return true;
-    }
-    @Override
-    public boolean addTransaction(Transaction transaction){
+    public boolean updateBank(Bank bank) {
         return true;
     }
 
     @Override
-    public boolean saveAll(Bank bank){
+    public boolean updateCustomer(Customer customer) {
+        // Update customer
+        String query = "update customers set firstname = ? ,lastname = ?, address = ?, phone = ? where customerID=?;";
+        try {
+            PreparedStatement pst = connection.prepareStatement(query);
+            pst.setString(1, customer.firstName);
+            pst.setString(2, customer.lastName);
+            pst.setString(3, customer.address);
+            pst.setString(4, customer.phoneNo);
+            pst.setInt(5, customer.idNo);
+            pst.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        // TODO: delete all customer account refs
+        // TODO: add back customer account refs
         return true;
     }
 
     @Override
-    public Bank loadBank(){
+    public boolean addCustomer(Customer customer) {
+
+        // Add customer
+        String query = "insert into customers (customerID,firstname,lastname,address,phone) values (?,?,?,?,?);";
+        try {
+            PreparedStatement pst = connection.prepareStatement(query);
+            pst.setInt(1, customer.idNo);
+            pst.setString(2, customer.firstName);
+            pst.setString(3, customer.lastName);
+            pst.setString(4, customer.address);
+            pst.setString(5, customer.phoneNo);
+            pst.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        // Add account connections
+        for (Account a : customer.accountList) {
+            query = "insert into customerAccounts (c_id, a_id) values (?,?);";
+            try {
+                PreparedStatement pst = connection.prepareStatement(query);
+                pst.setInt(1, customer.idNo);
+//                pst.setString(2, a.accountnr);
+                pst.executeUpdate();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+        }
+        return true;
+    }
+
+    @Override
+    public boolean updateAccount(Account account) {
+        return true;
+    }
+
+    @Override
+    public boolean addAccount(Account account) {
+        return true;
+    }
+
+    @Override
+    public boolean addTransaction(Transaction transaction) {
+        return true;
+    }
+
+    @Override
+    public boolean saveAll(Bank bank) {
+        return true;
+    }
+
+    @Override
+    public Bank loadBank() {
         return null;
     }
+
     @Override
-    public Bank loadAll(){
+    public Bank loadAll() {
         return null;
     }
 
     @Override
     public boolean resetPersistance() {
-        update("drop database if exists "+DB_SCHEMA+";");
-        update("create database if not exists "+DB_SCHEMA+";");
-        update("use "+DB_SCHEMA+";");
-        update("create table accounts ("+
+        update("drop database if exists " + DB_SCHEMA + ";");
+        update("create database if not exists " + DB_SCHEMA + ";");
+        update("use " + DB_SCHEMA + ";");
+        update("create table accounts (" +
                 "accountNumber char(20), " +
-                "balance bigint, "+
-                "interestRate int, "+
-                "allowedOverdraft bigint, "+
-                "accountType char(1), "+
-                "primary key (accountNumber) "+
+                "balance bigint, " +
+                "interestRate int, " +
+                "allowedOverdraft bigint, " +
+                "accountType char(1), " +
+                "primary key (accountNumber) " +
                 ");");
-        update("create table customers ("+
-                "customerID varchar(45), "+
-                "firstName varchar(45), "+
-                "lastName varchar(45), "+
-                "phone varchar(45), "+
-                "primary key (customerID) "+
+        update("create table customers (" +
+                "customerID varchar(45), " +
+                "firstName varchar(45), " +
+                "lastName varchar(45), " +
+                "phone varchar(45), " +
+                "primary key (customerID) " +
                 ");");
-        update("create table transactions ("+
-                "transactionID int, "+
-                "fromAccount varchar(14), "+
-                "toAccount varchar(14), "+
-                "amount bigint, "+
-                "primary key (transactionID) "+
+        update("create table transactions (" +
+                "transactionID int, " +
+                "fromAccount varchar(14), " +
+                "toAccount varchar(14), " +
+                "amount bigint, " +
+                "primary key (transactionID) " +
                 ")");
-        update("create table bank ("+
-                "thekey varchar(45), "+
-                "thevalue varchar(45), "+
-                "primary key (thekey) "+
+        update("create table bank (" +
+                "thekey varchar(45), " +
+                "thevalue varchar(45), " +
+                "primary key (thekey) " +
                 ");");
 
         return true;
@@ -121,8 +170,8 @@ public class MySQL implements Persistance {
 
     private void query(String query) {
         try {
-            resultSet=connection.createStatement().executeQuery(query);
-        } catch(SQLException ex) {
+            resultSet = connection.createStatement().executeQuery(query);
+        } catch (SQLException ex) {
             System.out.println("***ERROR: MySQL query did not execute***");
             ex.printStackTrace();
         }
@@ -131,16 +180,16 @@ public class MySQL implements Persistance {
     private void update(String query) {
         try {
             connection.createStatement().executeUpdate(query);
-        } catch(SQLException ex) {
+        } catch (SQLException ex) {
             System.out.println("***ERROR: MySQL update did not execute***");
             ex.printStackTrace();
         }
     }
 
-    public boolean backup(){
+    public boolean backup() {
 
-        int processComplete=0;
-        String command = "mysqldump -u "+DB_USERNAME+" -p"+DB_PASSWORD+" "+DB_SCHEMA+" -r "+MYSQL_BACKUP;
+        int processComplete = 0;
+        String command = "mysqldump -u " + DB_USERNAME + " -p" + DB_PASSWORD + " " + DB_SCHEMA + " -r " + MYSQL_BACKUP;
 
         Process runtimeProcess = null;
         try {
@@ -148,11 +197,11 @@ public class MySQL implements Persistance {
             processComplete = runtimeProcess.waitFor();
         } catch (IOException e) {
             e.printStackTrace();
-        } catch (InterruptedException e){
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
-        if(processComplete == 0){
+        if (processComplete == 0) {
             System.out.println("BMySQL backup successfull");
             return true;
         }
@@ -160,16 +209,16 @@ public class MySQL implements Persistance {
         return false;
     }
 
-    public boolean restore(){
+    public boolean restore() {
 
-        int processComplete=0;
+        int processComplete = 0;
         String command[] = new String[]
                 {"mysql",
-                DB_SCHEMA,
-                "-u" + DB_USERNAME,
-                "-p"+DB_PASSWORD,
-                "-e",
-                "source "+MYSQL_BACKUP};
+                        DB_SCHEMA,
+                        "-u" + DB_USERNAME,
+                        "-p" + DB_PASSWORD,
+                        "-e",
+                        "source " + MYSQL_BACKUP};
         try {
             Process runtimeProcess = Runtime.getRuntime().exec(command);
             processComplete = runtimeProcess.waitFor();
@@ -179,7 +228,7 @@ public class MySQL implements Persistance {
             e.printStackTrace();
         }
 
-        if(processComplete == 0){
+        if (processComplete == 0) {
             System.out.println("MySQL restore successfull");
             return true;
         }
