@@ -31,7 +31,10 @@ public class CurrentAccount extends Account{
      * Handling the Service Charge when allowed overdraft is surpassed.
      */
     private void handleServiceCharge() {
-        //TODO - Make a transaction of amount "SERVICE_CHARGE" to the Bank's own account?
+        //Makink a transaction of amount "SERVICE_CHARGE" to the Bank's own account.
+        String note = "Service Charge due to exeeding allowed overdraft.";
+        Transaction serviceCharge = new Transaction(this, Bank.getAccBank(), SERVICE_CHARGE, note);
+        Bank.addTransaction(serviceCharge);
     }
 
 }

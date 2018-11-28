@@ -51,7 +51,7 @@ public class AccountNumber {
         String reg=AccountNumber.getRegistrationNumber(account);
         if(reg==null)
             return false;
-        if(!reg.equals(bank.regNumber))
+        if(!reg.equals(bank.REG_NO))
             return false;
         return true;
     }

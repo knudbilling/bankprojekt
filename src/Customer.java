@@ -52,6 +52,18 @@ public class Customer {
         }
     }
 
+    public void newSavingsAccount(String accountNo) {
+        //If accountNo is taken throw exception?
+        SavingsAccount savingsAccount = new SavingsAccount(accountNo);
+        accountList.add(savingsAccount);
+        //Database?
+    }
 
+    public void newCurrentAccount(String accountNo) {
+        //If accountNo is taken throw exception?
+        CurrentAccount currentAccount = new CurrentAccount(accountNo);
+        accountList.add(currentAccount);
+        //Database?
+    }
 
 }
