@@ -17,11 +17,11 @@ public abstract class Account {
      * Handling the depositing of money into the account.
      * @param amount The amount of money to be deposited.
      */
-    public void deposit(long amount) {
+    public void deposit(long amount) throws IllegalArgumentException{
         if(amount > 0) {
             this.balance += amount;
         } else {
-            //TODO
+            throw new IllegalArgumentException("Depositing a negative amount of money is not supported.");
         }
     }
     
