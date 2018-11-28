@@ -1,6 +1,4 @@
-import java.io.IOException;
 import java.util.Date;
-import java.util.List;
 
 /**
  * @author Knud Billing
@@ -11,22 +9,32 @@ public class Transaction {
     Account toAccount;
     long amount;
     Date timestamp;
-    String note;
+    String bankReference;
 
     private Transaction(){
         timestamp=new Date();
     }
 
-    // Local transactions
-    public Transaction(Account fromAccount, Account toAccount, long amount, String note){
+    /**
+     * Constructor to use if both Account objects are known
+     * @param fromAccount
+     * @param toAccount
+     * @param amount
+     */
+    public Transaction(Account fromAccount, Account toAccount, long amount){
         this();
         this.fromAccount=fromAccount;
         this.toAccount=toAccount;
         this.amount=amount;
-        this.note=note;
     }
 
-    // Any transactions
+    /**
+     * Constructor to use is accounts are expressed with strings
+     * @param bank the local bank
+     * @param fromAccountString the account to move money from
+     * @param toAccountString the account to move money to
+     * @param amount the amount to move expressed in 'øre'
+     */
     public Transaction(Bank bank, String fromAccountString, String toAccountString, long amount){
         this();
 
@@ -37,7 +45,7 @@ public class Transaction {
 
         // fromAccount
         // Error on: fromAccount is in an invalid format
-        if(!AccountNumber.isValid(fromAccountString))
+        if(!AccountNumber.isValidFormat(fromAccountString))
             throw new NumberFormatException();
         // Error on: fromAccount is not local
         if(!AccountNumber.isLocal(bank,fromAccountString))
@@ -46,16 +54,16 @@ public class Transaction {
 
         // toAccount
         // Error on: toAccount is in an invalid format
-        if(!AccountNumber.isValid(toAccountString))
+        if(!AccountNumber.isValidFormat(toAccountString))
             throw new NumberFormatException();
 
-        // Local or external toAccount
+        // Local toAccount
         if(AccountNumber.isLocal(bank,toAccountString)) {
             this.toAccount = AccountNumber.getAccount(bank, toAccountString);
-        } else {
+        } else { // External toAccount
             // TODO: check if account exists in foreign bank
-            this.note=toAccountString;
- // TODO           toAccount=bank.interBankAccount;
+            this.bankReference =toAccountString;
+            // TODO: definer en interbankkonto så:  toAccount=bank.interBankAccount;
         }
     }
 

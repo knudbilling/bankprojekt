@@ -57,13 +57,7 @@ public interface Persistence {
      *
      * @return
      */
-    Bank loadBank();
-
-    /**
-     *
-     * @return
-     */
-    Bank loadAll();
+    Bank reload();
 
     /**
      * Reset persistent storage so that it contains no data.

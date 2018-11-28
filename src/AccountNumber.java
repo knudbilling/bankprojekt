@@ -10,7 +10,7 @@ public class AccountNumber {
      * @return Registration number (4 digits). Null is account number is malformed.
      */
     public static String getRegistrationNumber(String account){
-        if(!AccountNumber.isValid(account))
+        if(!AccountNumber.isValidFormat(account))
             return null;
         return account.substring(0,3);
     }
@@ -21,7 +21,7 @@ public class AccountNumber {
      * @return The account number (10 digits). Null if the account number is malformed.
      */
     public static String getAccountNumber(String account){
-        if(!AccountNumber.isValid(account))
+        if(!AccountNumber.isValidFormat(account))
             return null;
         return account.substring(4);
     }
@@ -31,7 +31,7 @@ public class AccountNumber {
      * @param account Account number to test.
      * @return True is account number is valid. Otherwise false.
      */
-    public static boolean isValid(String account){
+    public static boolean isValidFormat(String account){
         if(account.length()!=14)
             return false;
         for(int i=0;i<account.length();i++){
@@ -51,9 +51,9 @@ public class AccountNumber {
         String reg=AccountNumber.getRegistrationNumber(account);
         if(reg==null)
             return false;
-        if(!reg.equals(bank.regNumber))
+/*        if(!reg.equals(Bank.REG_NO))
             return false;
-        return true;
+*/        return true;
     }
 
     /**
@@ -62,13 +62,13 @@ public class AccountNumber {
      * @param account The account to check.
      * @return True is the account exists in the supplied bank. Otherwise false.
      */
-    public static boolean exists(Bank bank, String account){
+    public static boolean existsInBank(Bank bank, String account){
         String accountNumber=AccountNumber.getAccountNumber(account);
-        for(Account a:bank.accountList){
+ /*       for(Account a:bank.accountList){
             if(a.accountNo==accountNumber)
                 return true;
         }
-        return false;
+*/        return false;
     }
 
     /**
@@ -79,10 +79,10 @@ public class AccountNumber {
      */
     public static Account getAccount(Bank bank, String account){
         String accountNumber=AccountNumber.getAccountNumber(account);
-        for(Account a:bank.accountList){
+ /*       for(Account a:bank.accountList){
             if(a.accountNo.equals(accountNumber));
                 return a;
         }
-        return null;
+*/        return null;
     }
 }

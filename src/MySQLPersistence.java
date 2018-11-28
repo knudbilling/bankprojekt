@@ -1,21 +1,40 @@
-import java.io.IOException;
 import java.sql.*;
 
-public class MySQL implements Persistence {
+public class MySQLPersistence implements Persistence {
 
-    private static final String DB_HOSTNAME = "localhost";
-    private static final String DB_PORT = "3306";
-    private static final String DB_USERNAME = "user";
-    private static final String DB_PASSWORD = "1234";
-    private static final String DB_SCHEMA = "bank";
+    private static String DB_HOSTNAME;
+    private static int DB_PORT;
+    private static String DB_USERNAME;
+    private static String DB_PASSWORD;
+    private static String DB_SCHEMA;
 
     private static final String MYSQL_BACKUP = "backup.sql";
 
     private static Connection connection;
     private static ResultSet resultSet;
 
+    /**
+     * Constructor using the default values
+     */
+    public MySQLPersistence() {
+        this("localhost",3306,"bank","user","1234");
+    }
 
-    public MySQL() {
+    /**
+     * Constructor for connecting to any MySQL server
+     * @param hostname the hostname of the server e.g. "localhost" or "127.0.0.1"
+     * @param port port to connect to. Usually 3306
+     * @param schema schema to use
+     * @param userName username to log into MySQL
+     * @param password password for the user
+     */
+    public MySQLPersistence(String hostname, int port, String schema, String userName, String password) {
+        DB_HOSTNAME=hostname;
+        DB_PORT=port;
+        DB_SCHEMA=schema;
+        DB_USERNAME=userName;
+        DB_PASSWORD=password;
+
         // Make connection if it does not already exists
         if (connection == null) {
             String DB_Url = "jdbc:mysql://" + DB_HOSTNAME + ":" + DB_PORT + "/" + "?serverTimeZone=CET";
@@ -38,7 +57,7 @@ public class MySQL implements Persistence {
             }
 
             // Connect to the right schema
-            update("use " + DB_SCHEMA + ";");
+            executeUpdate("use " + DB_SCHEMA + ";");
         }
     }
 
@@ -91,7 +110,7 @@ public class MySQL implements Persistence {
             try {
                 PreparedStatement pst = connection.prepareStatement(query);
                 pst.setInt(1, customer.idNo);
-//                pst.setString(2, a.accountnr);
+                pst.setString(2, a.accountNo);
                 pst.executeUpdate();
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -122,21 +141,16 @@ public class MySQL implements Persistence {
     }
 
     @Override
-    public Bank loadBank() {
-        return null;
-    }
-
-    @Override
-    public Bank loadAll() {
+    public Bank reload() {
         return null;
     }
 
     @Override
     public boolean resetPersistance() {
-        update("drop database if exists " + DB_SCHEMA + ";");
-        update("create database if not exists " + DB_SCHEMA + ";");
-        update("use " + DB_SCHEMA + ";");
-        update("create table accounts (" +
+        executeUpdate("drop database if exists " + DB_SCHEMA + ";");
+        executeUpdate("create database if not exists " + DB_SCHEMA + ";");
+        executeUpdate("use " + DB_SCHEMA + ";");
+        executeUpdate("create table accounts (" +
                 "accountNumber char(20), " +
                 "balance bigint, " +
                 "interestRate int, " +
@@ -144,21 +158,21 @@ public class MySQL implements Persistence {
                 "accountType char(1), " +
                 "primary key (accountNumber) " +
                 ");");
-        update("create table customers (" +
+        executeUpdate("create table customers (" +
                 "customerID varchar(45), " +
                 "firstName varchar(45), " +
                 "lastName varchar(45), " +
                 "phone varchar(45), " +
                 "primary key (customerID) " +
                 ");");
-        update("create table transactions (" +
+        executeUpdate("create table transactions (" +
                 "transactionID int, " +
                 "fromAccount varchar(14), " +
                 "toAccount varchar(14), " +
                 "amount bigint, " +
                 "primary key (transactionID) " +
                 ")");
-        update("create table bank (" +
+        executeUpdate("create table bank (" +
                 "thekey varchar(45), " +
                 "thevalue varchar(45), " +
                 "primary key (thekey) " +
@@ -167,7 +181,7 @@ public class MySQL implements Persistence {
         return true;
     }
 
-    private void query(String query) {
+    private void executeQuery(String query) {
         try {
             resultSet = connection.createStatement().executeQuery(query);
         } catch (SQLException ex) {
@@ -176,7 +190,7 @@ public class MySQL implements Persistence {
         }
     }
 
-    private void update(String query) {
+    private void executeUpdate(String query) {
         try {
             connection.createStatement().executeUpdate(query);
         } catch (SQLException ex) {
@@ -184,6 +198,11 @@ public class MySQL implements Persistence {
             ex.printStackTrace();
         }
     }
+
+    /*
+    // mysqldump er for system-specifikt til at kunne lave i Java.... samme med restore
+    // er der mon en SQL kommando der kan udføre det samme?
+
 
     public boolean backup() {
 
@@ -234,5 +253,5 @@ public class MySQL implements Persistence {
         System.out.println("MySQL restore failed");
         return false;
     }
-
+    */
 }

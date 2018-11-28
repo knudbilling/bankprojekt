@@ -4,13 +4,13 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 /**
- * @authot Knud Billing
+ * @author Knud Billing
  */
-public class MySQLPersistenceTest {
+public class MySQLPersistencePersistenceTest {
 
     @Test
     public void canConnectToMySQL(){
-        Persistence p=new MySQL();
+        Persistence p=new MySQLPersistence();
         assertNotNull(p);
     }
 
@@ -18,15 +18,8 @@ public class MySQLPersistenceTest {
 
     @Test
     public void canResetPersistance(){
-        Persistence p = new MySQL();
+        Persistence p = new MySQLPersistence();
         assert(p.resetPersistance());
     }
 
-    @Test
-    public void backupTest(){
-        MySQL p = new MySQL();
-        p.resetPersistance();
-        p.backup();
-        assert(true);
-    }
-}
+ }
