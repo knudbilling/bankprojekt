@@ -25,12 +25,12 @@ public class UserStoryTests {
         // user story 2:
         // As a bank employee, I want to create a savings account for a customer.
         SavingsAccount savingsAccount = new SavingsAccount("12340000000003");
-        bank.addAccount(customer, savingsAccount);
+//        bank.addAccount(customer, savingsAccount);
 
         // user story 3:
         //As a bank employee, I want to create a current account for a customer.
         CurrentAccount currentAccount = new CurrentAccount("12340000000004");
-        bank.addAccount(customer, currentAccount);
+//        bank.addAccount(customer, currentAccount);
 
         // user story 4:
         // As a bank employee, I want to allow compound interest to a savings account for a customer.
@@ -38,8 +38,8 @@ public class UserStoryTests {
 
         // user story 5:
         // As a bank administrator, I want to create a facility report of any given account’s status.
-        for(Account a: Bank.accountList)
-            a.printReport();
+//        for(Account a: Bank.accountList)
+//            a.printReport();
 
         // user story 6:
         // As a customer, I want to deposit money into my savings account.
