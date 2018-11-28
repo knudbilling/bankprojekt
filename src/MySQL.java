@@ -1,8 +1,7 @@
 import java.io.IOException;
 import java.sql.*;
-import java.util.List;
 
-public class MySQL implements Persistance {
+public class MySQL implements Persistence {
 
     private static final String DB_HOSTNAME = "localhost";
     private static final String DB_PORT = "3306";

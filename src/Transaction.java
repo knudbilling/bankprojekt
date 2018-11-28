@@ -2,13 +2,16 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * @author Knud Billing
+ */
 public class Transaction {
-    public int idNo;
-    public Account fromAccount;
-    public Account toAccount;
-    public long amount;
-    public Date timestamp;
-    public String note;
+    int idNo;
+    Account fromAccount;
+    Account toAccount;
+    long amount;
+    Date timestamp;
+    String note;
 
     private Transaction(){
         timestamp=new Date();
@@ -27,24 +30,25 @@ public class Transaction {
     public Transaction(Bank bank, String fromAccountString, String toAccountString, long amount){
         this();
 
-        // Error on: Is the amount negative
+        // Error on: amount is negative
         if(amount<0)
             throw new NumberFormatException();
         this.amount=amount;
 
         // fromAccount
-        // Error on: Is fromAccount in an invalid format
+        // Error on: fromAccount is in an invalid format
         if(!AccountNumber.isValid(fromAccountString))
             throw new NumberFormatException();
-        // Error on: Is the fromAccount non-local
+        // Error on: fromAccount is not local
         if(!AccountNumber.isLocal(bank,fromAccountString))
             throw new NumberFormatException();
         this.fromAccount=AccountNumber.getAccount(bank,fromAccountString);
 
         // toAccount
-        // Error on: Is toAccount in an invalid format
+        // Error on: toAccount is in an invalid format
         if(!AccountNumber.isValid(toAccountString))
             throw new NumberFormatException();
+
         // Local or external toAccount
         if(AccountNumber.isLocal(bank,toAccountString)) {
             this.toAccount = AccountNumber.getAccount(bank, toAccountString);
