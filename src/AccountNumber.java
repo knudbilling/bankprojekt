@@ -1,5 +1,5 @@
 /**
- * Helper class for dealing with accounts
+ * Helper class for dealing with account numbers
  */
 
 public class AccountNumber {
@@ -12,7 +12,7 @@ public class AccountNumber {
     public static String getRegistrationNumber(String account){
         if(!AccountNumber.isValidFormat(account))
             return null;
-        return account.substring(0,3);
+        return account.substring(0,4);
     }
 
     /**
@@ -42,44 +42,44 @@ public class AccountNumber {
     }
 
     /**
-     * Test if an account number is local to a specific bank.
-     * @param bank The bank to check against.
-     * @param account Full account number (14 digits).
+     * Test if an account has the same registration number as a specific bank instance
+     * @param bank The bank to check against
+     * @param account Full account number (14 digits)
      * @return True if the account has the same registration number af the supplied bank. Otherwise false.
      */
     public static boolean isLocal(Bank bank, String account){
         String reg=AccountNumber.getRegistrationNumber(account);
         if(reg==null)
             return false;
-/*        if(!reg.equals(Bank.REG_NO))
+        if(!reg.equals(bank.getRegNo()))
             return false;
-*/        return true;
+        return true;
     }
 
     /**
-     * Tests whether an account exists in a specific bank.
-     * @param bank The bank to check for the account.
-     * @param account The account to check.
+     * Tests whether an account exists in a specific bank instance
+     * @param bank The bank to check for the account
+     * @param account The account to check
      * @return True is the account exists in the supplied bank. Otherwise false.
      */
     public static boolean existsInBank(Bank bank, String account){
         String accountNumber=AccountNumber.getAccountNumber(account);
- /*       for(Account a:bank.accountList){
-            if(a.accountNo==accountNumber)
+ /*      for(Account a:bank.accountList){
+            if(a.accountNo.equals(accountNumber))
                 return true;
         }
-*/        return false;
+ */       return false;
     }
 
     /**
-     * Get an Account object from a specific bank identified by the supplied account number (14 digits).
-     * @param bank The bank to get the Account object from.
+     * Get an Account object identified by the supplied account from a bank intance
+     * @param bank The bank to get the Account object from
      * @param account The full account number (14 digits)
-     * @return The account object if it exists. Otherwise null;
+     * @return The account object if it exists. Otherwise null.
      */
     public static Account getAccount(Bank bank, String account){
         String accountNumber=AccountNumber.getAccountNumber(account);
- /*       for(Account a:bank.accountList){
+/*       for(Account a:bank.accountList){
             if(a.accountNo.equals(accountNumber));
                 return a;
         }
