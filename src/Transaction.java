@@ -4,12 +4,12 @@ import java.util.Date;
  * @author Knud Billing
  */
 public class Transaction {
-    int idNo;
-    Account fromAccount;
-    Account toAccount;
-    long amount;
-    Date timestamp;
-    String bankReference;
+    private int idNo;
+    private Account fromAccount;
+    private Account toAccount;
+    private long amount;
+    private Date timestamp;
+    private String bankReference;
 
     private Transaction(){
         timestamp=new Date();
