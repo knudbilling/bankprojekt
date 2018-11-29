@@ -1,7 +1,9 @@
+import java.util.ArrayList;
+
 public class UserStoryTests {
 
     public static void main(String[] args) {
-        Bank bank=new Bank("12341234567890",null,null);
+        Bank bank=new Bank("MinBank","1234","12341234567890", "12340000000002");
         Persistence persistence= new MySQLPersistence();
 
         Customer bankCustomer = new Customer("Golden","Bullion","Financial Plaza 1","98765432");

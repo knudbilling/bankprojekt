@@ -50,14 +50,14 @@ public class AccountNumberTest {
 
     @Test
     public void validLocalAccounts(){
-        Bank bank = new Bank("12340000000001",null,null);
+        Bank bank = new Bank("MinBank","1234","12340000000001", "12349999999999");
         assertTrue(AccountNumber.isLocal(bank,"12340000000000"));
         assertTrue(AccountNumber.isLocal(bank,"12349876598765"));
     }
 
     @Test
     public void invalidLocalAccounts() {
-        Bank bank = new Bank("12340000000000",null,null);
+        Bank bank = new Bank("MinBank","1234","12340000000000", "12349999999999");
         String regNo=bank.getRegNo();
         String testNo="1234";
         if(testNo.equals(regNo)) testNo="4321";

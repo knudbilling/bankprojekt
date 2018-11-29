@@ -45,4 +45,8 @@ public abstract class Account {
         this.interestRate = interestRate;
     }
 
+    public String getAccountStatus(){
+        return ""+getBalance();
+    }
+
 }

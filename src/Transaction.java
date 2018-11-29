@@ -4,15 +4,18 @@ import java.util.Date;
  * @author Knud Billing
  */
 public class Transaction {
-    private int idNo;
-    private Account fromAccount;
-    private Account toAccount;
-    private long amount;
-    private Date timestamp;
-    private String bankReference;
+    int idNo;
+    Account fromAccount;
+    Account toAccount;
+    long amount;
+    Date timestamp;
+    String bankReference;
+
+    static private int nextId=0;
 
     private Transaction(){
-        timestamp=new Date();
+        this.timestamp=new Date();
+        this.idNo=nextId++;
     }
 
     /**
@@ -67,4 +70,7 @@ public class Transaction {
         }
     }
 
+    public String toString(){
+        return fromAccount.accountNo + " " + toAccount.accountNo + " " + amount;
+    }
 }

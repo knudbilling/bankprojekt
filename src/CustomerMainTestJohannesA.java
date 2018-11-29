@@ -8,7 +8,7 @@ public class CustomerMainTestJohannesA {
 
         System.out.println(firstCustomer.toString());
 
-        Account firstAccountFirstCustomer = new Account("First Account");
+        Account firstAccountFirstCustomer = new SavingsAccount("First Account");
         firstCustomer.addAccount(firstAccountFirstCustomer);
 
         firstCustomer.printAccountList();
