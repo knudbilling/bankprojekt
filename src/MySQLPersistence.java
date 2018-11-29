@@ -56,6 +56,7 @@ public class MySQLPersistence implements Persistence {
                 e.printStackTrace();
             }
 
+            executeUpdate("create database if not exists "+DB_SCHEMA+";");
             // Connect to the right schema
             executeUpdate("use " + DB_SCHEMA + ";");
         }
