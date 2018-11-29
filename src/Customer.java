@@ -38,8 +38,8 @@ public class Customer {
 
     public String toString() {
         return "first name: " + this.firstName
-                + " last name: " + this.lastName + " address : "
-                + this.address + "phone number: " + this.phoneNo + " idNo: " + this.idNo;
+               + " last name: " + this.lastName + " address : "
+               + this.address + "phone number: " + this.phoneNo + " idNo: " + this.idNo;
     }
 
     public void addAccount(Account ac){
@@ -51,7 +51,6 @@ public class Customer {
             System.out.println(accountList.get(i).toString() + "   ");
         }
     }
-
 
 
 }

@@ -3,11 +3,11 @@ import java.util.ArrayList;
 public class Bank {
 
     //Fields
-    private static final String NAME = "BANKNAME"; //Navnet på vores bank ændres aldrig - så det kan ligeså godt være final.
-    private static final String REG_NO = "1234"; //Samme logik her.
+    private static final String NAME = "BANKNAME";
+    private static final String REG_NO = "1234";
     private static String ACC_BANK; // <-- Skal det være en String? Jeg ville umiddelbart gøre det til et "Account" objekt?
-    private static ArrayList<Customer> customerList; //Det er en liste af "Customer" objekter. Det er en god idé lige at specificere.
-    private static ArrayList<Transaction> transactions; //Samme logik her.
+    private static ArrayList<Customer> customerList;
+    private static ArrayList<Transaction> transactions;
 
     //Constructor
     public Bank(String accBank, ArrayList<Customer> personList, ArrayList<Transaction> transactions) {
@@ -16,25 +16,32 @@ public class Bank {
         this.transactions = transactions;
     }
 
-    public void addCustomer(Customer customer) {
-        //Her bør man måske checke om kunden findes i forvejen, og f.eks kaste en exception hvis dette er tilfældet.
+    public void addCustomer(Customer customer) throws Exception {
         customerList.add(customer);
         if(customerList.contains(customer)) {
-            throw new Exception();
             System.out.println("The customer already exists.");
+            throw new Exception();
         }
     }
 
     public void deleteCustomer(Customer customer) {
-        //Her bør nok være et check for om kunden findes, og evt blive kastet en exception hvis ikke.
-        customerList.remove(customer);
+        if(customerList.contains(customer)) {
+            customerList.remove(customer);
+            System.out.println("The customer has been successfully deleted.");
+        } else {
+            System.out.println("The customer does not exist or has already been deleted.");
+        }
     }
 
-    //Det er nok en god idé at have metoder der kan tilgå "transactions"-listen også.
-    //Efter samme logik som ved customer.
-    public void addTransaction(Transaction transaction) {}
-    public void deleteTransaction(Transaction transaction) {}
+    //Mangler der mere her?
+    public void addTransaction(Transaction transaction) {
+        transactions.add(transaction);
+    }
 
+    //Dette skal nok ikke være med, da man ikke skal redigere i transaktionernek
+    //public void deleteTransaction(Transaction transaction) {
+    //    transactions.add(transaction);
+    //}
 
     public String getName() {
         return NAME; }
