@@ -88,6 +88,10 @@ public class Bank {
         return transactionList;
     }
 
+    public List<Account> getAccountList(){
+        return accountList;
+    }
+
 
     public void setAccBank(String accBank) {
         this.ACC_BANK = accBank;

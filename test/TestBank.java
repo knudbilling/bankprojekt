@@ -92,6 +92,7 @@ public class TestBank {
 
 
     }
+
     @Test
     public void canDepositToSavingsAccount() {
         Bank bank=new Bank("MinBank","1234","12340000000001", "12340000000002");
@@ -100,6 +101,7 @@ public class TestBank {
 
         Account account = new SavingsAccount("12345678901234");
         customer.addAccount(account);
+        bank.addAccount(account);
 
         Transaction transaction = new Transaction(bank,"12340000000002","12345678901234",50000);
 
@@ -107,9 +109,106 @@ public class TestBank {
 
         bank.addTransaction(transaction);
 
+        assertEquals(50000,account.getBalance());
+    }
+    @Test
+    public void canDepositToCurrentAccount() {
+        Bank bank=new Bank("MinBank","1234","12340000000001", "12340000000002");
+        Customer customer=new Customer("firstname","lastname","address","phone");
+        bank.addCustomer(customer);
 
+        Account account = new CurrentAccount("12345678901234");
+        customer.addAccount(account);
+        bank.addAccount(account);
+
+        Transaction transaction = new Transaction(bank,"12340000000002","12345678901234",50000);
+
+        assertEquals(account, transaction.toAccount);
+
+        bank.addTransaction(transaction);
 
         assertEquals(50000,account.getBalance());
-
     }
+    @Test
+    public void canWithdrawFromSavingsAccount() {
+        Bank bank=new Bank("MinBank","1234","12340000000001", "12340000000002");
+        Customer customer=new Customer("firstname","lastname","address","phone");
+        bank.addCustomer(customer);
+
+        Account account = new SavingsAccount("12345678901234");
+        customer.addAccount(account);
+        bank.addAccount(account);
+
+        Transaction transaction = new Transaction(bank,"12345678901234","12340000000002",50000);
+
+       // assertEquals(account, transaction.toAccount);
+
+        bank.addTransaction(transaction);
+
+        assertEquals(50000, AccountNumber.getAccount(bank,bank.getCashAccount()).getBalance());
+    }
+    @Test
+    public void canWithdrawFromCurrentAccount() {
+        Bank bank=new Bank("MinBank","1234","12340000000001", "12340000000002");
+        Customer customer=new Customer("firstname","lastname","address","phone");
+        bank.addCustomer(customer);
+
+        Account account = new CurrentAccount("12345678901234");
+        customer.addAccount(account);
+        bank.addAccount(account);
+
+        Transaction transaction = new Transaction(bank,"12345678901234","12340000000002",50000);
+
+        // assertEquals(account, transaction.toAccount);
+
+        bank.addTransaction(transaction);
+
+        assertEquals(50000, AccountNumber.getAccount(bank,bank.getCashAccount()).getBalance());
+    }
+    @Test
+    public void canTransferWithSavingsAccount() {
+        Bank bank=new Bank("MinBank","1234","12340000000001", "12340000000002");
+        Customer customer=new Customer("firstname","lastname","address","phone");
+        bank.addCustomer(customer);
+
+        Account account = new CurrentAccount("12345678901234");
+        customer.addAccount(account);
+        bank.addAccount(account);
+        account = new SavingsAccount("12345678904321");
+        customer.addAccount(account);
+        bank.addAccount(account);
+
+        Transaction transaction = new Transaction(bank,"12340000000002","12345678904321",50000);
+        bank.addTransaction(transaction);
+
+        transaction = new Transaction(bank,"12345678904321","12345678901234",30000);
+        bank.addTransaction(transaction);
+
+        assertEquals(20000, AccountNumber.getAccount(bank,"12345678904321").getBalance());
+        assertEquals(30000, AccountNumber.getAccount(bank,"12345678901234").getBalance());
+    }
+
+    @Test
+    public void canTransferWithCurrentAccount() {
+        Bank bank=new Bank("MinBank","1234","12340000000001", "12340000000002");
+        Customer customer=new Customer("firstname","lastname","address","phone");
+        bank.addCustomer(customer);
+
+        Account account = new CurrentAccount("12345678901234");
+        customer.addAccount(account);
+        bank.addAccount(account);
+        account = new SavingsAccount("12345678904321");
+        customer.addAccount(account);
+        bank.addAccount(account);
+
+        Transaction transaction = new Transaction(bank,"12340000000002","12345678901234",50000);
+        bank.addTransaction(transaction);
+
+        transaction = new Transaction(bank,"12345678901234","12345678904321",30000);
+        bank.addTransaction(transaction);
+
+        assertEquals(20000, AccountNumber.getAccount(bank,"12345678901234").getBalance());
+        assertEquals(30000, AccountNumber.getAccount(bank,"12345678904321").getBalance());
+    }
+
 }
