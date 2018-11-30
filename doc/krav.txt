@@ -1,10 +1,10 @@
 Konstruktionskrav
 25 Der skal være pæne fejlbeskeder ved exceptions
 26 Der skal være pæne fejlbeskeder ved fejlslagne pengeoverførsler
-24 Alle ændringer skal straks gemmes i databasen
 
 Reliability-krav
 2 Der skal laves en backup hver dag ved midnat
+24 Alle ændringer skal straks gemmes i databasen
 
 GUI:
 4 Der skal være en GUI hvor kunden kan se kontooversigt med aktuelt indestående
