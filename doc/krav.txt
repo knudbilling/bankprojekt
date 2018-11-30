@@ -1,0 +1,14 @@
+1 Alle beløb skal være positive - negative beløb skal afvises
+2 Der skal laves en backup hver dag ved midnat
+3 Der skal en rentesats på kontoen
+4 Der skal være en GUI hvor kunden kan se kontooversigt med aktuelt indestående
+5 Fra opsparingskontoen må man kun overføre til egne konti
+6 Som med arbejder skal man kunne søge efter en bestemt kunde os se kundens oplysninger
+7 Der skal opkræves overtræksgebyr hvis man er mere i minus end tilladt
+8 Der skal være en kontrol af om modtagerkontoen eksisterer/er gyldig
+9 Hvis man overfører til en konto i en anden bank skal der opkræves et overførselsgebyr
+10 En opsparingskonto må aldrig gå i minus
+11 Der skal være en GUI hvor kunden kan overføre penge mellem egne konti
+12 Der skal være en GUI hvor kunden kan foretage overførsler til eksterne konti fra sine lønkonti
+13 Der skal være en GUI hvor man for en konto kan se: reg.nr. kontonr. kontotype, indestående, rentesats, tilladt overtræk
+

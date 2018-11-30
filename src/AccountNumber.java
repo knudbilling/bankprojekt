@@ -64,11 +64,11 @@ public class AccountNumber {
      */
     public static boolean existsInBank(Bank bank, String account){
         String accountNumber=AccountNumber.getAccountNumber(account);
- /*      for(Account a:bank.accountList){
+       for(Account a:bank.getAccountList()){
             if(a.accountNo.equals(accountNumber))
                 return true;
         }
- */       return false;
+        return false;
     }
 
     /**
@@ -78,11 +78,11 @@ public class AccountNumber {
      * @return The account object if it exists. Otherwise null.
      */
     public static Account getAccount(Bank bank, String account){
-        String accountNumber=AccountNumber.getAccountNumber(account);
-/*       for(Account a:bank.accountList){
-            if(a.accountNo.equals(accountNumber));
-                return a;
+        for(int i=0;i<bank.getAccountList().size();i++){
+            if(bank.getAccountList().get(i).accountNo.equals(account))
+                return bank.getAccountList().get(i);
         }
-*/        return null;
+        System.out.println("not found");
+        return null;
     }
 }

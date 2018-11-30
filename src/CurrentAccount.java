@@ -17,7 +17,12 @@ public class CurrentAccount extends Account{
     
     @Override
     public void withdraw(long amount) {
-        //Test
+        if (amount < 0 ){
+            System.out.println("amount is negative");
+            throw new NumberFormatException();
+        }
+        balance -= amount;
+
     }
 
 }
