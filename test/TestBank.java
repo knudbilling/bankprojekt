@@ -1,7 +1,8 @@
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.List;
+//import java.util.List;
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 
@@ -210,5 +211,43 @@ public class TestBank {
         assertEquals(20000, AccountNumber.getAccount(bank,"12345678901234").getBalance());
         assertEquals(30000, AccountNumber.getAccount(bank,"12345678904321").getBalance());
     }
+
+    @Test
+    public void canDeleteAccountFromCustomersAccountList() {
+        Bank bank=new Bank("MinBank","1234","12345678901234", "12340000000002");
+        Customer customer=new Customer("firstname","lastname","address","phone");
+        bank.addCustomer(customer);
+
+        String acNo = "12345678901234";
+        Account account = new SavingsAccount(acNo);
+        customer.addAccount(account);
+
+        String acNoAlt = "12345678901235";
+        account = new SavingsAccount(acNoAlt);
+        customer.addAccount(account);
+
+        account = new SavingsAccount("12345678901236");
+        customer.addAccount(account);
+
+        account = new SavingsAccount("12345678901237");
+        customer.addAccount(account);
+
+
+
+        assertEquals(customer.accountList.size(), 4);
+
+        customer.deleteAccount(acNo);
+
+        assertEquals(customer.accountList.size(), 3);
+
+        customer.deleteAccount(acNoAlt);
+
+        assertEquals(customer.accountList.size(), 2);
+
+
+    }
+
+
+
 
 }

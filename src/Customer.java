@@ -35,6 +35,7 @@ public class Customer {
     public void setidNo(){
         this.idNo = idNo;
     }
+    //public List<Account> getAccountList(){return this.accountList;}
 
     public String toString() {
         return "first name: " + this.firstName
@@ -42,11 +43,28 @@ public class Customer {
                + this.address + "phone number: " + this.phoneNo + " idNo: " + this.idNo;
     }
 
-    public void addAccount(Account ac){
+    public void addAccount(Account account){
         // this.Account
-        accountList.add(ac);
+        accountList.add(account);
+    }
+    public void deleteAccount(String accountNo){
+        if (accountList.size() <=0) {
+            System.out.println("accountList is empty");
+        }else{
+            for (int i = accountList.size() - 1; i >= 0; i--) {
+                // Looking for the accoutNo in accountList
+                if (accountList.get(i).getAccountNo() == accountNo) {
+                    if (accountList.get(i).getBalance() == 0) { // account balance needs to be zero in order to delete the account
+                        accountList.remove(i);
+                    } else {
+                        System.out.println("accountBalance needs to be zero in order to deleteAccount");
+                    }
+                }
+            }
+        }
     }
     public void printAccountList(){
+
         for(int i = 0; i < accountList.size(); i++) {
             System.out.println(accountList.get(i).toString() + "   ");
         }
