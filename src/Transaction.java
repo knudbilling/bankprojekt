@@ -34,11 +34,11 @@ public class Transaction {
     /**
      * Constructor to use is accounts are expressed with strings
      * @param bank the local bank
-     * @param fromAccountString the account to move money from
-     * @param toAccountString the account to move money to
+     * @param fromAccountNumber the account to move money from
+     * @param toAccountNumber the account to move money to
      * @param amount the amount to move expressed in 'øre'
      */
-    public Transaction(Bank bank, String fromAccountString, String toAccountString, long amount){
+    public Transaction(Bank bank, String fromAccountNumber, String toAccountNumber, long amount){
         this();
 
         // Error on: amount is negative
@@ -48,24 +48,24 @@ public class Transaction {
 
         // fromAccount
         // Error on: fromAccount is in an invalid format
-        if(!AccountNumber.isValidFormat(fromAccountString))
+        if(!AccountNumber.isValidFormat(fromAccountNumber))
             throw new NumberFormatException();
         // Error on: fromAccount is not local
-        if(!AccountNumber.isLocal(bank,fromAccountString))
+        if(!AccountNumber.isLocal(bank,fromAccountNumber))
             throw new NumberFormatException();
-        this.fromAccount=AccountNumber.getAccount(bank,fromAccountString);
+        this.fromAccount=AccountNumber.getAccount(bank,fromAccountNumber);
 
         // toAccount
         // Error on: toAccount is in an invalid format
-        if(!AccountNumber.isValidFormat(toAccountString))
+        if(!AccountNumber.isValidFormat(toAccountNumber))
             throw new NumberFormatException();
 
         // Local toAccount
-        if(AccountNumber.isLocal(bank,toAccountString)) {
-            this.toAccount = AccountNumber.getAccount(bank, toAccountString);
+        if(AccountNumber.isLocal(bank,toAccountNumber)) {
+            this.toAccount = AccountNumber.getAccount(bank, toAccountNumber);
         } else { // External toAccount
-            if (BankRegister.accountExists(toAccountString)) {
-                this.bankReference = toAccountString;
+            if (BankRegister.accountExists(toAccountNumber)) {
+                this.bankReference = toAccountNumber;
                 this.toAccount=AccountNumber.getAccount(bank,bank.getInterBankAccountNumber());
             } else {
                 throw new NumberFormatException();
