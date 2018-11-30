@@ -66,7 +66,7 @@ public class Transaction {
         } else { // External toAccount
             if (BankRegister.accountExists(toAccountString)) {
                 this.bankReference = toAccountString;
-                this.toAccount=AccountNumber.getAccount(bank,bank.getInterBankAccount());
+                this.toAccount=AccountNumber.getAccount(bank,bank.getInterBankAccountNumber());
             } else {
                 throw new NumberFormatException();
             }

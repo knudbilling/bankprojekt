@@ -1,6 +1,5 @@
 import org.junit.Test;
 
-import java.util.ArrayList;
 //import java.util.List;
 import java.util.*;
 
@@ -81,10 +80,7 @@ public class TestBank {
         a.withdraw(4000);
         assertEquals("6000", a.getAccountStatus());
 
-
-
         Transaction testTransaction = new Transaction(account, account,1000);
-
         bank.addTransaction(testTransaction);
 
         List<Transaction> tl = bank.getTransactionList(account);
@@ -105,9 +101,6 @@ public class TestBank {
         bank.addAccount(account);
 
         Transaction transaction = new Transaction(bank,"12340000000002","12345678901234",50000);
-
-        assertEquals(account, transaction.toAccount);
-
         bank.addTransaction(transaction);
 
         assertEquals(50000,account.getBalance());
@@ -123,9 +116,6 @@ public class TestBank {
         bank.addAccount(account);
 
         Transaction transaction = new Transaction(bank,"12340000000002","12345678901234",50000);
-
-        assertEquals(account, transaction.toAccount);
-
         bank.addTransaction(transaction);
 
         assertEquals(50000,account.getBalance());
@@ -142,11 +132,9 @@ public class TestBank {
 
         Transaction transaction = new Transaction(bank,"12345678901234","12340000000002",50000);
 
-       // assertEquals(account, transaction.toAccount);
-
         bank.addTransaction(transaction);
 
-        assertEquals(50000, AccountNumber.getAccount(bank,bank.getCashAccount()).getBalance());
+        assertEquals(50000, AccountNumber.getAccount(bank,bank.getCashAccountNumber()).getBalance());
     }
     @Test
     public void canWithdrawFromCurrentAccount() {
@@ -159,12 +147,9 @@ public class TestBank {
         bank.addAccount(account);
 
         Transaction transaction = new Transaction(bank,"12345678901234","12340000000002",50000);
-
-        // assertEquals(account, transaction.toAccount);
-
         bank.addTransaction(transaction);
 
-        assertEquals(50000, AccountNumber.getAccount(bank,bank.getCashAccount()).getBalance());
+        assertEquals(50000, AccountNumber.getAccount(bank,bank.getCashAccountNumber()).getBalance());
     }
     @Test
     public void canTransferWithSavingsAccount() {
@@ -232,8 +217,6 @@ public class TestBank {
         account = new SavingsAccount("12345678901237");
         customer.addAccount(account);
 
-
-
         assertEquals(customer.accountList.size(), 4);
 
         customer.deleteAccount(acNo);
@@ -243,8 +226,6 @@ public class TestBank {
         customer.deleteAccount(acNoAlt);
 
         assertEquals(customer.accountList.size(), 2);
-
-
     }
 
 
