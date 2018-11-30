@@ -8,16 +8,18 @@ public class Bank {
     private final String REG_NO;
     private String ACC_BANK; // <-- Skal det være en String? Jeg ville umiddelbart gøre det til et "Account" objekt?
     private String cashAccount;
+    private String interBankAccount;
     private ArrayList<Customer> customerList; //Det er en liste af "Customer" objekter. Det er en god idé lige at specificere.
     private ArrayList<Transaction> transactionList; //Samme logik her.
     private ArrayList<Account> accountList;
 
     //Constructor
-    public Bank(String name, String REG_NO, String accBank, String cashAccount) {
+    public Bank(String name, String REG_NO, String accBank, String cashAccount, String interBankAccount) {
         this.name = name;
         this.REG_NO = REG_NO;
         this.ACC_BANK = accBank;
         this.cashAccount=cashAccount;
+        this.interBankAccount=interBankAccount;
         this.customerList = new ArrayList<Customer>();
         this.transactionList = new ArrayList<Transaction>();
         this.accountList = new ArrayList<Account>();
@@ -26,6 +28,10 @@ public class Bank {
         account.interestRate=0;
         addAccount(account);
         account = new CurrentAccount(cashAccount);
+        account.overdraftAllowed=Long.MAX_VALUE;
+        account.interestRate=0;
+        addAccount(account);
+        account = new CurrentAccount(interBankAccount);
         account.overdraftAllowed=Long.MAX_VALUE;
         account.interestRate=0;
         addAccount(account);
@@ -103,6 +109,10 @@ public class Bank {
 
     public String getCashAccount() {
         return cashAccount;
+    }
+
+    public String getInterBankAccount() {
+        return interBankAccount;
     }
 
 

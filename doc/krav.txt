@@ -1,14 +1,38 @@
-1 Alle beløb skal være positive - negative beløb skal afvises
+Konstruktionskrav
+25 Der skal være pæne fejlbeskeder ved exceptions
+26 Der skal være pæne fejlbeskeder ved fejlslagne pengeoverførsler
+
+Reliability-krav
 2 Der skal laves en backup hver dag ved midnat
-3 Der skal en rentesats på kontoen
+24 Alle ændringer skal straks gemmes i databasen
+
+GUI:
 4 Der skal være en GUI hvor kunden kan se kontooversigt med aktuelt indestående
-5 Fra opsparingskontoen må man kun overføre til egne konti
+11 Der skal være en GUI hvor kunden kan overføre penge mellem egne konti
+12 Der skal være en GUI hvor kunden kan foretage overførsler til eksterne konti fra sine lønkonti
+13 Der skal være en GUI hvor kunden for en konto kan se: reg.nr. kontonr. kontotype, indestående, rentesats, tilladt overtræk
+
+14 Der skal være en GUI hvor banken kan oprette en ny kunde
+15 Der skal være en GUI hvor banken kan oprette en ny konto
+16 Der skal være en GUI hvor banken kan ændre rentesats på en konto
+17 Der skal være en GUI hvor banken kan ændre tilladt overtræk på en konto
+18 Der skal være en GUI hvor banken kan søge efter kunde på fuldt navn og se alle kontooplysninger for kunden
+19 Banken skal kunne sætte kontanter ind på en kundes konto
+20 Banken skal kunne hæve kontanter fra en kundes konto
 6 Som med arbejder skal man kunne søge efter en bestemt kunde os se kundens oplysninger
+
+Test
+22 Der skal oprettes minimum 10 konti
+23 Der skal oprettes minimum 5 kunder
+27 Til test skal benyttes reg.nr. 9800 og 9900
+28 Konti til testbrug (reg.nr. 9800 og 9900) skal slettes i databasen efter brug
+
+Business rules
+1 Alle beløb skal være positive - negative beløb skal afvises
+3 Der skal være en rentesats på kontoen
+5 Fra opsparingskontoen må man kun overføre til egne konti
 7 Der skal opkræves overtræksgebyr hvis man er mere i minus end tilladt
 8 Der skal være en kontrol af om modtagerkontoen eksisterer/er gyldig
 9 Hvis man overfører til en konto i en anden bank skal der opkræves et overførselsgebyr
 10 En opsparingskonto må aldrig gå i minus
-11 Der skal være en GUI hvor kunden kan overføre penge mellem egne konti
-12 Der skal være en GUI hvor kunden kan foretage overførsler til eksterne konti fra sine lønkonti
-13 Der skal være en GUI hvor man for en konto kan se: reg.nr. kontonr. kontotype, indestående, rentesats, tilladt overtræk
-
+21 Bankens kontantbeholdning må aldrig gå i minus (HUSK EN POSITIV KONTANTBEHOLDNING ER ET NEGATIVT TAL PÅ DENNE KONTO)
