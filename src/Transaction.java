@@ -64,9 +64,12 @@ public class Transaction {
         if(AccountNumber.isLocal(bank,toAccountString)) {
             this.toAccount = AccountNumber.getAccount(bank, toAccountString);
         } else { // External toAccount
-            // TODO: check if account exists in foreign bank
-            this.bankReference =toAccountString;
-            // TODO: definer en interbankkonto så:  toAccount=bank.interBankAccount;
+            if (BankRegister.accountExists(toAccountString)) {
+                this.bankReference = toAccountString;
+                this.toAccount=AccountNumber.getAccount(bank,bank.getInterBankAccount());
+            } else {
+                throw new NumberFormatException();
+            }
         }
     }
 

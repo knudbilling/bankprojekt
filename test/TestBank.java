@@ -9,7 +9,7 @@ public class TestBank {
 
     @Test
     public void canMakeNewCustomer() {
-        Bank bank=new Bank("MinBank","1234","12345678901234", "12340000000002");
+        Bank bank=new Bank("MinBank","1234","12345678901234", "12340000000002","12340000000009");
         Customer customer=new Customer("firstname","lastname","address","phone");
         bank.addCustomer(customer);
 
@@ -18,7 +18,7 @@ public class TestBank {
 
     @Test
     public void canMakeNewSavingsAccount() {
-        Bank bank=new Bank("MinBank","1234","12345678901234", "12340000000002");
+        Bank bank=new Bank("MinBank","1234","12345678901234", "12340000000002","12340000000009");
         Customer customer=new Customer("firstname","lastname","address","phone");
         bank.addCustomer(customer);
 
@@ -31,7 +31,7 @@ public class TestBank {
     }
     @Test
     public void canMakeNewCurrentAccount() {
-        Bank bank=new Bank("MinBank","1234","12345678901234", "12340000000002");
+        Bank bank=new Bank("MinBank","1234","12345678901234", "12340000000002","12340000000009");
         Customer customer=new Customer("firstname","lastname","address","phone");
         bank.addCustomer(customer);
 
@@ -44,7 +44,7 @@ public class TestBank {
     }
     @Test
     public void canSetInterestRateOnSavingsAccount() {
-        Bank bank=new Bank("MinBank","1234","12345678901234", "12340000000002");
+        Bank bank=new Bank("MinBank","1234","12345678901234", "12340000000002","12340000000009");
         Customer customer=new Customer("firstname","lastname","address","phone");
         bank.addCustomer(customer);
 
@@ -60,7 +60,7 @@ public class TestBank {
     }
     @Test
     public void canPrintAccountStatus() {
-        Bank bank=new Bank("MinBank","1234","12345678901234", "12340000000002");
+        Bank bank=new Bank("MinBank","1234","12345678901234", "12340000000002","12340000000009");
         Customer customer=new Customer("firstname","lastname","address","phone");
         bank.addCustomer(customer);
 
@@ -95,7 +95,7 @@ public class TestBank {
 
     @Test
     public void canDepositToSavingsAccount() {
-        Bank bank=new Bank("MinBank","1234","12340000000001", "12340000000002");
+        Bank bank=new Bank("MinBank","1234","12340000000001", "12340000000002","12340000000009");
         Customer customer=new Customer("firstname","lastname","address","phone");
         bank.addCustomer(customer);
 
@@ -113,7 +113,7 @@ public class TestBank {
     }
     @Test
     public void canDepositToCurrentAccount() {
-        Bank bank=new Bank("MinBank","1234","12340000000001", "12340000000002");
+        Bank bank=new Bank("MinBank","1234","12340000000001", "12340000000002","12340000000009");
         Customer customer=new Customer("firstname","lastname","address","phone");
         bank.addCustomer(customer);
 
@@ -131,7 +131,7 @@ public class TestBank {
     }
     @Test
     public void canWithdrawFromSavingsAccount() {
-        Bank bank=new Bank("MinBank","1234","12340000000001", "12340000000002");
+        Bank bank=new Bank("MinBank","1234","12340000000001", "12340000000002","12340000000009");
         Customer customer=new Customer("firstname","lastname","address","phone");
         bank.addCustomer(customer);
 
@@ -149,7 +149,7 @@ public class TestBank {
     }
     @Test
     public void canWithdrawFromCurrentAccount() {
-        Bank bank=new Bank("MinBank","1234","12340000000001", "12340000000002");
+        Bank bank=new Bank("MinBank","1234","12340000000001", "12340000000002","12340000000009");
         Customer customer=new Customer("firstname","lastname","address","phone");
         bank.addCustomer(customer);
 
@@ -167,7 +167,7 @@ public class TestBank {
     }
     @Test
     public void canTransferWithSavingsAccount() {
-        Bank bank=new Bank("MinBank","1234","12340000000001", "12340000000002");
+        Bank bank=new Bank("MinBank","1234","12340000000001", "12340000000002","12340000000009");
         Customer customer=new Customer("firstname","lastname","address","phone");
         bank.addCustomer(customer);
 
@@ -190,7 +190,7 @@ public class TestBank {
 
     @Test
     public void canTransferWithCurrentAccount() {
-        Bank bank=new Bank("MinBank","1234","12340000000001", "12340000000002");
+        Bank bank=new Bank("MinBank","1234","12340000000001", "12340000000002","12340000000009");
         Customer customer=new Customer("firstname","lastname","address","phone");
         bank.addCustomer(customer);
 
