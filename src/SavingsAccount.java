@@ -13,14 +13,14 @@ public class SavingsAccount extends Account
 
     public void withdraw(long amount)
     {
-        if(this.balance - amount < 0)
+        if(this.balance - amount < this.overdraftAllowed)
         {
             System.out.println("Transaction unsuccessfull");
         }
         else
         {
-            this.balance = this.balance - amount;
-    //        System.out.println("Transaction successfull");
+            this.balance -= amount;
+            System.out.println("Transaction successfull");
         }
     }
 }
