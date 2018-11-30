@@ -214,7 +214,7 @@ public class TestBank {
 
     @Test
     public void canDeleteAccountFromCustomersAccountList() {
-        Bank bank=new Bank("MinBank","1234","12345678901234", "12340000000002");
+        Bank bank=new Bank("MinBank","1234","12345678901234", "12340000000002","12340000000009");
         Customer customer=new Customer("firstname","lastname","address","phone");
         bank.addCustomer(customer);
 
