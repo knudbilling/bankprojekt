@@ -1,67 +1,31 @@
 import java.util.List;
 
-/**
- * @author Knud Billing
- */
 public interface Persistence {
+
+    void addBank(Bank bank);
+
     /**
      * Update the information about the bank in the persistent storage.
      * @param bank The bank to read information from.
-     * @return True if successful, otherwise false.
      */
-    boolean updateBank(Bank bank);
+    void updateBank(Bank bank);
 
-    /**
-     *  Add a customer to persistent storage.
-     * @param customer
-     * @return  True if successful, otherwise false.
-     */
-    boolean addCustomer(Customer customer);
+    void addCustomer(Bank bank, Customer customer);
 
-    /**
-     *
-     * @param customer
-     * @return True if successful, otherwise false.
-     */
-    boolean updateCustomer(Customer customer);
+    void updateCustomer(Bank bank, Customer customer);
 
-    /**
-     * Add an account to the persistent storage.
-     * @param account
-     * @return True if successful, otherwise false.
-     */
-    boolean addAccount(Account account);
+    void addAccount(Bank bank, Account account);
 
-    /**
-     *
-     * @param account
-     * @return True if successful, otherwise false.
-     */
-    boolean updateAccount(Account account);
+    void updateAccount(Bank bank, Account account);
 
-    /**
-     * Add a transaction to the persistemt storage.
-     * @param transaction
-     * @return True if successful, otherwise false.
-     */
-    boolean addTransaction(Transaction transaction);
+    void addTransaction(Bank bank, Transaction transaction);
 
-    /**
-     *
-     * @param bank
-     * @return True if successful, otherwise false.
-     */
-    boolean saveAll(Bank bank);
+    void save(Bank bank);
 
-    /**
-     *
-     * @return
-     */
-    Bank reload();
+    Bank load();
 
     /**
      * Reset persistent storage so that it contains no data.
-     * @return True if successful, otherwise false.
      */
-    boolean resetPersistance();
+    void resetPersistence();
 }

@@ -105,4 +105,23 @@ public class Bank {
         return tl;
     }
 
+    public int getCustomerNumber(Account account){
+        for(int i=0;i<customerList.size();i++){
+            for(int j=0;j<customerList.get(i).accountList.size();j++){
+                if(account==customerList.get(i).accountList.get(j))
+                    return customerList.get(i).idNo;
+            }
+        }
+        return 0;
+    }
+
+    boolean booksAreBalancing(){
+        long sum=0;
+
+        for(int i=0;i<accountList.size();i++)
+            sum+=accountList.get(i).getBalance();
+
+        return sum==0;
+    }
+
 }

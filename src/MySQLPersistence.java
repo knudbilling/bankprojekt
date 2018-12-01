@@ -6,41 +6,33 @@ public class MySQLPersistence implements Persistence {
     private static int DB_PORT;
     private static String DB_USERNAME;
     private static String DB_PASSWORD;
-    private static String DB_SCHEMA;
-
-    private static final String MYSQL_BACKUP = "backup.sql";
+    private static String DB_DATABASE;
 
     private static Connection connection;
-    private static ResultSet resultSet;
 
-    /**
-     * Constructor using the default values
-     */
-    public MySQLPersistence() {
-        this("localhost",3306,"bank","user","1234");
-    }
 
     /**
      * Constructor for connecting to any MySQL server
      * @param hostname the hostname of the server e.g. "localhost" or "127.0.0.1"
      * @param port port to connect to. Usually 3306
-     * @param schema schema to use
+     * @param database database to use
      * @param userName username to log into MySQL
      * @param password password for the user
      */
-    public MySQLPersistence(String hostname, int port, String schema, String userName, String password) {
-        DB_HOSTNAME=hostname;
-        DB_PORT=port;
-        DB_SCHEMA=schema;
-        DB_USERNAME=userName;
-        DB_PASSWORD=password;
+    public MySQLPersistence(String hostname, int port, String database, String userName, String password) {
 
         // Make connection if it does not already exists
         if (connection == null) {
+            DB_HOSTNAME=hostname;
+            DB_PORT=port;
+            DB_DATABASE =database;
+            DB_USERNAME=userName;
+            DB_PASSWORD=password;
+
             String DB_Url = "jdbc:mysql://" + DB_HOSTNAME + ":" + DB_PORT + "/" + "?serverTimeZone=CET";
 
             // Check that correct driver exists
-            // Only for telling the user whats wrong if we cannot connect to MySQL
+            // Only for telling the user what's wrong if we cannot connect to MySQL
             try {
                 DriverManager.getDriver(DB_Url);
             } catch (SQLException e) {
@@ -56,21 +48,41 @@ public class MySQLPersistence implements Persistence {
                 e.printStackTrace();
             }
 
-            executeUpdate("create database if not exists "+DB_SCHEMA+";");
-            // Connect to the right schema
-            executeUpdate("use " + DB_SCHEMA + ";");
+            executeUpdate("create database if not exists "+ DB_DATABASE +";");
+            executeUpdate("use " + DB_DATABASE + ";");
         }
     }
 
     @Override
-    public boolean updateBank(Bank bank) {
-        return true;
+    public void addBank(Bank bank){
+        throw new UnsupportedOperationException();
     }
 
     @Override
-    public boolean updateCustomer(Customer customer) {
-        // Update customer
-        String query = "update customers set firstname = ? ,lastname = ?, address = ?, phone = ? where customerID=?;";
+    public void updateBank(Bank bank){
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void addCustomer(Bank bank, Customer customer) {
+        String query = "insert into customers (ID, BankRegistrationNumber, FirstName, LastName, Address, PhoneNumber) values (?,?,?,?,?,?);";
+        try {
+            PreparedStatement pst = connection.prepareStatement(query);
+            pst.setInt(1, customer.idNo);
+            pst.setString(2, bank.getRegNo());
+            pst.setString(3, customer.firstName);
+            pst.setString(4, customer.lastName);
+            pst.setString(5, customer.address);
+            pst.setString(6, customer.phoneNo);
+            pst.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void updateCustomer(Bank bank, Customer customer) {
+        String query = "update customers set FirstName = ?, LastName = ?, Address = ?, PhoneNumber = ? where ID=? and BankRegistrationNumber=?;";
         try {
             PreparedStatement pst = connection.prepareStatement(query);
             pst.setString(1, customer.firstName);
@@ -78,117 +90,128 @@ public class MySQLPersistence implements Persistence {
             pst.setString(3, customer.address);
             pst.setString(4, customer.phoneNo);
             pst.setInt(5, customer.idNo);
+            pst.setString(6, bank.getRegNo());
             pst.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-        // TODO: delete all customer account refs
-        // TODO: add back customer account refs
-        return true;
     }
 
     @Override
-    public boolean addCustomer(Customer customer) {
-
-        // Add customer
-        String query = "insert into customers (customerID,firstname,lastname,address,phone) values (?,?,?,?,?);";
+    public void addAccount(Bank bank, Account account) {
+        String query = "insert into accounts (AccountNumber, BankRegistrationNumber, Balance, AccountType, AllowedOverdraft, InterestRate, CustomerID ) values (?,?,?,?,?,?,?);";
         try {
             PreparedStatement pst = connection.prepareStatement(query);
-            pst.setInt(1, customer.idNo);
-            pst.setString(2, customer.firstName);
-            pst.setString(3, customer.lastName);
-            pst.setString(4, customer.address);
-            pst.setString(5, customer.phoneNo);
+            pst.setString(1, AccountNumber.getShortNumber(account.accountNo));
+            pst.setString(2, bank.getRegNo());
+            pst.setLong(3, account.balance);
+            pst.setString(4, account instanceof CurrentAccount?"C":"S");
+            pst.setLong(5, account.overdraftAllowed);
+            pst.setInt(6, account.interestRate);
+            pst.setInt(7,bank.getCustomerNumber(account));
             pst.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
 
-        // Add account connections
-        for (Account a : customer.accountList) {
-            query = "insert into customerAccounts (c_id, a_id) values (?,?);";
-            try {
-                PreparedStatement pst = connection.prepareStatement(query);
-                pst.setInt(1, customer.idNo);
-                pst.setString(2, a.accountNo);
-                pst.executeUpdate();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-
+    @Override
+    public void updateAccount(Bank bank, Account account) {
+        String query = "update accounts set Balance = ?, AllowedOverdraft = ?, InterestRate = ?, CustomerID = ? where AccountNumber = ? and BankRegistrationNumber = ?;";
+        try {
+            PreparedStatement pst = connection.prepareStatement(query);
+            pst.setLong(1, account.balance);
+            pst.setLong(2, account.overdraftAllowed);
+            pst.setInt(3, account.interestRate);
+            pst.setInt(4, bank.getCustomerNumber(account));
+            pst.setString(5, AccountNumber.getShortNumber(account.accountNo));
+            pst.setString(6, bank.getRegNo());
+            pst.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-        return true;
     }
 
     @Override
-    public boolean updateAccount(Account account) {
-        return true;
+    public void addTransaction(Bank bank, Transaction transaction) {
+        String query = "insert into transactions (BankRegistrationNumber, FromAccount, ToAccount, Amount, TimeStamp, Reference) values (?,?,?,?,?,?);";
+        try {
+            PreparedStatement pst = connection.prepareStatement(query);
+            pst.setString(1, bank.getRegNo());
+            pst.setString(2, AccountNumber.getShortNumber(transaction.fromAccount.accountNo));
+            pst.setString(3, AccountNumber.getShortNumber(transaction.toAccount.accountNo));
+            pst.setLong(4, transaction.amount);
+            pst.setDate(5, new java.sql.Date(transaction.timestamp.getTime()));
+            pst.setString(6, transaction.bankReference);
+            pst.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        throw new UnsupportedOperationException();
     }
 
     @Override
-    public boolean addAccount(Account account) {
-        return true;
+    public void save(Bank bank) {
+        throw new UnsupportedOperationException();
     }
 
     @Override
-    public boolean addTransaction(Transaction transaction) {
-        return true;
+    public Bank load() {
+        throw new UnsupportedOperationException();
     }
 
     @Override
-    public boolean saveAll(Bank bank) {
-        return true;
-    }
-
-    @Override
-    public Bank reload() {
-        return null;
-    }
-
-    @Override
-    public boolean resetPersistance() {
-        executeUpdate("drop database if exists " + DB_SCHEMA + ";");
-        executeUpdate("create database if not exists " + DB_SCHEMA + ";");
-        executeUpdate("use " + DB_SCHEMA + ";");
+    public void resetPersistence() {
+        executeUpdate("drop database if exists " + DB_DATABASE + ";");
+        executeUpdate("create database if not exists " + DB_DATABASE + ";");
+        executeUpdate("use " + DB_DATABASE + ";");
         executeUpdate("create table accounts (" +
-                "accountNumber char(20), " +
-                "balance bigint, " +
-                "interestRate int, " +
-                "allowedOverdraft bigint, " +
-                "accountType char(1), " +
-                "primary key (accountNumber) " +
+                "AccountNumber varchar(10), " +
+                "BankRegistrationNumber varchar(4), "+
+                "CustomerID int, " +
+                "Balance bigint, " +
+                "InterestRate int, " +
+                "AllowedOverdraft bigint, " +
+                "AccountType varchar(1), " +
+                "primary key (AccountNumber) " +
                 ");");
         executeUpdate("create table customers (" +
-                "customerID varchar(45), " +
-                "firstName varchar(45), " +
-                "lastName varchar(45), " +
-                "phone varchar(45), " +
-                "primary key (customerID) " +
+                "ID int, " +
+                "BankRegistrationNumber varchar(4), " +
+                "FirstName varchar(45), " +
+                "LastName varchar(45), " +
+                "Address varchar(45), "+
+                "PhoneNumber varchar(45), " +
+                "primary key (ID) " +
                 ");");
         executeUpdate("create table transactions (" +
-                "transactionID int, " +
-                "fromAccount varchar(14), " +
-                "toAccount varchar(14), " +
-                "amount bigint, " +
-                "primary key (transactionID) " +
-                ")");
-        executeUpdate("create table bank (" +
-                "thekey varchar(45), " +
-                "thevalue varchar(45), " +
-                "primary key (thekey) " +
+                "ID int auto_increment, " +
+                "BankRegistrationNumber varchar(4), " +
+                "FromAccount varchar(10), " +
+                "ToAccount varchar(10), " +
+                "Amount bigint, " +
+                "Reference varchar(45), " +
+                "primary key (ID) " +
                 ");");
-
-        return true;
+        executeUpdate("create table banks (" +
+                "RegistrationNumber varchar(4), " +
+                "Name varchar(45), " +
+                "OwnAccountNumber varchar(10), " +
+                "CashAccountNumber varchar(10), " +
+                "InterBankAccountNumber varchar(10), " +
+                "primary key (registrationNumber) " +
+                ");");
     }
 
-    private void executeQuery(String query) {
+    private ResultSet executeQuery(String query) {
+        ResultSet resultSet=null;
         try {
             resultSet = connection.createStatement().executeQuery(query);
         } catch (SQLException ex) {
             System.out.println("***ERROR: MySQL query did not execute***");
             ex.printStackTrace();
         }
+        return resultSet;
     }
 
     private void executeUpdate(String query) {
@@ -200,59 +223,4 @@ public class MySQLPersistence implements Persistence {
         }
     }
 
-    /*
-    // mysqldump er for system-specifikt til at kunne lave i Java.... samme med restore
-    // er der mon en SQL kommando der kan udføre det samme?
-
-
-    public boolean backup() {
-
-        int processComplete = 0;
-        String command = "mysqldump -u " + DB_USERNAME + " -p" + DB_PASSWORD + " " + DB_SCHEMA + " -r " + MYSQL_BACKUP;
-
-        Process runtimeProcess = null;
-        try {
-            runtimeProcess = Runtime.getRuntime().exec(command);
-            processComplete = runtimeProcess.waitFor();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        if (processComplete == 0) {
-            System.out.println("BMySQL backup successfull");
-            return true;
-        }
-        System.out.println("MySQL backup failed");
-        return false;
-    }
-
-    public boolean restore() {
-
-        int processComplete = 0;
-        String command[] = new String[]
-                {"mysql",
-                        DB_SCHEMA,
-                        "-u" + DB_USERNAME,
-                        "-p" + DB_PASSWORD,
-                        "-e",
-                        "source " + MYSQL_BACKUP};
-        try {
-            Process runtimeProcess = Runtime.getRuntime().exec(command);
-            processComplete = runtimeProcess.waitFor();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        if (processComplete == 0) {
-            System.out.println("MySQL restore successfull");
-            return true;
-        }
-        System.out.println("MySQL restore failed");
-        return false;
-    }
-    */
 }

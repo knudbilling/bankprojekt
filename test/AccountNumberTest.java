@@ -38,14 +38,14 @@ public class AccountNumberTest {
 
     @Test
     public void getValidAccountNumber(){
-        assertEquals("1234567890",AccountNumber.getAccountNumber("00001234567890"));
+        assertEquals("1234567890",AccountNumber.getShortNumber("00001234567890"));
     }
 
     @Test
     public void getInvalidAccountNumber(){
-        assertNull(AccountNumber.getAccountNumber(""));
-        assertNull(AccountNumber.getAccountNumber("123456789012345"));
-        assertNull(AccountNumber.getAccountNumber("abcdefghijklmn"));
+        assertNull(AccountNumber.getShortNumber(""));
+        assertNull(AccountNumber.getShortNumber("123456789012345"));
+        assertNull(AccountNumber.getShortNumber("abcdefghijklmn"));
     }
 
     @Test
