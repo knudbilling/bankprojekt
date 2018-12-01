@@ -188,15 +188,38 @@ public class MySQLPersistence implements Persistence {
 
     @Override
     public Bank load(String registrationNumber) {
-        ResultSet resultSet;
+        ResultSet resultSet=null;
+        String bankName;
+        String bankRegistrationNumber;
+        String bankOwnAccountNumber;
+        String bankCashAccountNumber;
+        String bankInterBankAccontNumber;
+        Bank bank;
+
         String query = "select * from banks where RegistrationNumber=?;";
         try {
             PreparedStatement pst = connection.prepareStatement(query);
             pst.setString(1, registrationNumber);
             resultSet=pst.executeQuery();
         } catch (SQLException e) {
+            System.out.println("***ERROR: Failed to query database***");
             e.printStackTrace();
         }
+        try {
+            if (!resultSet.next())
+                return null;
+            bankRegistrationNumber=resultSet.getString(1);
+            bankName=resultSet.getString(2);
+            bank=new Bank(resultSet.getString("name"),
+                    resultSet.getString("registrationnumber"),
+                    resultSet.getString("ownaccountnumber"),
+                    resultSet.getString("cashaccountnumber"),
+                    resultSet.getString("interbankaccountnumber"));
+        } catch (SQLException e) {
+            System.out.println("***ERROR: Failed getting data from database***");
+            e.printStackTrace();
+        }
+
 
         throw new UnsupportedOperationException();
     }
