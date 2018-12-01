@@ -22,7 +22,7 @@ public interface Persistence {
 
     void save(Bank bank);
 
-    Bank load();
+    Bank load(String registrationNumber);
 
     /**
      * Reset persistent storage so that it contains no data.

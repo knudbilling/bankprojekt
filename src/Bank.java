@@ -69,7 +69,7 @@ public class Bank {
         return REGISTRATION_NUMBER;
     }
 
-    public String getOwnAccount() {
+    public String getOwnAccountNumber() {
         return ownAccountNumber;
     }
 
@@ -81,7 +81,7 @@ public class Bank {
         return accountList;
     }
 
-    public void setOwnAccount(String accBank) {
+    public void setOwnAccountNumber(String accBank) {
         this.ownAccountNumber = accBank;
     }
 

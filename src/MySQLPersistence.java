@@ -55,12 +55,34 @@ public class MySQLPersistence implements Persistence {
 
     @Override
     public void addBank(Bank bank){
-        throw new UnsupportedOperationException();
+        String query = "insert into banks (RegistrationNumber, Name, OwnAccountNumber, CashAccountNumber, InterBankAccountNumber) values (?,?,?,?,?);";
+        try {
+            PreparedStatement pst = connection.prepareStatement(query);
+            pst.setString(1, bank.getRegNo());
+            pst.setString(2, bank.getName());
+            pst.setString(3, bank.getOwnAccountNumber());
+            pst.setString(4, bank.getCashAccountNumber());
+            pst.setString(5, bank.getInterBankAccountNumber());
+            pst.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void updateBank(Bank bank){
-        throw new UnsupportedOperationException();
+        String query = "update banks set Name=?, OwnAccountNumber=?, CashAccountNumber=?, InterBankAccountNumber=? where RegistrationNumber = ?;";
+        try {
+            PreparedStatement pst = connection.prepareStatement(query);
+            pst.setString(1, bank.getName());
+            pst.setString(2, bank.getOwnAccountNumber());
+            pst.setString(3, bank.getCashAccountNumber());
+            pst.setString(4, bank.getInterBankAccountNumber());
+            pst.setString(5, bank.getRegNo());
+            pst.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -147,16 +169,35 @@ public class MySQLPersistence implements Persistence {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        throw new UnsupportedOperationException();
     }
 
     @Override
     public void save(Bank bank) {
-        throw new UnsupportedOperationException();
+        resetPersistence();
+        addBank(bank);
+        for(int i=0;i<bank.getCustomerList().size();i++){
+            addCustomer(bank,bank.getCustomerList().get(i));
+        }
+        for(int i=0;i<bank.getAccountList().size();i++){
+            addAccount(bank,bank.getAccountList().get(i));
+        }
+        for(int i=0;i<bank.getTransactionList().size();i++){
+            addTransaction(bank,bank.getTransactionList().get(i));
+        }
     }
 
     @Override
-    public Bank load() {
+    public Bank load(String registrationNumber) {
+        ResultSet resultSet;
+        String query = "select * from banks where RegistrationNumber=?;";
+        try {
+            PreparedStatement pst = connection.prepareStatement(query);
+            pst.setString(1, registrationNumber);
+            resultSet=pst.executeQuery();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         throw new UnsupportedOperationException();
     }
 
