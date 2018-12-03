@@ -18,7 +18,7 @@ public class MySQLPersistencePersistenceTest {
 
         Customer c1=new Customer("Douglas","Beaver","Douglas' Home","12345678");
         Customer c2=new Customer("Morten","Christensen","Mortens Home","23456789");
-        Customer c3=new Customer("Julian","Nielsen","Julians Home","11223344");
+        Customer c3=new Customer("Julian","Christensen","Julians Home","11223344");
         Customer c4=new Customer("Patricia","Kellvig","Patricias Home","22334455");
         Customer c5=new Customer("Martin","Busk","Martins Home","33445566");
 
