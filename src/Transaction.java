@@ -30,11 +30,11 @@ public class Transaction {
      * @param toAccountNumber the account number to move money to
      * @param amount the amount to move expressed in 'øre'
      */
-    public Transaction(Bank bank, String fromAccountNumber, String toAccountNumber, long amount){
+    public Transaction(Bank bank, String fromAccountNumber, String toAccountNumber, long amount) throws NegativeAmountException {
 
         // Error on: amount is negative
         if(amount<0)
-            throw new NumberFormatException();
+            throw new NegativeAmountException();
         this.amount=amount;
 
         // fromAccount
