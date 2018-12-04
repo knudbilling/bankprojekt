@@ -10,7 +10,7 @@ public class Customer {
     public int idNo;
     public List<Account> accountList = new ArrayList<>();
 
-    static int nextidNo = 0;
+    static int nextidNo = 1;
 
 
     // constructor
