@@ -63,20 +63,19 @@ public class JuliansTest {
         Customer customer = new Customer("firstname", "lastname", "address", "phone");
         bank.addCustomer(customer);
 
+        Transaction transaction;
         Account account = new CurrentAccount("98005678901234");
         customer.addAccount(account);
         bank.addAccount(account);
 
         try {
-            Transaction transaction = new Transaction(bank, "98000000000002", "98005678901234", 10000); //Hvordan sætter man kontoen på minus?
-            bank.addTransaction(transaction);
-            transaction = new Transaction(bank, "98005678901234", "99000000000001", -20000);
+            transaction = new Transaction(bank, "98000000000002", "98005678901234", 10000); //Hvordan sætter man kontoen på minus?
             bank.addTransaction(transaction);
         } catch (NegativeAmountException e) {
             System.out.println("Task 12: A transaction from negative account is not allowed!");
             fail();
         }
-        assertEquals(-10000, AccountNumber.getAccount(bank,"98005678901234").getBalance());
-        assertEquals(-20000, AccountNumber.getAccount(bank, bank.getInterBankAccountNumber()).getBalance());
+        transaction = new Transaction(bank, "98005678901234", "99000000000001", -20000);
+        bank.addTransaction(transaction);
     }
 }
