@@ -44,18 +44,16 @@ public class Martin_Test {
         bank.addAccount(account);
 
         // Sæt penge ind på kundens konto
-        Transaction transaction = new Transaction(bank,bank.getCashAccountNumber(), "98000000000001", 50000);
+        Transaction transaction = new Transaction(bank,bank.getCashAccountNumber(), "98000000000001", 0);
         bank.addTransaction(transaction);
 
-        transaction = new Transaction(bank,"98000000000001", "98000000000002", 60000);
+        // Overfør 11000,00 fra lønkonto til opsparingskonto
+        transaction = new Transaction(bank,"98000000000001", "98000000000002", 1100000);
         bank.addTransaction(transaction);
 
-        transaction = new Transaction(bank, "98000000000001", "98001234567890", 5000);
-        bank.addTransaction(transaction);
-
-        assertEquals(-15000, AccountNumber.getAccount(bank, "98000000000001").getBalance());
-        assertEquals(60000, AccountNumber.getAccount(bank, "98000000000002").getBalance());
-        assertEquals(5000, AccountNumber.getAccount(bank, "98001234567890").getBalance());
+        assertEquals(-1110000, AccountNumber.getAccount(bank, "98000000000001").getBalance());
+        assertEquals(1100000, AccountNumber.getAccount(bank, "98000000000002").getBalance());
+        assertEquals(10000, AccountNumber.getAccount(bank, "98001234567890").getBalance());
 
 
     }
