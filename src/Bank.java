@@ -50,7 +50,8 @@ public class Bank {
         customerList.remove(customer);
     }
 
-    public void addTransaction(Transaction transaction) throws NegativeAmountException,NoOverdraftAllowedException{
+    public void addTransaction(Transaction transaction)
+            throws NegativeAmountException, NoOverdraftAllowedException, NotEnoughCashException{
         if(transactionList.contains(transaction))
             return;
 
@@ -64,6 +65,14 @@ public class Bank {
                     Transaction feeTransaction = new Transaction(transaction.fromAccount,AccountNumber.getAccount(this,this.ownAccountNumber),SERVICE_CHARGE);
                     this.addTransaction(feeTransaction);
                 }
+            }
+        }
+
+        // If it's the cashAccount
+        if(transaction.toAccount == AccountNumber.getAccount(this,this.cashAccountNumber)){
+            // It must never be positive (A positive amount of cash in the bank equals a negative amount on this account)
+            if(transaction.toAccount.getBalance()+transaction.amount>0){
+                throw new NotEnoughCashException();
             }
         }
         transaction.fromAccount.withdraw(transaction.amount);
