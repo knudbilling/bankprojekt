@@ -58,7 +58,7 @@ public class AccountNumber {
 
     public static boolean exists(Bank bank, String accountNumber){
         for(int i=0;i<bank.getAccountList().size();i++){
-            if(bank.getAccountList().get(i).accountNo.equals(accountNumber))
+            if(bank.getAccountList().get(i).accountNumber.equals(accountNumber))
                 return true;
         }
         return false;
@@ -72,7 +72,7 @@ public class AccountNumber {
      */
     public static Account getAccount(Bank bank, String accountNumber){
         for(int i=0;i<bank.getAccountList().size();i++){
-            if(bank.getAccountList().get(i).accountNo.equals(accountNumber))
+            if(bank.getAccountList().get(i).accountNumber.equals(accountNumber))
                 return bank.getAccountList().get(i);
         }
         return null;

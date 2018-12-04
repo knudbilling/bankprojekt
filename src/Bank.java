@@ -25,17 +25,17 @@ public class Bank {
         this.accountList = new ArrayList<Account>();
 
         Account account = new CurrentAccount(ownAccountNumber);
-        account.overdraftAllowed=Long.MAX_VALUE;
+        account.allowedOverdraft =Long.MAX_VALUE;
         account.interestRate=0;
         addAccount(account);
 
         account = new CurrentAccount(cashAccountNumber);
-        account.overdraftAllowed=Long.MAX_VALUE;
+        account.allowedOverdraft =Long.MAX_VALUE;
         account.interestRate=0;
         addAccount(account);
 
         account = new CurrentAccount(interBankAccountNumber);
-        account.overdraftAllowed=Long.MAX_VALUE;
+        account.allowedOverdraft =Long.MAX_VALUE;
         account.interestRate=0;
         addAccount(account);
     }
@@ -54,9 +54,13 @@ public class Bank {
         if(transactionList.contains(transaction))
             return;
 
+        // If it's a current account
         if(transaction.fromAccount instanceof CurrentAccount){
+            // and it's not to the banks own account
             if(transaction.toAccount != AccountNumber.getAccount(this,this.ownAccountNumber)){
-                if(transaction.fromAccount.getBalance()-transaction.amount<-transaction.fromAccount.overdraftAllowed){
+                // and the balance gets below the allowed overdraft
+                if(transaction.fromAccount.getBalance()-transaction.amount<-transaction.fromAccount.allowedOverdraft){
+                    // then make a transaction with a fee payable to the banks own account
                     Transaction feeTransaction = new Transaction(transaction.fromAccount,AccountNumber.getAccount(this,this.ownAccountNumber),SERVICE_CHARGE);
                     this.addTransaction(feeTransaction);
                 }

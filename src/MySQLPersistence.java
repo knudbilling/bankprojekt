@@ -123,10 +123,10 @@ public class MySQLPersistence implements Persistence {
         String query = "insert into accounts (AccountNumber, BankRegistrationNumber, AccountType, AllowedOverdraft, InterestRate, CustomerID ) values (?,?,?,?,?,?);";
         try {
             PreparedStatement pst = connection.prepareStatement(query);
-            pst.setString(1, AccountNumber.getShortNumber(account.accountNo));
+            pst.setString(1, AccountNumber.getShortNumber(account.accountNumber));
             pst.setString(2, bank.getRegNo());
             pst.setString(3, account instanceof CurrentAccount ? "C" : "S");
-            pst.setLong(4, account.overdraftAllowed);
+            pst.setLong(4, account.allowedOverdraft);
             pst.setInt(5, account.interestRate);
             pst.setInt(6, bank.getCustomerNumber(account));
             pst.executeUpdate();
@@ -140,10 +140,10 @@ public class MySQLPersistence implements Persistence {
         String query = "update accounts set AllowedOverdraft = ?, InterestRate = ?, CustomerID = ? where AccountNumber = ? and BankRegistrationNumber = ?;";
         try {
             PreparedStatement pst = connection.prepareStatement(query);
-            pst.setLong(1, account.overdraftAllowed);
+            pst.setLong(1, account.allowedOverdraft);
             pst.setInt(2, account.interestRate);
             pst.setInt(3, bank.getCustomerNumber(account));
-            pst.setString(4, AccountNumber.getShortNumber(account.accountNo));
+            pst.setString(4, AccountNumber.getShortNumber(account.accountNumber));
             pst.setString(5, bank.getRegNo());
             pst.executeUpdate();
         } catch (SQLException e) {
@@ -157,8 +157,8 @@ public class MySQLPersistence implements Persistence {
         try {
             PreparedStatement pst = connection.prepareStatement(query);
             pst.setString(1, bank.getRegNo());
-            pst.setString(2, AccountNumber.getShortNumber(transaction.fromAccount.accountNo));
-            pst.setString(3, AccountNumber.getShortNumber(transaction.toAccount.accountNo));
+            pst.setString(2, AccountNumber.getShortNumber(transaction.fromAccount.accountNumber));
+            pst.setString(3, AccountNumber.getShortNumber(transaction.toAccount.accountNumber));
             pst.setLong(4, transaction.amount);
             pst.setDate(5, new java.sql.Date(transaction.timestamp.getTime()));
             pst.setString(6, transaction.bankReference);
