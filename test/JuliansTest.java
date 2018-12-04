@@ -12,7 +12,7 @@ public class JuliansTest {
 */
 
     @Test
-    public void canTransferFromCurrentToExternalAccount() {
+    public void canTransferFromCurrentToExternalAccount() throws NoOverdraftAllowedException {
         Bank bank = new Bank("MinBank", "9800", "98005678901234", "98000000000002", "98000000000001");
         Customer customer = new Customer("firstname", "lastname", "address", "phone");
         bank.addCustomer(customer);
@@ -35,7 +35,7 @@ public class JuliansTest {
     }
 
     @Test
-    public void canTransferWithOverdraftFromCurrentToExternalAccount() {
+    public void canTransferWithOverdraftFromCurrentToExternalAccount() throws NoOverdraftAllowedException {
         Bank bank = new Bank("MinBank", "9800", "98005678901234", "98000000000002", "98000000000001");
         Customer customer = new Customer("firstname", "lastname", "address", "phone");
         bank.addCustomer(customer);
@@ -48,17 +48,18 @@ public class JuliansTest {
             Transaction transaction = new Transaction(bank, "98000000000002", "98005678901234", 5000);
             bank.addTransaction(transaction);
             transaction = new Transaction(bank, "98005678901234", "99000000000001", 10000);
+            account.getOverdraftAllowed();
             bank.addTransaction(transaction);
         } catch (NegativeAmountException e) {
             System.out.println("Task 11: ErrorTest");
             fail();
         }
-        assertEquals(-5000, account.getBalance()); //Fejl her, hvorfor? Manglende overtræksgebyr?
+        assertEquals(-5000, account.getBalance()); //Fejl her, hvorfor? Manglende tilladelse til overtræk?
         assertEquals(10000, AccountNumber.getAccount(bank, bank.getInterBankAccountNumber()).getBalance());
     }
 
     @Test
-    public void canTransferFromNegativeCurrentToExternalAccount() {
+    public void canTransferFromNegativeCurrentToExternalAccount() throws NoOverdraftAllowedException {
         Bank bank = new Bank("MinBank", "9800", "98005678901234", "98000000000002", "98000000000001");
         Customer customer = new Customer("firstname", "lastname", "address", "phone");
         bank.addCustomer(customer);
