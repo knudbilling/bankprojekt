@@ -17,7 +17,8 @@ public class Martin_Test {
         customer.addAccount(account);
         bank.addAccount(account);
 
-        Transaction transaction = new Transaction(bank,"98000987654321", "98000000000001", 50000);
+        //Sæt penge ind på kundes konto
+        Transaction transaction = new Transaction(bank,bank.getCashAccountNumber(), "98000000000001", 50000);
         bank.addTransaction(transaction);
 
         transaction = new Transaction(bank,"98000000000001", "98000000000002", 30000);
@@ -42,7 +43,8 @@ public class Martin_Test {
         customer.addAccount(account);
         bank.addAccount(account);
 
-        Transaction transaction = new Transaction(bank,"98000987654321", "98000000000001", 50000);
+        // Sæt penge ind på kundens konto
+        Transaction transaction = new Transaction(bank,bank.getCashAccountNumber(), "98000000000001", 50000);
         bank.addTransaction(transaction);
 
         transaction = new Transaction(bank,"98000000000001", "98000000000002", 60000);
@@ -71,7 +73,8 @@ public class Martin_Test {
         customer.addAccount(account);
         bank.addAccount(account);
 
-        Transaction transaction = new Transaction(bank,"98000987654321", "98000000000001", 50000);
+        // Sæt penge ind på kundens konto
+        Transaction transaction = new Transaction(bank,bank.getCashAccountNumber(), "98000000000001", 50000);
         bank.addTransaction(transaction);
 
         transaction = new Transaction(bank,"98000000000001", "98000000000002", -60000);
