@@ -61,7 +61,7 @@ public class TestBank {
     }
 
     @Test
-    public void canPrintAccountStatus() {
+    public void canPrintAccountStatus() throws NoOverdraftAllowedException, NegativeAmountException{
         Bank bank = new Bank("MinBank", "1234", "12345678901234", "12340000000002", "12340000000009");
         Customer customer = new Customer("firstname", "lastname", "address", "phone");
         bank.addCustomer(customer);
@@ -91,7 +91,7 @@ public class TestBank {
     }
 
     @Test
-    public void canDepositToSavingsAccount() {
+    public void canDepositToSavingsAccount() throws NoOverdraftAllowedException{
         Bank bank = new Bank("MinBank", "1234", "12340000000001", "12340000000002", "12340000000009");
         Customer customer = new Customer("firstname", "lastname", "address", "phone");
         bank.addCustomer(customer);
@@ -112,7 +112,7 @@ public class TestBank {
     }
 
     @Test
-    public void canDepositToCurrentAccount() {
+    public void canDepositToCurrentAccount() throws NoOverdraftAllowedException{
         Bank bank = new Bank("MinBank", "1234", "12340000000001", "12340000000002", "12340000000009");
         Customer customer = new Customer("firstname", "lastname", "address", "phone");
         bank.addCustomer(customer);
@@ -132,7 +132,7 @@ public class TestBank {
     }
 
     @Test
-    public void canWithdrawFromSavingsAccount() {
+    public void canWithdrawFromSavingsAccount() throws NoOverdraftAllowedException{
         Bank bank = new Bank("MinBank", "1234", "12340000000001", "12340000000002", "12340000000009");
         Customer customer = new Customer("firstname", "lastname", "address", "phone");
         bank.addCustomer(customer);
@@ -153,7 +153,7 @@ public class TestBank {
     }
 
     @Test
-    public void canWithdrawFromCurrentAccount() {
+    public void canWithdrawFromCurrentAccount() throws NoOverdraftAllowedException {
         Bank bank = new Bank("MinBank", "1234", "12340000000001", "12340000000002", "12340000000009");
         Customer customer = new Customer("firstname", "lastname", "address", "phone");
         bank.addCustomer(customer);
@@ -173,7 +173,7 @@ public class TestBank {
     }
 
     @Test
-    public void canTransferWithSavingsAccount() {
+    public void canTransferWithSavingsAccount() throws NoOverdraftAllowedException{
         Transaction transaction=null;
         Bank bank = new Bank("MinBank", "1234", "12340000000001", "12340000000002", "12340000000009");
         Customer customer = new Customer("firstname", "lastname", "address", "phone");
@@ -207,7 +207,7 @@ public class TestBank {
     }
 
     @Test
-    public void canTransferWithCurrentAccount() {
+    public void canTransferWithCurrentAccount() throws NoOverdraftAllowedException{
         Transaction transaction=null;
         Bank bank = new Bank("MinBank", "1234", "12340000000001", "12340000000002", "12340000000009");
         Customer customer = new Customer("firstname", "lastname", "address", "phone");
