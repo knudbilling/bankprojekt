@@ -13,7 +13,7 @@ public class JuliansTest {
 
     @Test
     public void canTransferFromCurrentToExternalAccount() throws NoOverdraftAllowedException {
-        Bank bank = new Bank("MinBank", "9800", "98005678901234", "98000000000002", "98000000000001");
+        Bank bank = new Bank("MinBank", "9800", "98005678900001", "98000000000002", "98000000000001");
         Customer customer = new Customer("firstname", "lastname", "address", "phone");
         bank.addCustomer(customer);
 
@@ -36,7 +36,7 @@ public class JuliansTest {
 
     @Test
     public void canTransferWithOverdraftFromCurrentToExternalAccount() throws NoOverdraftAllowedException {
-        Bank bank = new Bank("MinBank", "9800", "98005678901234", "98000000000002", "98000000000001");
+        Bank bank = new Bank("MinBank", "9800", "98005678900001", "98000000000002", "98000000000001");
         Customer customer = new Customer("firstname", "lastname", "address", "phone");
         bank.addCustomer(customer);
 
@@ -48,19 +48,18 @@ public class JuliansTest {
             Transaction transaction = new Transaction(bank, "98000000000002", "98005678901234", 5000);
             bank.addTransaction(transaction);
             transaction = new Transaction(bank, "98005678901234", "99000000000001", 10000);
-            account.getOverdraftAllowed();
             bank.addTransaction(transaction);
         } catch (NegativeAmountException e) {
             System.out.println("Task 11: ErrorTest");
             fail();
         }
-        assertEquals(-5000, account.getBalance()); //Fejl her, hvorfor? Manglende tilladelse til overtræk?
+        assertEquals(-5000, account.getBalance());
         assertEquals(10000, AccountNumber.getAccount(bank, bank.getInterBankAccountNumber()).getBalance());
     }
 
-    @Test
-    public void canTransferFromNegativeCurrentToExternalAccount() throws NoOverdraftAllowedException {
-        Bank bank = new Bank("MinBank", "9800", "98005678901234", "98000000000002", "98000000000001");
+    @Test (expected = NegativeAmountException.class)
+    public void canTransferFromNegativeCurrentToExternalAccount() throws NoOverdraftAllowedException, NegativeAmountException {
+        Bank bank = new Bank("MinBank", "9800", "98005678900001", "98000000000002", "98000000000001");
         Customer customer = new Customer("firstname", "lastname", "address", "phone");
         bank.addCustomer(customer);
 
@@ -69,15 +68,15 @@ public class JuliansTest {
         bank.addAccount(account);
 
         try {
-            Transaction transaction = new Transaction(bank, "98000000000002", "98005678901234", 1000); //Hvordan sætter man kontoen på minus?
+            Transaction transaction = new Transaction(bank, "98000000000002", "98005678901234", 10000); //Hvordan sætter man kontoen på minus?
             bank.addTransaction(transaction);
-            transaction = new Transaction(bank, "98005678901234", "99000000000001", 2000);
+            transaction = new Transaction(bank, "98005678901234", "99000000000001", -20000);
             bank.addTransaction(transaction);
         } catch (NegativeAmountException e) {
             System.out.println("Task 12: A transaction from negative account is not allowed!");
             fail();
         }
-        assertEquals(-1000, account.getBalance());
-        assertEquals(1000, AccountNumber.getAccount(bank, bank.getInterBankAccountNumber()).getBalance());
+        assertEquals(-10000, AccountNumber.getAccount(bank,"98005678901234").getBalance());
+        assertEquals(-20000, AccountNumber.getAccount(bank, bank.getInterBankAccountNumber()).getBalance());
     }
 }
