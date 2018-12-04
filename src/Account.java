@@ -1,3 +1,4 @@
+
 public abstract class Account {
     protected final String accountNumber;
     protected long balance;
@@ -16,12 +17,10 @@ public abstract class Account {
      * Handling the depositing of money into the account.
      * @param amount The amount of money to be deposited.
      */
-    public void deposit(long amount) {
-        if(amount > 0) {
-            this.balance += amount;
-        } else {
-            //DO STUFF?
-        }
+    public void deposit(long amount) throws NegativeAmountException {
+        if(amount<0)
+            throw new NegativeAmountException();
+        this.balance += amount;
     }
     
     /**

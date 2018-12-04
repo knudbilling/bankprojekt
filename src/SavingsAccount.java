@@ -16,9 +16,9 @@ public class SavingsAccount extends Account
         if(amount<0)
             throw new NegativeAmountException();
 
-        if(this.balance - amount < this.allowedOverdraft)
+        if(this.balance - amount < 0)
             throw new NoOverdraftAllowedException();
-        else
-            this.balance -= amount;
+
+        balance -= amount;
     }
 }
