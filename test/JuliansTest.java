@@ -22,7 +22,7 @@ public class JuliansTest {
         bank.addAccount(account);
 
         try {
-            Transaction transaction = new Transaction(bank, "98000000000002", "98005678901234", 5000);
+            Transaction transaction = new Transaction(bank, bank.getCashAccountNumber(), "98005678901234", 5000);
             bank.addTransaction(transaction);
             transaction = new Transaction(bank, "98005678901234", "99000000000001", 5000);
             bank.addTransaction(transaction);
