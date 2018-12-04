@@ -4,7 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 public class Martin_Test {
     @Test
-    public void canTransferLegalAmountFromCurrentAccountToSavingsAccount() {
+    public void canTransferLegalAmountFromCurrentAccountToSavingsAccount() throws NegativeAmountException, NoOverdraftAllowedException {
         Bank bank = new Bank("MinBank", "9800", "98001234567890", "98000987654321", "98000000000009");
         Customer customer = new Customer ("firstname", "lastname", "address", "phone");
         bank.addCustomer(customer);
@@ -29,7 +29,7 @@ public class Martin_Test {
     }
 
     @Test
-    public void canTransferLegalAmountWithServiceChargeFromCurrentAccountToSavingsAccount() {
+    public void canTransferLegalAmountWithServiceChargeFromCurrentAccountToSavingsAccount() throws NegativeAmountException, NoOverdraftAllowedException {
         Bank bank = new Bank("MinBank", "9800", "98001234567890", "98000987654321", "98000000000009");
         Customer customer = new Customer ("firstname", "lastname", "address", "phone");
         bank.addCustomer(customer);
@@ -57,8 +57,8 @@ public class Martin_Test {
 
 
     }
-    @Test
-    public void canTransferNegativeAmountFromCurrentAccountToSavingsAccount() {
+    @Test(expected = NegativeAmountException.class)
+    public void canTransferNegativeAmountFromCurrentAccountToSavingsAccount() throws NegativeAmountException, NoOverdraftAllowedException{
         Bank bank = new Bank("MinBank", "9800", "98001234567890", "98000987654321", "98000000000009");
         Customer customer = new Customer ("firstname", "lastname", "address", "phone");
         bank.addCustomer(customer);
