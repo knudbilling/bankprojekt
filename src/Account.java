@@ -29,7 +29,7 @@ public abstract class Account {
      * Handling withdrawal of money from accounts.
      * @param amount The amount of money to be withdrawn.
      */
-    public abstract void withdraw(long amount);
+    public abstract void withdraw(long amount) throws NoOverdraftAllowedException, NegativeAmountException;
 
     public String getAccountNo() { return this.accountNo; }
     public long getBalance() { return this.balance; }

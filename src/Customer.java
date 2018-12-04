@@ -15,17 +15,22 @@ public class Customer {
 
     // constructor
     public Customer(String firstName, String lastName, String address, String phoneNo){
+        this(firstName,lastName,address,phoneNo,nextidNo);
+    }
+
+    public Customer(String firstName, String lastName, String address, String phoneNo,int idNo){
         // default constructor.
-        this();
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
         this.phoneNo = phoneNo;
+        this.idNo=idNo;
+        if(idNo>=nextidNo) nextidNo=idNo+1;
     }
     //default constructor.
-    public Customer() {
-        idNo = nextidNo++;
-    }
+    //public Customer() {
+    //    idNo = nextidNo++;
+    //}
 
 
     //Methods

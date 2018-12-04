@@ -3,6 +3,8 @@ import java.util.List;
 
 public class Bank {
 
+    private static final long SERVICE_CHARGE = 10_000; //100 kr
+
     private String name;
     private final String REGISTRATION_NUMBER;
     private String ownAccountNumber;
@@ -48,9 +50,18 @@ public class Bank {
         customerList.remove(customer);
     }
 
-    public void addTransaction(Transaction transaction) {
+    public void addTransaction(Transaction transaction) throws NegativeAmountException,NoOverdraftAllowedException{
         if(transactionList.contains(transaction))
             return;
+
+        if(transaction.fromAccount instanceof CurrentAccount){
+            if(transaction.toAccount != AccountNumber.getAccount(this,this.ownAccountNumber)){
+                if(transaction.fromAccount.getBalance()-transaction.amount<-transaction.fromAccount.overdraftAllowed){
+                    Transaction feeTransaction = new Transaction(transaction.fromAccount,AccountNumber.getAccount(this,this.ownAccountNumber),SERVICE_CHARGE);
+                    this.addTransaction(feeTransaction);
+                }
+            }
+        }
         transaction.fromAccount.withdraw(transaction.amount);
         transaction.toAccount.deposit(transaction.amount);
         transactionList.add(transaction);

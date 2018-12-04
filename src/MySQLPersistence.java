@@ -1,4 +1,5 @@
 import java.sql.*;
+import java.util.List;
 
 public class MySQLPersistence implements Persistence {
 
@@ -119,16 +120,15 @@ public class MySQLPersistence implements Persistence {
 
     @Override
     public void addAccount(Bank bank, Account account) {
-        String query = "insert into accounts (AccountNumber, BankRegistrationNumber, Balance, AccountType, AllowedOverdraft, InterestRate, CustomerID ) values (?,?,?,?,?,?,?);";
+        String query = "insert into accounts (AccountNumber, BankRegistrationNumber, AccountType, AllowedOverdraft, InterestRate, CustomerID ) values (?,?,?,?,?,?);";
         try {
             PreparedStatement pst = connection.prepareStatement(query);
             pst.setString(1, AccountNumber.getShortNumber(account.accountNo));
             pst.setString(2, bank.getRegNo());
-            pst.setLong(3, account.balance);
-            pst.setString(4, account instanceof CurrentAccount ? "C" : "S");
-            pst.setLong(5, account.overdraftAllowed);
-            pst.setInt(6, account.interestRate);
-            pst.setInt(7, bank.getCustomerNumber(account));
+            pst.setString(3, account instanceof CurrentAccount ? "C" : "S");
+            pst.setLong(4, account.overdraftAllowed);
+            pst.setInt(5, account.interestRate);
+            pst.setInt(6, bank.getCustomerNumber(account));
             pst.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -137,15 +137,14 @@ public class MySQLPersistence implements Persistence {
 
     @Override
     public void updateAccount(Bank bank, Account account) {
-        String query = "update accounts set Balance = ?, AllowedOverdraft = ?, InterestRate = ?, CustomerID = ? where AccountNumber = ? and BankRegistrationNumber = ?;";
+        String query = "update accounts set AllowedOverdraft = ?, InterestRate = ?, CustomerID = ? where AccountNumber = ? and BankRegistrationNumber = ?;";
         try {
             PreparedStatement pst = connection.prepareStatement(query);
-            pst.setLong(1, account.balance);
-            pst.setLong(2, account.overdraftAllowed);
-            pst.setInt(3, account.interestRate);
-            pst.setInt(4, bank.getCustomerNumber(account));
-            pst.setString(5, AccountNumber.getShortNumber(account.accountNo));
-            pst.setString(6, bank.getRegNo());
+            pst.setLong(1, account.overdraftAllowed);
+            pst.setInt(2, account.interestRate);
+            pst.setInt(3, bank.getCustomerNumber(account));
+            pst.setString(4, AccountNumber.getShortNumber(account.accountNo));
+            pst.setString(5, bank.getRegNo());
             pst.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -188,18 +187,89 @@ public class MySQLPersistence implements Persistence {
     public Bank load(String registrationNumber) {
         ResultSet resultSet = null;
         Bank bank;
+        Account account;
 
-        bank=loadBank(registrationNumber, resultSet);
-        if(bank==null)
+        bank = loadBank(registrationNumber, resultSet);
+        if (bank == null)
             return null;
 
+        loadCustomers(registrationNumber, resultSet, bank);
+
+        loadAccounts(registrationNumber, resultSet, bank);
+
+        // TODO: loadTransactions
+
+        // TODO: calculate balances
 
 
         throw new UnsupportedOperationException();
     }
 
+    private void loadAccounts(String registrationNumber, ResultSet resultSet, Bank bank) {
+        Account account;
+        String query = "select * from accounts where BankRegistrationNumber = ?;";
+        try {
+            PreparedStatement pst = connection.prepareStatement(query);
+            pst.setString(1, registrationNumber);
+            resultSet = pst.executeQuery();
+        } catch (SQLException e) {
+            System.out.println("***ERROR: Failed to query database***");
+            e.printStackTrace();
+        }
+        try {
+            while (resultSet.next()) {
+
+                if(resultSet.getString("AccountType").equals("C")){
+                    account=new CurrentAccount(resultSet.getString(bank.getRegNo()+"AccountNumber"));
+                } else {
+                    account = new SavingsAccount(resultSet.getString(bank.getRegNo() + "AccountNumber"));
+                }
+                int customerId=resultSet.getInt("CustomerID");
+                List<Customer> cl=bank.getCustomerList();
+                for(int i=0;i<cl.size();i++)
+                {
+                    if(cl.get(i).getidNo()==customerId){
+                        cl.get(i).addAccount(account);
+                        break;
+                    }
+                }
+                bank.addAccount(account);
+            }
+        } catch (SQLException e) {
+            System.out.println("***ERROR: Failed getting data from database***");
+            e.printStackTrace();
+        }
+    }
+
+    private void loadCustomers(String registrationNumber, ResultSet resultSet, Bank bank) {
+        Customer customer;
+        String query = "select * from customers where BankRegistrationNumber = ?;";
+        try {
+            PreparedStatement pst = connection.prepareStatement(query);
+            pst.setString(1, registrationNumber);
+            resultSet = pst.executeQuery();
+        } catch (SQLException e) {
+            System.out.println("***ERROR: Failed to query database***");
+            e.printStackTrace();
+        }
+        try {
+            while (resultSet.next()) {
+
+                customer = new Customer(resultSet.getString("FirstName"),
+                        resultSet.getString("LastName"),
+                        resultSet.getString("Address"),
+                        resultSet.getString("PhoneNumber"),
+                        resultSet.getInt("ID"));
+                bank.addCustomer(customer);
+            }
+        } catch (SQLException e) {
+            System.out.println("***ERROR: Failed getting data from database***");
+            e.printStackTrace();
+        }
+    }
+
     private Bank loadBank(String registrationNumber, ResultSet resultSet) {
-        Bank bank=null;
+        Bank bank = null;
         String query = "select * from banks where RegistrationNumber=?;";
         try {
             PreparedStatement pst = connection.prepareStatement(query);
@@ -233,7 +303,6 @@ public class MySQLPersistence implements Persistence {
                 "AccountNumber varchar(10), " +
                 "BankRegistrationNumber varchar(4), " +
                 "CustomerID int, " +
-                "Balance bigint, " +
                 "InterestRate int, " +
                 "AllowedOverdraft bigint, " +
                 "AccountType varchar(1), " +

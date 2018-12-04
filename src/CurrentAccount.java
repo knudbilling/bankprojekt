@@ -2,7 +2,6 @@ public class CurrentAccount extends Account{
 
     private static final long STANDARD_OVERDRAFT_ALLOWED = 1_000_000; //10.000 kr
     private static final int STANDARD_INTEREST_RATE = 10;
-    private static final long SERVICE_CHARGE = 10_000; //100 kr
 
     /**
      * Constructor for the CurrentAccount Class.
@@ -16,11 +15,10 @@ public class CurrentAccount extends Account{
     }
 
     @Override
-    public void withdraw(long amount) {
-        if (amount < 0 ){
-            System.out.println("amount is negative");
-            throw new NumberFormatException();
-        }
+    public void withdraw(long amount) throws NegativeAmountException {
+        if (amount < 0 )
+            throw new NegativeAmountException();
+
         balance -= amount;
 
     }

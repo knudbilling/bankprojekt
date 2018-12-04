@@ -11,16 +11,14 @@ public class SavingsAccount extends Account
         this.overdraftAllowed = STANDARD_OVERDRAFT_ALLOWED;
     }
 
-    public void withdraw(long amount)
+    public void withdraw(long amount) throws NoOverdraftAllowedException, NegativeAmountException
     {
+        if(amount<0)
+            throw new NegativeAmountException();
+
         if(this.balance - amount < this.overdraftAllowed)
-        {
-            System.out.println("Transaction unsuccessfull");
-        }
+            throw new NoOverdraftAllowedException();
         else
-        {
             this.balance -= amount;
-            System.out.println("Transaction successfull");
-        }
     }
 }
