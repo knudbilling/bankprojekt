@@ -72,6 +72,6 @@ public class Transaction {
     }
 
     public String toString(){
-        return fromAccount.accountNo + " " + toAccount.accountNo + " " + amount;
+        return fromAccount.accountNumber + " " + toAccount.accountNumber + " " + amount;
     }
 }

@@ -11,7 +11,7 @@ public class CurrentAccount extends Account{
         super(accountNo);
         this.balance = 0;
         this.interestRate = STANDARD_INTEREST_RATE;
-        this.overdraftAllowed = STANDARD_OVERDRAFT_ALLOWED;
+        this.allowedOverdraft = STANDARD_OVERDRAFT_ALLOWED;
     }
 
     @Override

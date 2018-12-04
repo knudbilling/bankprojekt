@@ -58,7 +58,7 @@ public class Customer {
         }else{
             for (int i = accountList.size() - 1; i >= 0; i--) {
                 // Looking for the accoutNo in accountList
-                if (accountList.get(i).getAccountNo() == accountNo) {
+                if (accountList.get(i).getAccountNumber() == accountNo) {
                     if (accountList.get(i).getBalance() == 0) { // account balance needs to be zero in order to delete the account
                         accountList.remove(i);
                     } else {
