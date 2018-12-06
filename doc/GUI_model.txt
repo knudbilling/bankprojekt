@@ -1,0 +1,188 @@
+Model over GUI vinduer.
+
+Første "side" er en "vælg brugertype":
++--------------------------------------------------------------------------+
+|   						"BANKNAME" INTERFACE						   |
++--------------------------------------------------------------------------+
+|																		   |
+|  	Tast "1" hvis du er kunde.											   |
+|	Tast "2" hvis du er medarbejder i banken.							   |
+|																		   |
+|	Tast "Q" for at afslutte.											   |
+|																		   |
+|	Godkend med "Enter".												   |
+|																		   |
++--------------------------------------------------------------------------+
+
+Hvis brugertypen er "kunde":
++--------------------------------------------------------------------------+
+|   						"BANKNAME" INTERFACE						   |
++--------------------------------------------------------------------------+
+|																		   |
+|	Indtast kundenummer:												   |
+|																		   |
+|	Tast "B" for at gå tilbage.											   |
+|	Tast "Q" for at afslutte.											   |
+|																		   |
+|	Godkend med "Enter".												   |
+|																		   |
++--------------------------------------------------------------------------+
+
+Kundenummer ikke fundet:
++--------------------------------------------------------------------------+
+|   						"BANKNAME" INTERFACE						   |
++--------------------------------------------------------------------------+
+|																		   |
+|	Kundenummer ikke fundet. Prøv igen.									   |
+|																		   |
+|	Indtast kundenummer:												   |
+|																		   |
+|	Tast "B" for at gå tilbage.											   |
+|	Tast "Q" for at afslutte.											   |
+|																		   |
+|	Godkend med "Enter".												   |
+|																		   |
++--------------------------------------------------------------------------+
+
+Kundenummer godkendt:
++--------------------------------------------------------------------------+
+|   						"BANKNAME" INTERFACE						   |
++--------------------------------------------------------------------------+
+|																		   |
+|	Velkommen <<firstName>> <<lastName>>,								   |
+|																		   |
+|	Tast "1" for at se kontooversigt.									   |
+|	Tast "2" for at overføre penge mellem egne konti.					   |
+|																		   |
+|	Tast "B" for at gå tilbage.											   |
+|	Tast "Q" for at afslutte.											   |
+|																		   |
+|	Godkend med "Enter".												   |
+|																		   |
++--------------------------------------------------------------------------+
+
+Kontooversigt:
++--------------------------------------------------------------------------+
+|   						"BANKNAME" INTERFACE						   |
++--------------------------------------------------------------------------+
+|																		   |
+|	Konto: <<regNumber>> <<accountNumber>>								   |
+|		Indestående: <<amount>> DKK										   |
+|		For yderligere info tast "1"									   |
+|																		   |
+|	Konto: <<regNumber>> <<accountNumber>>								   |
+|		Indestående: <<amount>> DKK										   |
+|		For yderligere info tast "2"									   |
+|																		   |
+|	Tast "B" for at gå tilbage.											   |
+|	Tast "Q" for at afslutte.											   |
+|																		   |
+|	Godkend med "Enter".												   |
+|																		   |
++--------------------------------------------------------------------------+
+
+Yderligere info om konti:
++--------------------------------------------------------------------------+
+|   						"BANKNAME" INTERFACE						   |
++--------------------------------------------------------------------------+
+|																		   |
+|	Reg. nummer:		<<regNumber>>									   |
+|	Kontonummber:		<<accountNumber>>								   |
+|	Type: 				<<accountType>>									   |
+|	Indestående: 		<<amount>> DKK									   |
+|	Rentesats:			<<renteSats>>									   |
+|	Tilladt overtræk:	<<overdraftAllowed>>							   |
+|																		   |
+|	Tast "B" for at gå tilbage.											   |
+|	Tast "Q" for at afslutte.											   |
+|																		   |
+|	Godkend med "Enter".												   |
+|																		   |
++--------------------------------------------------------------------------+
+
+Overførsler mellem egne konti - vælg "fra"-konto:
++--------------------------------------------------------------------------+
+|   						"BANKNAME" INTERFACE						   |
++--------------------------------------------------------------------------+
+|																		   |
+|	Hvilken af dine konti vil du overføre penge fra?					   |
+|																		   |
+|   Tast "1" for Konto: <<regNumber>> <<accountNumber>>					   |
+|   Tast "2" for Konto: <<regNumber>> <<accountNumber>>					   |
+|   Tast "3" for Konto: <<regNumber>> <<accountNumber>>					   |
+|																		   |
+|	Tast "B" for at gå tilbage.											   |
+|	Tast "Q" for at afslutte.											   |
+|																		   |
+|	Godkend med "Enter".												   |
+|																		   |
++--------------------------------------------------------------------------+
+
+Overførsler mellem egne konti - kunden har kun 1 konto:
++--------------------------------------------------------------------------+
+|   						"BANKNAME" INTERFACE						   |
++--------------------------------------------------------------------------+
+|																		   |
+|	Dette kan ikke lade sig gøre, da du kun har én konto i banken.		   |
+|																		   |
+|	Tast "B" for at gå tilbage.											   |
+|	Tast "Q" for at afslutte.											   |
+|																		   |
+|	Godkend med "Enter".												   |
+|																		   |
++--------------------------------------------------------------------------+
+
+Overførsler mellem egne konti - vælg "fra"-konto:
++--------------------------------------------------------------------------+
+|   						"BANKNAME" INTERFACE						   |
++--------------------------------------------------------------------------+
+|																		   |
+|	Hvilken af dine konti vil du overføre penge til?					   |
+|																		   |
+|   Tast "1" for Konto: <<regNumber>> <<accountNumber>>					   |
+|   Tast "2" for Konto: <<regNumber>> <<accountNumber>>					   |
+|   Tast "3" for Konto: <<regNumber>> <<accountNumber>>					   |
+|																		   |
+|	Tast "B" for at gå tilbage.											   |
+|	Tast "Q" for at afslutte.											   |
+|																		   |
+|	Godkend med "Enter".												   |
+|																		   |
++--------------------------------------------------------------------------+
+
+Overførsler - beløb:
++--------------------------------------------------------------------------+
+|   						"BANKNAME" INTERFACE						   |
++--------------------------------------------------------------------------+
+|																		   |
+|	Overførsel															   |
+|		fra Konto: <<regNumber>> <<accountNumber>>						   |
+|		til Konto: <<regNumber>> <<accountNumber>>						   |
+|																		   |
+|	Indtast beløb du ønsker at overføre: ___							   | <-- Hvilket format?  (10000 = 100kr) eller (100,00 = 100kr) ?
+|																		   |
+|	Tast "B" for at gå tilbage.											   |
+|	Tast "Q" for at afslutte.											   |
+|																		   |
+|	Godkend med "Enter".												   |
+|																		   |
++--------------------------------------------------------------------------+
+
+Overførsler - godkendt:
++--------------------------------------------------------------------------+
+|   						"BANKNAME" INTERFACE						   |
++--------------------------------------------------------------------------+
+|																		   |
+|	Overførsel gennemført.												   |
+|																		   |
+|	Velkommen <<firstName>> <<lastName>>,								   | <-- Interface fra 'Kundenummer godkendt'.
+|																		   |
+|	Tast "1" for at se kontooversigt.									   |
+|	Tast "2" for at overføre penge mellem egne konti.					   |
+|																		   |
+|	Tast "B" for at gå tilbage.											   |
+|	Tast "Q" for at afslutte.											   |
+|																		   |
+|	Godkend med "Enter".												   |
+|																		   |
++--------------------------------------------------------------------------+

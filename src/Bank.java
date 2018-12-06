@@ -54,14 +54,14 @@ public class Bank {
         if(transactionList.contains(transaction))
             return;
 
-        // If it's a current account
+        // If it's from a current account
         if(transaction.fromAccount instanceof CurrentAccount){
             // and it's not to the banks own account
             if(transaction.toAccount != AccountNumber.getAccount(this,this.ownAccountNumber)){
                 // and the balance gets below the allowed overdraft
                 if(transaction.fromAccount.getBalance()-transaction.amount<-transaction.fromAccount.allowedOverdraft){
                     // then make a transaction with a fee payable to the banks own account
-                    Transaction feeTransaction = new Transaction(transaction.fromAccount,AccountNumber.getAccount(this,this.ownAccountNumber),SERVICE_CHARGE);
+                    Transaction feeTransaction = new Transaction(this,transaction.fromAccount.getAccountNumber(),this.getOwnAccountNumber(),SERVICE_CHARGE);
                     this.addTransaction(feeTransaction);
                 }
             }

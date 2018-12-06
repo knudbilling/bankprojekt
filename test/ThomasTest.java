@@ -1,12 +1,11 @@
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 
 public class ThomasTest{
 
     @Test
-    public void canTransferLegalAmountNoOverdraftFromACurrentAccountToASavingsAccountInternallyInBank() throws Exception {
+    public void canTransferLegalAmountNoOverdraftFromACurrentAccountToACurrentAccountInternallyInBank() throws Exception {
 
         //Setting up the bank and the customers.
         Bank bank = new Bank("MinBank", "9800", "98001234567890", "98000987654321", "98000000000009");
@@ -21,7 +20,7 @@ public class ThomasTest{
         bank.addAccount(accountSender);
 
         //Setting up recipients account.
-        Account accountRecipient = new SavingsAccount ("98000000000002");
+        Account accountRecipient = new CurrentAccount ("98000000000002");
         customerSender.addAccount(accountRecipient);
         bank.addAccount(accountRecipient);
 
@@ -40,7 +39,7 @@ public class ThomasTest{
     }
 
     @Test
-    public void canTransferLegalAmountWithOverdraftFromACurrentAccountToASavingsAccountInternallyInBank() throws Exception {
+    public void canTransferLegalAmountWithOverdraftFromACurrentAccountToACurrentAccountInternallyInBank() throws Exception {
 
         //Setting up the bank and the customers.
         Bank bank = new Bank("MinBank", "9800", "98001234567890", "98000987654321", "98000000000009");
@@ -55,7 +54,7 @@ public class ThomasTest{
         bank.addAccount(accountSender);
 
         //Setting up recipients account.
-        Account accountRecipient = new SavingsAccount ("98000000000002");
+        Account accountRecipient = new CurrentAccount ("98000000000002");
         customerSender.addAccount(accountRecipient);
         bank.addAccount(accountRecipient);
 
@@ -74,7 +73,7 @@ public class ThomasTest{
     }
 
     @Test(expected = NegativeAmountException.class)
-    public void canTransferIllegalAmountFromACurrentAccountToASavingsAccountInternallyInBank() throws Exception {
+    public void canTransferIllegalAmountFromACurrentAccountToACurrentAccountInternallyInBank() throws Exception {
 
         //Setting up the bank and the customers.
         Bank bank = new Bank("MinBank", "9800", "98001234567890", "98000987654321", "98000000000009");
@@ -89,7 +88,7 @@ public class ThomasTest{
         bank.addAccount(accountSender);
 
         //Setting up recipients account.
-        Account accountRecipient = new SavingsAccount ("98000000000002");
+        Account accountRecipient = new CurrentAccount ("98000000000002");
         customerSender.addAccount(accountRecipient);
         bank.addAccount(accountRecipient);
 
