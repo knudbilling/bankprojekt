@@ -30,7 +30,7 @@ public class JohannesTest {
 
         firstAccount.deposit(100000);
 
-        Transaction testTransaction = new Transaction(firstAccount, secondAccount, 40000);
+        Transaction testTransaction = new Transaction(bank,firstAccount.getAccountNumber(),secondAccount.getAccountNumber(),40000);
         bank.addTransaction(testTransaction);
 
         assertEquals(60000, firstAccount.getBalance());
@@ -63,7 +63,7 @@ public class JohannesTest {
 
         firstAccount.deposit(120000);
 
-        Transaction testTransaction = new Transaction(firstAccount, secondAccount, 70000);
+        Transaction testTransaction = new Transaction(bank,firstAccount.getAccountNumber(), secondAccount.getAccountNumber(), 70000);
         bank.addTransaction(testTransaction);
 
         assertEquals(50000, firstAccount.getBalance());
@@ -95,7 +95,7 @@ public class JohannesTest {
         bank.addTransaction(putMoneyInAccount);
 
 
-        Transaction testTransaction = new Transaction(firstAccount, secondAccount, 4000);
+        Transaction testTransaction = new Transaction(bank,firstAccount.getAccountNumber(), secondAccount.getAccountNumber(), 4000);
         bank.addTransaction(testTransaction);
     }
 }
