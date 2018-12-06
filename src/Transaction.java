@@ -48,7 +48,7 @@ public class Transaction {
             System.out.println("***ERROR: Trying to transfer from an external account***");
             throw new IllegalArgumentException();
         }
-        this.fromAccount=AccountNumber.getAccount(bank,fromAccountNumber);
+        this.fromAccount=bank.getAccount(fromAccountNumber);
 
         // toAccount
         // Error on: toAccount is in an invalid format
@@ -59,11 +59,11 @@ public class Transaction {
 
         // Local toAccount
         if(AccountNumber.isLocal(bank,toAccountNumber)) {
-            this.toAccount = AccountNumber.getAccount(bank, toAccountNumber);
+            this.toAccount = bank.getAccount(toAccountNumber);
         } else { // External toAccount
             if (BankRegister.accountExists(toAccountNumber)) {
                 this.bankReference = toAccountNumber;
-                this.toAccount=AccountNumber.getAccount(bank,bank.getInterBankAccountNumber());
+                this.toAccount=bank.getAccount(bank.getInterBankAccountNumber());
             } else {
                 System.out.println("***ERROR: Trying to transfer to a non-existing external account***");
                 throw new IllegalArgumentException();

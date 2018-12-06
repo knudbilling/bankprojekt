@@ -35,9 +35,9 @@ public class KnudTest {
         bank.addTransaction(transaction);
 
         // Kontroller at den anden kunde har 200 kr på kontoen
-        assertEquals(20000,AccountNumber.getAccount(bank,"98001000000002").getBalance());
+        assertEquals(20000,bank.getAccount("98001000000002").getBalance());
         // Kontroller at første kunde har 800 kr på kontoen
-        assertEquals(80000,AccountNumber.getAccount(bank,"98001000000001").getBalance());
+        assertEquals(80000,bank.getAccount("98001000000001").getBalance());
     }
 
     //Test 17 - Overførsel af gyldigt beløb med overtræk fra lønkonto til anden kundes opsparingskonto i samme pengeinstitut
@@ -70,9 +70,9 @@ public class KnudTest {
         bank.addTransaction(transaction);
 
         // Kontroller at den anden kunde har 50 kr på kontoen
-        assertEquals(5000,AccountNumber.getAccount(bank,"98001000000002").getBalance());
+        assertEquals(5000,bank.getAccount("98001000000002").getBalance());
         // Kontroller at første kunde har -250 kr på kontoen
-        assertEquals(-25000,AccountNumber.getAccount(bank,"98001000000001").getBalance());
+        assertEquals(-25000,bank.getAccount("98001000000001").getBalance());
     }
 
     //Test 18 - Overførsel af negativt beløb fra lønkonto til anden kundes opsparingskonto i samme pengeinstitut

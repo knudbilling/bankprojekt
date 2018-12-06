@@ -37,9 +37,9 @@ public class ThomasTest{
         bank.addTransaction(transaction);
 
         //Checking that the amounts on the accounts are as predicted.
-        assertEquals(5000_00, AccountNumber.getAccount(bank,"98000000000001").getBalance());
-        assertEquals(5000_00, AccountNumber.getAccount(bank,"98000000000002").getBalance());
-        assertEquals(0, AccountNumber.getAccount(bank, "98001234567890").getBalance());
+        assertEquals(5000_00, bank.getAccount("98000000000001").getBalance());
+        assertEquals(5000_00, bank.getAccount("98000000000002").getBalance());
+        assertEquals(0, bank.getAccount("98001234567890").getBalance());
     }
 
     //Test 14 - Overførsel af gyldigt beløb med overtræk fra lønkonto til anden kundes lønkonto i samme pengeinstitut.
@@ -72,9 +72,9 @@ public class ThomasTest{
         bank.addTransaction(transaction);
 
         //Checking that the amounts on the accounts are as predicted.
-        assertEquals(-15100_00, AccountNumber.getAccount(bank,"98000000000001").getBalance());
-        assertEquals(25000_00, AccountNumber.getAccount(bank,"98000000000002").getBalance());
-        assertEquals(100_00, AccountNumber.getAccount(bank, "98001234567890").getBalance());
+        assertEquals(-15100_00, bank.getAccount("98000000000001").getBalance());
+        assertEquals(25000_00, bank.getAccount("98000000000002").getBalance());
+        assertEquals(100_00, bank.getAccount("98001234567890").getBalance());
     }
 
     //Test 15 - Overførsel af negativt beløb fra lønkonto til anden kundes lønkonto i samme pengeinstitut.

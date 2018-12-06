@@ -139,7 +139,7 @@ public class TestBank {
         transaction = new Transaction(bank, "12345678901234", "12340000000002", 50000);
         bank.addTransaction(transaction);
 
-        assertEquals(0, AccountNumber.getAccount(bank, bank.getCashAccountNumber()).getBalance());
+        assertEquals(0, bank.getAccount(bank.getCashAccountNumber()).getBalance());
         assertEquals(0, account.getBalance());
     }
 
@@ -161,7 +161,7 @@ public class TestBank {
         transaction = new Transaction(bank, "12345678901234", "12340000000002", 50000);
         bank.addTransaction(transaction);
 
-        assertEquals(50000-equity, AccountNumber.getAccount(bank, bank.getCashAccountNumber()).getBalance());
+        assertEquals(50000-equity, bank.getAccount(bank.getCashAccountNumber()).getBalance());
     }
 
     @Test
@@ -184,8 +184,8 @@ public class TestBank {
         transaction = new Transaction(bank, "12345678904321", "12345678901234", 30000);
         bank.addTransaction(transaction);
 
-        assertEquals(20000, AccountNumber.getAccount(bank, "12345678904321").getBalance());
-        assertEquals(30000, AccountNumber.getAccount(bank, "12345678901234").getBalance());
+        assertEquals(20000, bank.getAccount("12345678904321").getBalance());
+        assertEquals(30000, bank.getAccount("12345678901234").getBalance());
     }
 
     @Test
@@ -208,8 +208,8 @@ public class TestBank {
         transaction = new Transaction(bank, "12345678901234", "12345678904321", 30000);
         bank.addTransaction(transaction);
 
-        assertEquals(20000, AccountNumber.getAccount(bank, "12345678901234").getBalance());
-        assertEquals(30000, AccountNumber.getAccount(bank, "12345678904321").getBalance());
+        assertEquals(20000, bank.getAccount("12345678901234").getBalance());
+        assertEquals(30000, bank.getAccount("12345678904321").getBalance());
     }
 
     @Test

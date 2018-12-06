@@ -64,17 +64,4 @@ public class AccountNumber {
         return false;
     }
 
-    /**
-     * Get an Account object identified by the supplied account number from a bank instance
-     * @param bank The bank to get the Account object from
-     * @param accountNumber The account number to search for
-     * @return The account object if it exists. Otherwise null.
-     */
-    public static Account getAccount(Bank bank, String accountNumber){
-        for(int i=0;i<bank.getAccountList().size();i++){
-            if(bank.getAccountList().get(i).accountNumber.equals(accountNumber))
-                return bank.getAccountList().get(i);
-        }
-        return null;
-    }
 }

@@ -64,7 +64,7 @@ public class Bank {
         // If it's from a current account
         if(transaction.fromAccount instanceof CurrentAccount){
             // and it's not to the banks own account
-            if(transaction.toAccount != AccountNumber.getAccount(this,this.ownAccountNumber)){
+            if(transaction.toAccount != getAccount(this.ownAccountNumber)){
                 // and the balance gets below the allowed overdraft
                 if(transaction.fromAccount.getBalance()-transaction.amount<-transaction.fromAccount.allowedOverdraft){
                     // then make a transaction with a fee payable to the banks own account
@@ -86,12 +86,13 @@ public class Bank {
         }
 
         // If it's the cashAccount
-        if(transaction.toAccount == AccountNumber.getAccount(this,this.cashAccountNumber)){
+        if(transaction.toAccount == getAccount(this.cashAccountNumber)){
             // It must never be positive (A positive amount of cash in the bank equals a negative amount on this account)
             if(transaction.toAccount.getBalance()+transaction.amount>0){
                 throw new NotEnoughCashException();
             }
         }
+        // Order is important. First withdraw, then deposit.
         transaction.fromAccount.withdraw(transaction.amount);
         transaction.toAccount.deposit(transaction.amount);
         transactionList.add(transaction);
@@ -99,7 +100,9 @@ public class Bank {
 
     private void addAccount(Account account) throws DuplicateAccountException {
         for(int i=0;i<accountList.size();i++){
+            // If the new account has the same account number as an existing one
             if(accountList.get(i).getAccountNumber()==account.getAccountNumber()) {
+                // it MUST be the same instance
                 if(accountList.get(i)!=account) {
                     throw new DuplicateAccountException();
                 }
@@ -110,7 +113,7 @@ public class Bank {
     }
 
     public void addAccount(Customer customer, Account account) throws DuplicateAccountException, DuplicateCustomerException {
-        // If customer==null then do no customer checks, just add account
+        // If customer==null then make no customer checks, just add account
         if(customer==null){
             this.addAccount(account);
         } else {
@@ -138,10 +141,6 @@ public class Bank {
 
     public List<Account> getAccountList(){
         return accountList;
-    }
-
-    public void setOwnAccountNumber(String accBank) {
-        this.ownAccountNumber = accBank;
     }
 
     public String getCashAccountNumber() {
@@ -172,6 +171,14 @@ public class Bank {
             }
         }
         return 0;
+    }
+
+    public Account getAccount(String accountNumber){
+        for(int i=0;i<this.getAccountList().size();i++){
+            if(this.getAccountList().get(i).accountNumber.equals(accountNumber))
+                return this.getAccountList().get(i);
+        }
+        return null;
     }
 
     boolean booksAreBalancing(){

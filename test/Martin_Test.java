@@ -25,8 +25,8 @@ public class Martin_Test {
         transaction = new Transaction(bank,"98000000000001", "98000000000002", 30000);
         bank.addTransaction(transaction);
 
-        assertEquals(20000, AccountNumber.getAccount(bank,"98000000000001").getBalance());
-        assertEquals(30000, AccountNumber.getAccount(bank,"98000000000002").getBalance());
+        assertEquals(20000, bank.getAccount("98000000000001").getBalance());
+        assertEquals(30000, bank.getAccount("98000000000002").getBalance());
 
     }
 
@@ -52,9 +52,9 @@ public class Martin_Test {
         transaction = new Transaction(bank,"98000000000001", "98000000000002", 1100000);
         bank.addTransaction(transaction);
 
-        assertEquals(-1110000, AccountNumber.getAccount(bank, "98000000000001").getBalance());
-        assertEquals(1100000, AccountNumber.getAccount(bank, "98000000000002").getBalance());
-        assertEquals(10000, AccountNumber.getAccount(bank, "98001234567890").getBalance());
+        assertEquals(-1110000, bank.getAccount("98000000000001").getBalance());
+        assertEquals(1100000, bank.getAccount("98000000000002").getBalance());
+        assertEquals(10000, bank.getAccount("98001234567890").getBalance());
 
 
     }

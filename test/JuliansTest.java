@@ -31,7 +31,7 @@ public class JuliansTest {
             fail();
         }
         assertEquals(0, account.getBalance());
-        assertEquals(5000, AccountNumber.getAccount(bank, bank.getInterBankAccountNumber()).getBalance());
+        assertEquals(5000, bank.getAccount(bank.getInterBankAccountNumber()).getBalance());
     }
 
     @Test
@@ -54,7 +54,7 @@ public class JuliansTest {
             fail();
         }
         assertEquals(-5000, account.getBalance());
-        assertEquals(10000, AccountNumber.getAccount(bank, bank.getInterBankAccountNumber()).getBalance());
+        assertEquals(10000, bank.getAccount(bank.getInterBankAccountNumber()).getBalance());
     }
 
     @Test (expected = NegativeAmountException.class)
