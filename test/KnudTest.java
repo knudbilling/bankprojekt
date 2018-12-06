@@ -83,7 +83,7 @@ public class KnudTest {
 
         // Kontroller at den anden kunde har 50 kr på kontoen
         assertEquals(5000,AccountNumber.getAccount(bank,"98001000000002").getBalance());
-        // Kontroller at første kunde har -100 kr på kontoen
+        // Kontroller at første kunde har -250 kr på kontoen
         assertEquals(-25000,AccountNumber.getAccount(bank,"98001000000001").getBalance());
     }
 
