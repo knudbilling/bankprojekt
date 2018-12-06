@@ -12,7 +12,7 @@ public class JuliansTest {
 */
 
     @Test
-    public void canTransferFromCurrentToExternalAccount() throws NoOverdraftAllowedException {
+    public void canTransferFromCurrentToExternalAccount() throws NoOverdraftAllowedException, NotEnoughCashException, IllegalAccountException {
         Bank bank = new Bank("MinBank", "9800", "98005678900001", "98000000000002", "98000000000001");
         Customer customer = new Customer("firstname", "lastname", "address", "phone");
         bank.addCustomer(customer);
@@ -35,7 +35,7 @@ public class JuliansTest {
     }
 
     @Test
-    public void canTransferWithOverdraftFromCurrentToExternalAccount() throws NoOverdraftAllowedException {
+    public void canTransferWithOverdraftFromCurrentToExternalAccount() throws NoOverdraftAllowedException, IllegalAccountException, NotEnoughCashException  {
         Bank bank = new Bank("MinBank", "9800", "98005678900001", "98000000000002", "98000000000001");
         Customer customer = new Customer("firstname", "lastname", "address", "phone");
         bank.addCustomer(customer);
@@ -58,7 +58,7 @@ public class JuliansTest {
     }
 
     @Test (expected = NegativeAmountException.class)
-    public void canTransferFromNegativeCurrentToExternalAccount() throws NoOverdraftAllowedException, NegativeAmountException {
+    public void canTransferFromNegativeCurrentToExternalAccount() throws NoOverdraftAllowedException, NegativeAmountException, NotEnoughCashException, IllegalAccountException {
         Bank bank = new Bank("MinBank", "9800", "98005678900001", "98000000000002", "98000000000001");
         Customer customer = new Customer("firstname", "lastname", "address", "phone");
         bank.addCustomer(customer);

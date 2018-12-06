@@ -46,7 +46,6 @@ public class Bank {
     }
 
     public void deleteCustomer(Customer customer) {
-        //TODO: Her bør nok være et check for om kunden findes, og evt blive kastet en exception hvis ikke.
         customerList.remove(customer);
     }
 

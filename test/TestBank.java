@@ -61,7 +61,7 @@ public class TestBank {
     }
 
     @Test
-    public void canPrintAccountStatus() throws NoOverdraftAllowedException, NegativeAmountException{
+    public void canPrintAccountStatus() throws NoOverdraftAllowedException, NegativeAmountException, NotEnoughCashException{
         Bank bank = new Bank("MinBank", "1234", "12345678901234", "12340000000002", "12340000000009");
         Customer customer = new Customer("firstname", "lastname", "address", "phone");
         bank.addCustomer(customer);
@@ -91,7 +91,7 @@ public class TestBank {
     }
 
     @Test
-    public void canDepositToSavingsAccount() throws NoOverdraftAllowedException{
+    public void canDepositToSavingsAccount() throws Exception {
         Bank bank = new Bank("MinBank", "1234", "12340000000001", "12340000000002", "12340000000009");
         Customer customer = new Customer("firstname", "lastname", "address", "phone");
         bank.addCustomer(customer);
@@ -100,19 +100,14 @@ public class TestBank {
         customer.addAccount(account);
         bank.addAccount(account);
 
-        try {
-            Transaction transaction = new Transaction(bank, "12340000000002", "12345678901234", 50000);
-            bank.addTransaction(transaction);
-        } catch (NegativeAmountException e){
-            System.out.println("Hov du! Man kan ikke overføre et negativt beløb!");
-            fail();
-        }
+        Transaction transaction = new Transaction(bank, "12340000000002", "12345678901234", 50000);
+        bank.addTransaction(transaction);
 
         assertEquals(50000, account.getBalance());
     }
 
     @Test
-    public void canDepositToCurrentAccount() throws NoOverdraftAllowedException{
+    public void canDepositToCurrentAccount() throws Exception{
         Bank bank = new Bank("MinBank", "1234", "12340000000001", "12340000000002", "12340000000009");
         Customer customer = new Customer("firstname", "lastname", "address", "phone");
         bank.addCustomer(customer);
@@ -121,18 +116,15 @@ public class TestBank {
         customer.addAccount(account);
         bank.addAccount(account);
 
-        try {
-            Transaction transaction = new Transaction(bank, "12340000000002", "12345678901234", 50000);
-            bank.addTransaction(transaction);
-        } catch (NegativeAmountException e){
-            System.out.println("Hov du! Man kan ikke overføre et negativt beløb!");
-            fail();
-        }
+        Transaction transaction = new Transaction(bank, "12340000000002", "12345678901234", 50000);
+        bank.addTransaction(transaction);
+
         assertEquals(50000, account.getBalance());
     }
 
     @Test
-    public void canWithdrawFromSavingsAccount() throws NoOverdraftAllowedException{
+    public void canWithdrawFromSavingsAccount() throws Exception{
+        Transaction transaction=null;
         Bank bank = new Bank("MinBank", "1234", "12340000000001", "12340000000002", "12340000000009");
         Customer customer = new Customer("firstname", "lastname", "address", "phone");
         bank.addCustomer(customer);
@@ -141,19 +133,20 @@ public class TestBank {
         customer.addAccount(account);
         bank.addAccount(account);
 
-        try {
-            Transaction transaction = new Transaction(bank, "12345678901234", "12340000000002", 50000);
-            bank.addTransaction(transaction);
-        } catch (NegativeAmountException e){
-            System.out.println("Hov du! Man kan ikke overføre et negativt beløb!");
-            fail();
-        }
+        transaction = new Transaction(bank,bank.getCashAccountNumber(),"12345678901234",50000);
+        bank.addTransaction(transaction);
 
-        assertEquals(50000, AccountNumber.getAccount(bank, bank.getCashAccountNumber()).getBalance());
+        transaction = new Transaction(bank, "12345678901234", "12340000000002", 50000);
+        bank.addTransaction(transaction);
+
+        assertEquals(0, AccountNumber.getAccount(bank, bank.getCashAccountNumber()).getBalance());
+        assertEquals(0, account.getBalance());
     }
 
     @Test
-    public void canWithdrawFromCurrentAccount() throws NoOverdraftAllowedException {
+    public void canWithdrawFromCurrentAccount() throws Exception {
+        Transaction transaction=null;
+        long equity=10000000;
         Bank bank = new Bank("MinBank", "1234", "12340000000001", "12340000000002", "12340000000009");
         Customer customer = new Customer("firstname", "lastname", "address", "phone");
         bank.addCustomer(customer);
@@ -162,18 +155,17 @@ public class TestBank {
         customer.addAccount(account);
         bank.addAccount(account);
 
-        try {
-            Transaction transaction = new Transaction(bank, "12345678901234", "12340000000002", 50000);
-            bank.addTransaction(transaction);
-        } catch (NegativeAmountException e){
-            System.out.println("Hov du! Man kan ikke overføre et negativt beløb!");
-            fail();
-        }
-        assertEquals(50000, AccountNumber.getAccount(bank, bank.getCashAccountNumber()).getBalance());
+        transaction=new Transaction(bank,bank.getCashAccountNumber(),bank.getOwnAccountNumber(),equity);
+        bank.addTransaction(transaction);
+
+        transaction = new Transaction(bank, "12345678901234", "12340000000002", 50000);
+        bank.addTransaction(transaction);
+
+        assertEquals(50000-equity, AccountNumber.getAccount(bank, bank.getCashAccountNumber()).getBalance());
     }
 
     @Test
-    public void canTransferWithSavingsAccount() throws NoOverdraftAllowedException{
+    public void canTransferWithSavingsAccount() throws Exception {
         Transaction transaction=null;
         Bank bank = new Bank("MinBank", "1234", "12340000000001", "12340000000002", "12340000000009");
         Customer customer = new Customer("firstname", "lastname", "address", "phone");
@@ -186,28 +178,18 @@ public class TestBank {
         customer.addAccount(account);
         bank.addAccount(account);
 
-        try {
-            transaction = new Transaction(bank, "12340000000002", "12345678904321", 50000);
-            bank.addTransaction(transaction);
-        } catch (NegativeAmountException e){
-            System.out.println("Hov du! Man kan ikke overføre et negativt beløb!");
-            fail();
-        }
+        transaction = new Transaction(bank, "12340000000002", "12345678904321", 50000);
+        bank.addTransaction(transaction);
 
-        try {
-            transaction = new Transaction(bank, "12345678904321", "12345678901234", 30000);
-            bank.addTransaction(transaction);
-        } catch (NegativeAmountException e){
-            System.out.println("Hov du! Man kan ikke overføre et negativt beløb!");
-            fail();
-        }
+        transaction = new Transaction(bank, "12345678904321", "12345678901234", 30000);
+        bank.addTransaction(transaction);
 
         assertEquals(20000, AccountNumber.getAccount(bank, "12345678904321").getBalance());
         assertEquals(30000, AccountNumber.getAccount(bank, "12345678901234").getBalance());
     }
 
     @Test
-    public void canTransferWithCurrentAccount() throws NoOverdraftAllowedException{
+    public void canTransferWithCurrentAccount() throws Exception {
         Transaction transaction=null;
         Bank bank = new Bank("MinBank", "1234", "12340000000001", "12340000000002", "12340000000009");
         Customer customer = new Customer("firstname", "lastname", "address", "phone");
@@ -220,21 +202,12 @@ public class TestBank {
         customer.addAccount(account);
         bank.addAccount(account);
 
-        try {
-            transaction = new Transaction(bank, "12340000000002", "12345678901234", 50000);
-            bank.addTransaction(transaction);
-        } catch (NegativeAmountException e){
-            System.out.println("Hov du! Man kan ikke overføre et negativt beløb!");
-            fail();
-        }
+        transaction = new Transaction(bank, "12340000000002", "12345678901234", 50000);
+        bank.addTransaction(transaction);
 
-        try {
-            transaction = new Transaction(bank, "12345678901234", "12345678904321", 30000);
-            bank.addTransaction(transaction);
-        } catch (NegativeAmountException e){
-            System.out.println("Hov du! Man kan ikke overføre et negativt beløb!");
-            fail();
-        }
+        transaction = new Transaction(bank, "12345678901234", "12345678904321", 30000);
+        bank.addTransaction(transaction);
+
         assertEquals(20000, AccountNumber.getAccount(bank, "12345678901234").getBalance());
         assertEquals(30000, AccountNumber.getAccount(bank, "12345678904321").getBalance());
     }

@@ -64,9 +64,11 @@ public class Transaction {
             // If transferring from savings account
             if (this.fromAccount instanceof SavingsAccount){
                 // the 'to' account must be owned by the same customer
-                if( bank.getCustomerNumber(this.toAccount)!=bank.getCustomerNumber(this.fromAccount))
-                {
-                    throw new IllegalAccountException();
+                if( bank.getCustomerNumber(this.toAccount)!=bank.getCustomerNumber(this.fromAccount)){
+                    // except if it's the cash account
+                    if( this.toAccount.getAccountNumber() != bank.getCashAccountNumber() ) {
+                        throw new IllegalAccountException();
+                    }
                 }
             }
         } else { // External toAccount
