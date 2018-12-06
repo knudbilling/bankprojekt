@@ -4,7 +4,7 @@ public class Transaction {
     final Account fromAccount;
     final Account toAccount;
     final long amount;
-    final Date timestamp;
+    Date timestamp;
     String bankReference;
 
     {

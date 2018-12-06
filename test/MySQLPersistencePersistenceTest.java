@@ -6,13 +6,13 @@ public class MySQLPersistencePersistenceTest {
 
     @Test
     public void canConnectToMySQL(){
-        Persistence p=new MySQLPersistence("192.168.1.102",3306,"bank","user","1234");
+        Persistence p=new MySQLPersistence("localhost",3306,"bank","user","1234");
         assertNotNull(p);
     }
 
     @Test
     public void greatBigTest(){
-        Persistence persistence = new MySQLPersistence("192.168.1.102",3306,"bank","user","1234");
+        Persistence persistence = new MySQLPersistence("localhost",3306,"bank","user","1234");
 
         Bank bank=new Bank("ShowMeTheMoney","9800","98000000000001","98000000000002","98000000000003");
 
@@ -62,6 +62,11 @@ public class MySQLPersistencePersistenceTest {
         bank.addAccount(a10);
 
         persistence.save(bank);
+
+        Bank bank9800 = persistence.load("9800");
+
+        for(Customer c:bank9800.getCustomerList())
+        System.out.println(c);
 
         assert(true);
     }

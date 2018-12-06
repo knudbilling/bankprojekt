@@ -188,6 +188,7 @@ public class MySQLPersistence implements Persistence {
         ResultSet resultSet = null;
         Bank bank;
         Account account;
+        Transaction transaction = null;
 
         bank = loadBank(registrationNumber, resultSet);
         if (bank == null)
@@ -197,12 +198,35 @@ public class MySQLPersistence implements Persistence {
 
         loadAccounts(registrationNumber, resultSet, bank);
 
-        // TODO: loadTransactions
+        String query = "select * from transactions where BankRegistrationNumber = ?;";
+        try {
+            PreparedStatement pst = connection.prepareStatement(query);
+            pst.setString(1, registrationNumber);
+            resultSet = pst.executeQuery();
+        } catch (SQLException e) {
+            System.out.println("***ERROR: Failed to query database***");
+            e.printStackTrace();
+        }
+        try {
+            while (resultSet.next()) {
+                try {
+                    transaction = new Transaction(bank, bank.getRegNo() + resultSet.getString("FromAccountNumber"), bank.getRegNo() + resultSet.getString("ToAccountNumber"), resultSet.getLong("Amount"));
+                } catch (NegativeAmountException e) {
+                    return null;
+                }
+                transaction.timestamp = resultSet.getDate("TimeStamp");
+                transaction.bankReference = resultSet.getString("Reference");
 
-        // TODO: calculate balances
+                try {
+                    bank.addTransaction(transaction);
+                } catch (Exception e) {return null;}
 
-
-        throw new UnsupportedOperationException();
+            }
+        } catch (SQLException e) {
+            System.out.println("***ERROR: Failed getting transaction data from database***");
+            e.printStackTrace();
+        }
+        return bank;
     }
 
     private void loadAccounts(String registrationNumber, ResultSet resultSet, Bank bank) {
@@ -219,16 +243,15 @@ public class MySQLPersistence implements Persistence {
         try {
             while (resultSet.next()) {
 
-                if(resultSet.getString("AccountType").equals("C")){
-                    account=new CurrentAccount(resultSet.getString(bank.getRegNo()+"AccountNumber"));
+                if (resultSet.getString("AccountType").equals("C")) {
+                    account = new CurrentAccount(bank.getRegNo() +resultSet.getString("AccountNumber"));
                 } else {
-                    account = new SavingsAccount(resultSet.getString(bank.getRegNo() + "AccountNumber"));
+                    account = new SavingsAccount(bank.getRegNo() +resultSet.getString("AccountNumber"));
                 }
-                int customerId=resultSet.getInt("CustomerID");
-                List<Customer> cl=bank.getCustomerList();
-                for(int i=0;i<cl.size();i++)
-                {
-                    if(cl.get(i).getidNo()==customerId){
+                int customerId = resultSet.getInt("CustomerID");
+                List<Customer> cl = bank.getCustomerList();
+                for (int i = 0; i < cl.size(); i++) {
+                    if (cl.get(i).getidNo() == customerId) {
                         cl.get(i).addAccount(account);
                         break;
                     }
