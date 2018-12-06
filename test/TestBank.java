@@ -61,7 +61,7 @@ public class TestBank {
     }
 
     @Test
-    public void canPrintAccountStatus() throws NoOverdraftAllowedException, NegativeAmountException, NotEnoughCashException{
+    public void canPrintAccountStatus() throws Exception {
         Bank bank = new Bank("MinBank", "1234", "12345678901234", "12340000000002", "12340000000009");
         Customer customer = new Customer("firstname", "lastname", "address", "phone");
         bank.addCustomer(customer);
