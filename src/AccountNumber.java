@@ -56,6 +56,14 @@ public class AccountNumber {
         return true;
     }
 
+    public static boolean exists(Bank bank, String accountNumber){
+        for(int i=0;i<bank.getAccountList().size();i++){
+            if(bank.getAccountList().get(i).accountNumber.equals(accountNumber))
+                return true;
+        }
+        return false;
+    }
+
     /**
      * Get an Account object identified by the supplied account number from a bank instance
      * @param bank The bank to get the Account object from
@@ -64,7 +72,7 @@ public class AccountNumber {
      */
     public static Account getAccount(Bank bank, String accountNumber){
         for(int i=0;i<bank.getAccountList().size();i++){
-            if(bank.getAccountList().get(i).accountNo.equals(accountNumber))
+            if(bank.getAccountList().get(i).accountNumber.equals(accountNumber))
                 return bank.getAccountList().get(i);
         }
         return null;

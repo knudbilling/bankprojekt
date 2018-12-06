@@ -30,7 +30,8 @@ public class Transaction {
      * @param toAccountNumber the account number to move money to
      * @param amount the amount to move expressed in 'øre'
      */
-    public Transaction(Bank bank, String fromAccountNumber, String toAccountNumber, long amount) throws NegativeAmountException {
+    public Transaction(Bank bank, String fromAccountNumber, String toAccountNumber, long amount)
+            throws NegativeAmountException, IllegalAccountException {
 
         // Error on: amount is negative
         if(amount<0)
@@ -60,6 +61,16 @@ public class Transaction {
         // Local toAccount
         if(AccountNumber.isLocal(bank,toAccountNumber)) {
             this.toAccount = AccountNumber.getAccount(bank, toAccountNumber);
+            // If transferring from savings account
+            if (this.fromAccount instanceof SavingsAccount){
+                // the 'to' account must be owned by the same customer
+                if( bank.getCustomerNumber(this.toAccount)!=bank.getCustomerNumber(this.fromAccount)){
+                    // except if it's the cash account
+                    if( this.toAccount.getAccountNumber() != bank.getCashAccountNumber() ) {
+                        throw new IllegalAccountException();
+                    }
+                }
+            }
         } else { // External toAccount
             if (BankRegister.accountExists(toAccountNumber)) {
                 this.bankReference = toAccountNumber;
@@ -72,6 +83,6 @@ public class Transaction {
     }
 
     public String toString(){
-        return fromAccount.accountNo + " " + toAccount.accountNo + " " + amount;
+        return fromAccount.accountNumber + " " + toAccount.accountNumber + " " + amount;
     }
 }

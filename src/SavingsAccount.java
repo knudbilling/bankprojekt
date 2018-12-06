@@ -8,19 +8,17 @@ public class SavingsAccount extends Account
         super(accountNo);
         this.balance=0;
         this.interestRate = STANDARD_INTEREST_RATE;
-        this.overdraftAllowed = STANDARD_OVERDRAFT_ALLOWED;
+        this.allowedOverdraft = STANDARD_OVERDRAFT_ALLOWED;
     }
 
-    public void withdraw(long amount)
+    public void withdraw(long amount) throws NoOverdraftAllowedException, NegativeAmountException
     {
-        if(this.balance - amount < this.overdraftAllowed)
-        {
-            System.out.println("Transaction unsuccessfull");
-        }
-        else
-        {
-            this.balance -= amount;
-            System.out.println("Transaction successfull");
-        }
+        if(amount<0)
+            throw new NegativeAmountException();
+
+        if(this.balance - amount < 0)
+            throw new NoOverdraftAllowedException();
+
+        balance -= amount;
     }
 }

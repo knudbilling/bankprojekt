@@ -10,22 +10,27 @@ public class Customer {
     public int idNo;
     public List<Account> accountList = new ArrayList<>();
 
-    static int nextidNo = 0;
+    static int nextidNo = 1;
 
 
     // constructor
     public Customer(String firstName, String lastName, String address, String phoneNo){
+        this(firstName,lastName,address,phoneNo,nextidNo);
+    }
+
+    public Customer(String firstName, String lastName, String address, String phoneNo,int idNo){
         // default constructor.
-        this();
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
         this.phoneNo = phoneNo;
+        this.idNo=idNo;
+        if(idNo>=nextidNo) nextidNo=idNo+1;
     }
     //default constructor.
-    public Customer() {
-        idNo = nextidNo++;
-    }
+    //public Customer() {
+    //    idNo = nextidNo++;
+    //}
 
 
     //Methods
@@ -53,7 +58,7 @@ public class Customer {
         }else{
             for (int i = accountList.size() - 1; i >= 0; i--) {
                 // Looking for the accoutNo in accountList
-                if (accountList.get(i).getAccountNo() == accountNo) {
+                if (accountList.get(i).getAccountNumber() == accountNo) {
                     if (accountList.get(i).getBalance() == 0) { // account balance needs to be zero in order to delete the account
                         accountList.remove(i);
                     } else {

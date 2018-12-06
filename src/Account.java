@@ -1,7 +1,8 @@
+
 public abstract class Account {
-    protected final String accountNo;
+    protected final String accountNumber;
     protected long balance;
-    protected long overdraftAllowed;
+    protected long allowedOverdraft;
     protected int interestRate;
 
     /**
@@ -9,19 +10,17 @@ public abstract class Account {
      * @param accountNo The account number.
      */
     public Account(String accountNo) {
-        this.accountNo = accountNo;
+        this.accountNumber = accountNo;
     }
 
     /**
      * Handling the depositing of money into the account.
      * @param amount The amount of money to be deposited.
      */
-    public void deposit(long amount) {
-        if(amount > 0) {
-            this.balance += amount;
-        } else {
-            //DO STUFF?
-        }
+    public void deposit(long amount) throws NegativeAmountException {
+        if(amount<0)
+            throw new NegativeAmountException();
+        this.balance += amount;
     }
     
     /**
@@ -29,16 +28,16 @@ public abstract class Account {
      * Handling withdrawal of money from accounts.
      * @param amount The amount of money to be withdrawn.
      */
-    public abstract void withdraw(long amount);
+    public abstract void withdraw(long amount) throws NoOverdraftAllowedException, NegativeAmountException;
 
-    public String getAccountNo() { return this.accountNo; }
+    public String getAccountNumber() { return this.accountNumber; }
     public long getBalance() { return this.balance; }
-    public long getOverdraftAllowed() { return this.overdraftAllowed; }
+    public long getAllowedOverdraft() { return this.allowedOverdraft; }
     public int getInterestRate() { return this.interestRate; }
 
 
-    public void setOverdraftAllowed(long overdraftAllowed) {
-        this.overdraftAllowed = overdraftAllowed;
+    public void setAllowedOverdraft(long allowedOverdraft) {
+        this.allowedOverdraft = allowedOverdraft;
     }
 
     public void setInterestRate(int interestRate) {
