@@ -17,11 +17,11 @@ public class Transaction {
      * @param toAccount
      * @param amount
      */
-    public Transaction(Account fromAccount, Account toAccount, long amount){
-        this.fromAccount=fromAccount;
-        this.toAccount=toAccount;
-        this.amount=amount;
-    }
+//    public Transaction(Account fromAccount, Account toAccount, long amount){
+//        this.fromAccount=fromAccount;
+//        this.toAccount=toAccount;
+//        this.amount=amount;
+//    }
 
     /**
      * Constructs a transaction from two account numbers

@@ -54,7 +54,7 @@ public class Bank {
         if(transactionList.contains(transaction))
             return;
 
-        // If it's a current account
+        // If it's from a current account
         if(transaction.fromAccount instanceof CurrentAccount){
             // and it's not to the banks own account
             if(transaction.toAccount != AccountNumber.getAccount(this,this.ownAccountNumber)){
