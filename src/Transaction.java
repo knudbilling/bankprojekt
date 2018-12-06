@@ -50,13 +50,6 @@ public class Transaction {
         }
         this.fromAccount=AccountNumber.getAccount(bank,fromAccountNumber);
 
-        // For a CurrentAccount, it is not allowed to make transactions that exceed the balance of that account.
-        if(fromAccount instanceof CurrentAccount && amount > fromAccount.getBalance()){
-            throw new TransactionTooLargeException();
-        }
-
-
-
         // toAccount
         // Error on: toAccount is in an invalid format
         if(!AccountNumber.isValidFormat(toAccountNumber)) {
@@ -79,6 +72,6 @@ public class Transaction {
     }
 
     public String toString(){
-        return fromAccount.accountNo + " " + toAccount.accountNo + " " + amount;
+        return fromAccount.accountNumber + " " + toAccount.accountNumber + " " + amount;
     }
 }
