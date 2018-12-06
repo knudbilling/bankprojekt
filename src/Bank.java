@@ -61,7 +61,7 @@ public class Bank {
                 // and the balance gets below the allowed overdraft
                 if(transaction.fromAccount.getBalance()-transaction.amount<-transaction.fromAccount.allowedOverdraft){
                     // then make a transaction with a fee payable to the banks own account
-                    Transaction feeTransaction = new Transaction(transaction.fromAccount,AccountNumber.getAccount(this,this.ownAccountNumber),SERVICE_CHARGE);
+                    Transaction feeTransaction = new Transaction(this,transaction.fromAccount.getAccountNumber(),this.getOwnAccountNumber(),SERVICE_CHARGE);
                     this.addTransaction(feeTransaction);
                 }
             }
