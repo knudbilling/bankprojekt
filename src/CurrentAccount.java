@@ -1,6 +1,6 @@
 public class CurrentAccount extends Account{
 
-    private static final long STANDARD_OVERDRAFT_ALLOWED = 1_000_000; //10.000 kr
+    private static final long STANDARD_OVERDRAFT_ALLOWED = 10000_00; //DKK 10.000,00
     private static final int STANDARD_INTEREST_RATE = 10;
 
     /**

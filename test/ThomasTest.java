@@ -39,6 +39,7 @@ public class ThomasTest{
         assertEquals(0, AccountNumber.getAccount(bank, "98001234567890").getBalance());
     }
 
+    @Test
     public void canTransferLegalAmountWithOverdraftFromACurrentAccountToASavingsAccountInternallyInBank() throws Exception {
 
         //Setting up the bank and the customers.
@@ -62,13 +63,13 @@ public class ThomasTest{
         Transaction transaction = new Transaction(bank,bank.getCashAccountNumber(), "98000000000001", 10000_00);
         bank.addTransaction(transaction);
 
-        //Transfering DKK 15.000,00 to recipient's account.
-        transaction = new Transaction(bank,"98000000000001", "98000000000002", 15000_00);
+        //Transfering DKK 25.000,00 to recipient's account.
+        transaction = new Transaction(bank,"98000000000001", "98000000000002", 25000_00);
         bank.addTransaction(transaction);
 
         //Checking that the amounts on the accounts are as predicted.
-        assertEquals(-5100_00, AccountNumber.getAccount(bank,"98000000000001").getBalance());
-        assertEquals(15000_00, AccountNumber.getAccount(bank,"98000000000002").getBalance());
+        assertEquals(-15100_00, AccountNumber.getAccount(bank,"98000000000001").getBalance());
+        assertEquals(25000_00, AccountNumber.getAccount(bank,"98000000000002").getBalance());
         assertEquals(100_00, AccountNumber.getAccount(bank, "98001234567890").getBalance());
     }
 
