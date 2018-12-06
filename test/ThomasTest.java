@@ -1,7 +1,6 @@
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 
 public class ThomasTest{
 
@@ -21,7 +20,7 @@ public class ThomasTest{
         bank.addAccount(accountSender);
 
         //Setting up recipients account.
-        Account accountRecipient = new SavingsAccount ("98000000000002");
+        Account accountRecipient = new CurrentAccount ("98000000000002");
         customerSender.addAccount(accountRecipient);
         bank.addAccount(accountRecipient);
 
@@ -55,7 +54,7 @@ public class ThomasTest{
         bank.addAccount(accountSender);
 
         //Setting up recipients account.
-        Account accountRecipient = new SavingsAccount ("98000000000002");
+        Account accountRecipient = new CurrentAccount ("98000000000002");
         customerSender.addAccount(accountRecipient);
         bank.addAccount(accountRecipient);
 
@@ -89,7 +88,7 @@ public class ThomasTest{
         bank.addAccount(accountSender);
 
         //Setting up recipients account.
-        Account accountRecipient = new SavingsAccount ("98000000000002");
+        Account accountRecipient = new CurrentAccount ("98000000000002");
         customerSender.addAccount(accountRecipient);
         bank.addAccount(accountRecipient);
 
