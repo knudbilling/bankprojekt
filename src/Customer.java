@@ -74,6 +74,4 @@ public class Customer {
             System.out.println(accountList.get(i).toString() + "   ");
         }
     }
-
-
 }
