@@ -1,9 +1,13 @@
 import org.junit.Test;
-
 import static org.junit.Assert.assertEquals;
+
+//Test 13 - Overførsel af gyldigt beløb uden overtræk fra lønkonto til anden kundes lønkonto i samme pengeinstitut.
+//Test 14 - Overførsel af gyldigt beløb med overtræk fra lønkonto til anden kundes lønkonto i samme pengeinstitut.
+//Test 15 - Overførsel af negativt beløb fra lønkonto til anden kundes lønkonto i samme pengeinstitut.
 
 public class ThomasTest{
 
+    //Test 13 - Overførsel af gyldigt beløb uden overtræk fra lønkonto til anden kundes lønkonto i samme pengeinstitut.
     @Test
     public void canTransferLegalAmountNoOverdraftFromACurrentAccountToACurrentAccountInternallyInBank() throws Exception {
 
@@ -38,6 +42,7 @@ public class ThomasTest{
         assertEquals(0, AccountNumber.getAccount(bank, "98001234567890").getBalance());
     }
 
+    //Test 14 - Overførsel af gyldigt beløb med overtræk fra lønkonto til anden kundes lønkonto i samme pengeinstitut.
     @Test
     public void canTransferLegalAmountWithOverdraftFromACurrentAccountToACurrentAccountInternallyInBank() throws Exception {
 
@@ -72,8 +77,9 @@ public class ThomasTest{
         assertEquals(100_00, AccountNumber.getAccount(bank, "98001234567890").getBalance());
     }
 
+    //Test 15 - Overførsel af negativt beløb fra lønkonto til anden kundes lønkonto i samme pengeinstitut.
     @Test(expected = NegativeAmountException.class)
-    public void canTransferIllegalAmountFromACurrentAccountToACurrentAccountInternallyInBank() throws Exception {
+    public void canNotTransferIllegalAmountFromACurrentAccountToACurrentAccountInternallyInBank() throws Exception {
 
         //Setting up the bank and the customers.
         Bank bank = new Bank("MinBank", "9800", "98001234567890", "98000987654321", "98000000000009");

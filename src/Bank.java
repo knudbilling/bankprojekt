@@ -50,7 +50,7 @@ public class Bank {
     }
 
     public void addTransaction(Transaction transaction)
-            throws NegativeAmountException, NoOverdraftAllowedException, NotEnoughCashException{
+            throws NegativeAmountException, NoOverdraftAllowedException, NotEnoughCashException, IllegalAccountException {
         if(transactionList.contains(transaction))
             return;
 
@@ -63,6 +63,17 @@ public class Bank {
                     // then make a transaction with a fee payable to the banks own account
                     Transaction feeTransaction = new Transaction(this,transaction.fromAccount.getAccountNumber(),this.getOwnAccountNumber(),SERVICE_CHARGE);
                     this.addTransaction(feeTransaction);
+                }
+            }
+        }
+
+        // If it's from a savings account
+        if(transaction.fromAccount instanceof SavingsAccount){
+            // and it's not to the customers own account
+            if(getCustomerNumber(transaction.fromAccount) != getCustomerNumber(transaction.toAccount)){
+                // or the banks cash account
+                if(transaction.toAccount.getAccountNumber() != this.getCashAccountNumber()) {
+                    throw new IllegalAccountException();
                 }
             }
         }
