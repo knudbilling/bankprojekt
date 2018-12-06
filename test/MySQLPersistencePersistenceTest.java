@@ -6,13 +6,13 @@ public class MySQLPersistencePersistenceTest {
 
     @Test
     public void canConnectToMySQL(){
-        Persistence p=new MySQLPersistence("localhost",3306,"bank","user","1234");
+        Persistence p=new MySQLPersistence("192.168.1.102",3306,"bank","user","1234");
         assertNotNull(p);
     }
 
     @Test
-    public void greatBigTest(){
-        Persistence persistence = new MySQLPersistence("localhost",3306,"bank","user","1234");
+    public void greatBigTest() throws Exception {
+        Persistence persistence = new MySQLPersistence("192.168.1.102",3306,"bank","user","1234");
 
         Bank bank=new Bank("ShowMeTheMoney","9800","98000000000001","98000000000002","98000000000003");
 
@@ -33,16 +33,6 @@ public class MySQLPersistencePersistenceTest {
         Account a9 = new SavingsAccount("98001000000009");
         Account a10 = new CurrentAccount("98001000000010");
 
-        c1.addAccount(a1);
-        c1.addAccount(a2);
-        c2.addAccount(a3);
-        c2.addAccount(a4);
-        c3.addAccount(a5);
-        c3.addAccount(a6);
-        c4.addAccount(a7);
-        c4.addAccount(a8);
-        c5.addAccount(a9);
-        c5.addAccount(a10);
 
         bank.addCustomer(c1);
         bank.addCustomer(c2);
@@ -50,16 +40,16 @@ public class MySQLPersistencePersistenceTest {
         bank.addCustomer(c4);
         bank.addCustomer(c5);
 
-        bank.addAccount(a1);
-        bank.addAccount(a2);
-        bank.addAccount(a3);
-        bank.addAccount(a4);
-        bank.addAccount(a5);
-        bank.addAccount(a6);
-        bank.addAccount(a7);
-        bank.addAccount(a8);
-        bank.addAccount(a9);
-        bank.addAccount(a10);
+        bank.addAccount(c1,a1);
+        bank.addAccount(c1,a2);
+        bank.addAccount(c2,a3);
+        bank.addAccount(c2,a4);
+        bank.addAccount(c3,a5);
+        bank.addAccount(c3,a6);
+        bank.addAccount(c4,a7);
+        bank.addAccount(c4,a8);
+        bank.addAccount(c5,a9);
+        bank.addAccount(c5,a10);
 
         persistence.save(bank);
 

@@ -16,6 +16,7 @@ public class JohannesTest {
 
         Account firstAccount = new SavingsAccount("12345678901234");
         customer.addAccount(firstAccount);
+        bank.addAccount(customer,firstAccount);
 
         Customer c = (Customer) bank.getCustomerList().get(0);
         assertEquals(firstAccount, c.accountList.get(0));
@@ -23,7 +24,7 @@ public class JohannesTest {
 
         Account secondAccount = new CurrentAccount("12345678904321");
         customer.addAccount(secondAccount);
-
+        bank.addAccount(customer,secondAccount);
 
         assertEquals(secondAccount, c.accountList.get(1));
 
@@ -49,6 +50,7 @@ public class JohannesTest {
 
         Account firstAccount = new SavingsAccount("12345678901234");
         customer.addAccount(firstAccount);
+        bank.addAccount(customer,firstAccount);
 
         Customer c = (Customer) bank.getCustomerList().get(0);
         assertEquals(firstAccount, c.accountList.get(0));
@@ -56,6 +58,7 @@ public class JohannesTest {
 
         Account secondAccount = new SavingsAccount("12345678904321");
         customer.addAccount(secondAccount);
+        bank.addAccount(customer,secondAccount);
 
 
         assertEquals(secondAccount, c.accountList.get(1));
@@ -79,19 +82,21 @@ public class JohannesTest {
         Customer customer = new Customer("firstname", "lastname", "address", "phone");
         bank.addCustomer(customer);
 
-        Account firstAccount = new SavingsAccount("12345678901234");
+        Account firstAccount = new SavingsAccount("12345678901235");
         customer.addAccount(firstAccount);
+        bank.addAccount(customer,firstAccount);
 
         Customer c = (Customer) bank.getCustomerList().get(0);
         assertEquals(firstAccount, c.accountList.get(0));
 
         Account secondAccount = new CurrentAccount("12345678904321");
         customer.addAccount(secondAccount);
+        bank.addAccount(customer,secondAccount);
 
         assertEquals(secondAccount, c.accountList.get(1));
 
 
-        Transaction putMoneyInAccount = new Transaction(bank, bank.getInterBankAccountNumber(),firstAccount.getAccountNumber(),3000);
+        Transaction putMoneyInAccount = new Transaction(bank, bank.getCashAccountNumber(),firstAccount.getAccountNumber(),3000);
         bank.addTransaction(putMoneyInAccount);
 
 

@@ -9,7 +9,7 @@ import static org.junit.Assert.fail;
 public class TestBank {
 
     @Test
-    public void canMakeNewCustomer() {
+    public void canMakeNewCustomer() throws Exception {
         Bank bank = new Bank("MinBank", "1234", "12345678901234", "12340000000002", "12340000000009");
         Customer customer = new Customer("firstname", "lastname", "address", "phone");
         bank.addCustomer(customer);
@@ -18,7 +18,7 @@ public class TestBank {
     }
 
     @Test
-    public void canMakeNewSavingsAccount() {
+    public void canMakeNewSavingsAccount() throws Exception{
         Bank bank = new Bank("MinBank", "1234", "12345678901234", "12340000000002", "12340000000009");
         Customer customer = new Customer("firstname", "lastname", "address", "phone");
         bank.addCustomer(customer);
@@ -31,7 +31,7 @@ public class TestBank {
     }
 
     @Test
-    public void canMakeNewCurrentAccount() {
+    public void canMakeNewCurrentAccount() throws Exception{
         Bank bank = new Bank("MinBank", "1234", "12345678901234", "12340000000002", "12340000000009");
         Customer customer = new Customer("firstname", "lastname", "address", "phone");
         bank.addCustomer(customer);
@@ -44,7 +44,7 @@ public class TestBank {
     }
 
     @Test
-    public void canSetInterestRateOnSavingsAccount() {
+    public void canSetInterestRateOnSavingsAccount() throws  Exception{
         Bank bank = new Bank("MinBank", "1234", "12345678901234", "12340000000002", "12340000000009");
         Customer customer = new Customer("firstname", "lastname", "address", "phone");
         bank.addCustomer(customer);
@@ -98,7 +98,7 @@ public class TestBank {
 
         Account account = new SavingsAccount("12345678901234");
         customer.addAccount(account);
-        bank.addAccount(account);
+        bank.addAccount(customer,account);
 
         Transaction transaction = new Transaction(bank, "12340000000002", "12345678901234", 50000);
         bank.addTransaction(transaction);
@@ -114,7 +114,7 @@ public class TestBank {
 
         Account account = new CurrentAccount("12345678901234");
         customer.addAccount(account);
-        bank.addAccount(account);
+        bank.addAccount(customer,account);
 
         Transaction transaction = new Transaction(bank, "12340000000002", "12345678901234", 50000);
         bank.addTransaction(transaction);
@@ -131,7 +131,7 @@ public class TestBank {
 
         Account account = new SavingsAccount("12345678901234");
         customer.addAccount(account);
-        bank.addAccount(account);
+        bank.addAccount(customer,account);
 
         transaction = new Transaction(bank,bank.getCashAccountNumber(),"12345678901234",50000);
         bank.addTransaction(transaction);
@@ -153,7 +153,7 @@ public class TestBank {
 
         Account account = new CurrentAccount("12345678901234");
         customer.addAccount(account);
-        bank.addAccount(account);
+        bank.addAccount(customer,account);
 
         transaction=new Transaction(bank,bank.getCashAccountNumber(),bank.getOwnAccountNumber(),equity);
         bank.addTransaction(transaction);
@@ -173,10 +173,10 @@ public class TestBank {
 
         Account account = new CurrentAccount("12345678901234");
         customer.addAccount(account);
-        bank.addAccount(account);
+        bank.addAccount(customer,account);
         account = new SavingsAccount("12345678904321");
         customer.addAccount(account);
-        bank.addAccount(account);
+        bank.addAccount(customer,account);
 
         transaction = new Transaction(bank, "12340000000002", "12345678904321", 50000);
         bank.addTransaction(transaction);
@@ -197,10 +197,10 @@ public class TestBank {
 
         Account account = new CurrentAccount("12345678901234");
         customer.addAccount(account);
-        bank.addAccount(account);
+        bank.addAccount(customer,account);
         account = new SavingsAccount("12345678904321");
         customer.addAccount(account);
-        bank.addAccount(account);
+        bank.addAccount(customer,account);
 
         transaction = new Transaction(bank, "12340000000002", "12345678901234", 50000);
         bank.addTransaction(transaction);
@@ -213,7 +213,7 @@ public class TestBank {
     }
 
     @Test
-    public void canDeleteAccountFromCustomersAccountList() {
+    public void canDeleteAccountFromCustomersAccountList() throws Exception {
         Bank bank = new Bank("MinBank", "1234", "12345678901234", "12340000000002", "12340000000009");
         Customer customer = new Customer("firstname", "lastname", "address", "phone");
         bank.addCustomer(customer);

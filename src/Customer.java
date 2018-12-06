@@ -48,10 +48,18 @@ public class Customer {
                + this.address + "phone number: " + this.phoneNo + " idNo: " + this.idNo;
     }
 
-    public void addAccount(Account account){
-        // this.Account
-        accountList.add(account);
+    public void addAccount(Account account) throws DuplicateAccountException {
+        for(int i=0;i<this.accountList.size();i++){
+            if(this.accountList.get(i).getAccountNumber()==account.getAccountNumber()){
+                if(this.accountList.get(i)!=account) {
+                    throw new DuplicateAccountException();
+                }
+            }
+        }
+        if(!this.accountList.contains(account))
+            accountList.add(account);
     }
+
     public void deleteAccount(String accountNo){
         if (accountList.size() <=0) {
             System.out.println("accountList is empty");

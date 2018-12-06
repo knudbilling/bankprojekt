@@ -12,11 +12,11 @@ public class Martin_Test {
 
         Account account = new CurrentAccount("98000000000001");
         customer.addAccount(account);
-        bank.addAccount(account);
+        bank.addAccount(customer,account);
 
         account = new SavingsAccount ("98000000000002");
         customer.addAccount(account);
-        bank.addAccount(account);
+        bank.addAccount(customer,account);
 
         //Sæt penge ind på kundes konto
         Transaction transaction = new Transaction(bank,bank.getCashAccountNumber(), "98000000000001", 50000);
@@ -38,11 +38,11 @@ public class Martin_Test {
 
         Account account = new CurrentAccount("98000000000001");
         customer.addAccount(account);
-        bank.addAccount(account);
+        bank.addAccount(customer,account);
 
         account = new SavingsAccount ("98000000000002");
         customer.addAccount(account);
-        bank.addAccount(account);
+        bank.addAccount(customer,account);
 
         // Sæt penge ind på kundens konto
         Transaction transaction = new Transaction(bank,bank.getCashAccountNumber(), "98000000000001", 0);
@@ -67,11 +67,11 @@ public class Martin_Test {
 
         Account account = new CurrentAccount("98000000000001");
         customer.addAccount(account);
-        bank.addAccount(account);
+        bank.addAccount(customer,account);
 
         account = new SavingsAccount ("98000000000002");
         customer.addAccount(account);
-        bank.addAccount(account);
+        bank.addAccount(customer,account);
 
         try {
             // Sæt penge ind på kundens konto

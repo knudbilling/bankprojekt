@@ -3,7 +3,7 @@ public class CustomerMainTestJohannesA {
 
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         Customer firstCustomer = new Customer("Johannes", "Linde-Hansen", "My home", "12345678");
 
         System.out.println(firstCustomer.toString());

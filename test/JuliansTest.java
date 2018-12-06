@@ -12,14 +12,14 @@ public class JuliansTest {
 */
 
     @Test
-    public void canTransferFromCurrentToExternalAccount() throws NoOverdraftAllowedException, NotEnoughCashException, IllegalAccountException {
+    public void canTransferFromCurrentToExternalAccount() throws Exception {
         Bank bank = new Bank("MinBank", "9800", "98005678900001", "98000000000002", "98000000000001");
         Customer customer = new Customer("firstname", "lastname", "address", "phone");
         bank.addCustomer(customer);
 
         Account account = new CurrentAccount("98005678901234");
         customer.addAccount(account);
-        bank.addAccount(account);
+        bank.addAccount(customer,account);
 
         try {
             Transaction transaction = new Transaction(bank, bank.getCashAccountNumber(), "98005678901234", 5000);
@@ -35,14 +35,14 @@ public class JuliansTest {
     }
 
     @Test
-    public void canTransferWithOverdraftFromCurrentToExternalAccount() throws NoOverdraftAllowedException, IllegalAccountException, NotEnoughCashException  {
+    public void canTransferWithOverdraftFromCurrentToExternalAccount() throws Exception  {
         Bank bank = new Bank("MinBank", "9800", "98005678900001", "98000000000002", "98000000000001");
         Customer customer = new Customer("firstname", "lastname", "address", "phone");
         bank.addCustomer(customer);
 
         Account account = new CurrentAccount("98005678901234");
         customer.addAccount(account);
-        bank.addAccount(account);
+        bank.addAccount(customer,account);
 
         try {
             Transaction transaction = new Transaction(bank, "98000000000002", "98005678901234", 5000);
@@ -58,7 +58,7 @@ public class JuliansTest {
     }
 
     @Test (expected = NegativeAmountException.class)
-    public void canTransferFromNegativeCurrentToExternalAccount() throws NoOverdraftAllowedException, NegativeAmountException, NotEnoughCashException, IllegalAccountException {
+    public void canTransferFromNegativeCurrentToExternalAccount() throws Exception {
         Bank bank = new Bank("MinBank", "9800", "98005678900001", "98000000000002", "98000000000001");
         Customer customer = new Customer("firstname", "lastname", "address", "phone");
         bank.addCustomer(customer);
@@ -66,7 +66,7 @@ public class JuliansTest {
         Transaction transaction;
         Account account = new CurrentAccount("98005678901234");
         customer.addAccount(account);
-        bank.addAccount(account);
+        bank.addAccount(customer,account);
 
         try {
             transaction = new Transaction(bank, "98000000000002", "98005678901234", 10000); //Hvordan sætter man kontoen på minus?

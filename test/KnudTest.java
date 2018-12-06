@@ -19,18 +19,12 @@ public class KnudTest {
         Bank bank=new Bank("MyBank","9800","98000000000001","98000000000002","98000000000003");
 
         customer = new Customer("John","Doe","Address","12345678");
-        bank.addCustomer(customer);
-
         account=new CurrentAccount("98001000000001");
-        customer.addAccount(account);
-        bank.addAccount(account);
+        bank.addAccount(customer,account);
 
         customer = new Customer("Jane","Doe","Address","87654321");
-        bank.addCustomer(customer);
-
         account=new SavingsAccount("98001000000002");
-        customer.addAccount(account);
-        bank.addAccount(account);
+        bank.addAccount(customer,account);
 
         // Indsæt 1000 kr på kundens lønkonto
         transaction=new Transaction(bank,bank.getCashAccountNumber(),"98001000000001",100000);
@@ -56,18 +50,12 @@ public class KnudTest {
         Bank bank=new Bank("MyBank","9800","98000000000001","98000000000002","98000000000003");
 
         customer = new Customer("John","Doe","Address","12345678");
-        bank.addCustomer(customer);
-
         account=new CurrentAccount("98001000000001");
-        customer.addAccount(account);
-        bank.addAccount(account);
+        bank.addAccount(customer,account);
 
         customer = new Customer("Jane","Doe","Address","87654321");
-        bank.addCustomer(customer);
-
         account=new SavingsAccount("98001000000002");
-        customer.addAccount(account);
-        bank.addAccount(account);
+        bank.addAccount(customer,account);
 
         // Indsæt 100 kr på kundens lønkonto
         transaction=new Transaction(bank,bank.getCashAccountNumber(),"98001000000001",10000);
@@ -97,18 +85,12 @@ public class KnudTest {
         Bank bank=new Bank("MyBank","9800","98000000000001","98000000000002","98000000000003");
 
         customer = new Customer("John","Doe","Address","12345678");
-        bank.addCustomer(customer);
-
         account=new CurrentAccount("98001000000001");
-        customer.addAccount(account);
-        bank.addAccount(account);
+        bank.addAccount(customer,account);
 
         customer = new Customer("Jane","Doe","Address","87654321");
-        bank.addCustomer(customer);
-
         account=new SavingsAccount("98001000000002");
-        customer.addAccount(account);
-        bank.addAccount(account);
+        bank.addAccount(customer,account);
 
         // Indsæt 1000 kr på kundens lønkonto
         transaction=new Transaction(bank,bank.getCashAccountNumber(),"98001000000001",100000);

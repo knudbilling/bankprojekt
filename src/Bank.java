@@ -14,7 +14,7 @@ public class Bank {
     private ArrayList<Transaction> transactionList;
     private ArrayList<Account> accountList;
 
-    public Bank(String name, String registrationNumber, String ownAccountNumber, String cashAccountNumber, String interBankAccountNumber) {
+    public Bank(String name, String registrationNumber, String ownAccountNumber, String cashAccountNumber, String interBankAccountNumber) throws DuplicateAccountException {
         this.name = name;
         this.REGISTRATION_NUMBER = registrationNumber;
         this.ownAccountNumber = ownAccountNumber;
@@ -40,7 +40,14 @@ public class Bank {
         addAccount(account);
     }
 
-    public void addCustomer(Customer customer) {
+    public void addCustomer(Customer customer) throws DuplicateCustomerException {
+        for(int i=0;i<customerList.size();i++){
+            if(customerList.get(i).getidNo()==customer.getidNo()){
+                if(customerList.get(i)!=customer) {
+                    throw new DuplicateCustomerException();
+                }
+            }
+        }
         if (!customerList.contains(customer))
             customerList.add(customer);
     }
@@ -90,9 +97,27 @@ public class Bank {
         transactionList.add(transaction);
     }
 
-    public void addAccount(Account account) {
+    private void addAccount(Account account) throws DuplicateAccountException {
+        for(int i=0;i<accountList.size();i++){
+            if(accountList.get(i).getAccountNumber()==account.getAccountNumber()) {
+                if(accountList.get(i)!=account) {
+                    throw new DuplicateAccountException();
+                }
+            }
+        }
         if (!accountList.contains(account))
             accountList.add(account);
+    }
+
+    public void addAccount(Customer customer, Account account) throws DuplicateAccountException, DuplicateCustomerException {
+        // If customer==null then do no customer checks, just add account
+        if(customer==null){
+            this.addAccount(account);
+        } else {
+            this.addCustomer(customer);
+            customer.addAccount(account);
+            this.addAccount(account);
+        }
     }
 
     public String getName() {

@@ -231,6 +231,8 @@ public class MySQLPersistence implements Persistence {
 
     private void loadAccounts(String registrationNumber, ResultSet resultSet, Bank bank) {
         Account account;
+        Customer customer=null;
+
         String query = "select * from accounts where BankRegistrationNumber = ?;";
         try {
             PreparedStatement pst = connection.prepareStatement(query);
@@ -249,14 +251,22 @@ public class MySQLPersistence implements Persistence {
                     account = new SavingsAccount(bank.getRegNo() +resultSet.getString("AccountNumber"));
                 }
                 int customerId = resultSet.getInt("CustomerID");
-                List<Customer> cl = bank.getCustomerList();
-                for (int i = 0; i < cl.size(); i++) {
-                    if (cl.get(i).getidNo() == customerId) {
-                        cl.get(i).addAccount(account);
+                List<Customer> customerList = bank.getCustomerList();
+                customer=null;
+                for (int i = 0; i < customerList.size(); i++) {
+                    if (customerList.get(i).getidNo() == customerId) {
+                        customer=customerList.get(i);
                         break;
                     }
                 }
-                bank.addAccount(account);
+                try {
+                    bank.addAccount(customer,account);
+                } catch (DuplicateAccountException e){
+                    System.out.println("***ERROR: Duplicate account number***");
+                    e.printStackTrace();
+                } catch (DuplicateCustomerException e){
+                    System.out.println("***ERROR: Duplicate customer number***");
+                }
             }
         } catch (SQLException e) {
             System.out.println("***ERROR: Failed getting data from database***");
@@ -288,6 +298,9 @@ public class MySQLPersistence implements Persistence {
         } catch (SQLException e) {
             System.out.println("***ERROR: Failed getting data from database***");
             e.printStackTrace();
+        } catch (DuplicateCustomerException e){
+            System.out.println("***ERROR: Duplicate customer***");
+            e.printStackTrace();
         }
     }
 
@@ -312,6 +325,9 @@ public class MySQLPersistence implements Persistence {
                     resultSet.getString("interbankaccountnumber"));
         } catch (SQLException e) {
             System.out.println("***ERROR: Failed getting data from database***");
+            e.printStackTrace();
+        } catch (DuplicateAccountException e){
+            System.out.println("***ERROR: Duplicate account***");
             e.printStackTrace();
         }
         return bank;

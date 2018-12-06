@@ -49,14 +49,14 @@ public class AccountNumberTest {
     }
 
     @Test
-    public void validLocalAccounts(){
+    public void validLocalAccounts() throws Exception {
         Bank bank = new Bank("MinBank","1234","12340000000001", "12349999999999","12340000000009");
         assertTrue(AccountNumber.isLocal(bank,"12340000000000"));
         assertTrue(AccountNumber.isLocal(bank,"12349876598765"));
     }
 
     @Test
-    public void invalidLocalAccounts() {
+    public void invalidLocalAccounts() throws Exception {
         Bank bank = new Bank("MinBank","1234","12340000000000", "12349999999999","12340000000009");
         String regNo=bank.getRegNo();
         String testNo="1234";
