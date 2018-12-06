@@ -82,7 +82,7 @@ public class TestBank {
         a.withdraw(4000);
         assertEquals("6000", a.getAccountStatus());
 
-        Transaction testTransaction = new Transaction(account, account, 1000);
+        Transaction testTransaction = new Transaction(bank,account.getAccountNumber(), account.getAccountNumber(), 1000);
         bank.addTransaction(testTransaction);
 
         List<Transaction> tl = bank.getTransactionList(account);
