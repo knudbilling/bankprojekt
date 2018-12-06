@@ -5,7 +5,7 @@ import static org.junit.Assert.assertEquals;
 public class ThomasTest{
 
     @Test
-    public void canTransferLegalAmountNoOverdraftFromACurrentAccountToASavingsAccountInternallyInBank() throws Exception {
+    public void canTransferLegalAmountNoOverdraftFromACurrentAccountToACurrentAccountInternallyInBank() throws Exception {
 
         //Setting up the bank and the customers.
         Bank bank = new Bank("MinBank", "9800", "98001234567890", "98000987654321", "98000000000009");
@@ -39,7 +39,7 @@ public class ThomasTest{
     }
 
     @Test
-    public void canTransferLegalAmountWithOverdraftFromACurrentAccountToASavingsAccountInternallyInBank() throws Exception {
+    public void canTransferLegalAmountWithOverdraftFromACurrentAccountToACurrentAccountInternallyInBank() throws Exception {
 
         //Setting up the bank and the customers.
         Bank bank = new Bank("MinBank", "9800", "98001234567890", "98000987654321", "98000000000009");
@@ -73,7 +73,7 @@ public class ThomasTest{
     }
 
     @Test(expected = NegativeAmountException.class)
-    public void canTransferIllegalAmountFromACurrentAccountToASavingsAccountInternallyInBank() throws Exception {
+    public void canTransferIllegalAmountFromACurrentAccountToACurrentAccountInternallyInBank() throws Exception {
 
         //Setting up the bank and the customers.
         Bank bank = new Bank("MinBank", "9800", "98001234567890", "98000987654321", "98000000000009");
