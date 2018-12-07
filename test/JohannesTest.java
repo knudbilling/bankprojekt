@@ -12,10 +12,8 @@ public class JohannesTest {
     public void canMakeATransferFromSavingsToCurrentAccount() throws Exception{
         Bank bank = new Bank("MinBank", "1234", "12345678901234", "12340000000002", "12340000000009");
         Customer customer = new Customer("firstname", "lastname", "address", "phone");
-        bank.addCustomer(customer);
 
-        Account firstAccount = new SavingsAccount("12345678901234");
-        customer.addAccount(firstAccount);
+        Account firstAccount = new SavingsAccount("12345678901238");
         bank.addAccount(customer,firstAccount);
 
         Customer c = (Customer) bank.getCustomerList().get(0);
@@ -37,32 +35,23 @@ public class JohannesTest {
         assertEquals(60000, firstAccount.getBalance());
 
         assertEquals(40000,secondAccount.getBalance());
-
-
-
     }
     // Test 2 - Overførsel af gyldigt beløb fra opsparingskonto til egen opsparingskonto
     @Test
     public void canMakeATransferFromSavingsToSavingsAccount() throws Exception {
         Bank bank = new Bank("MinBank", "1234", "12345678901234", "12340000000002", "12340000000009");
         Customer customer = new Customer("firstname", "lastname", "address", "phone");
-        bank.addCustomer(customer);
 
-        Account firstAccount = new SavingsAccount("12345678901234");
-        customer.addAccount(firstAccount);
+        Account firstAccount = new SavingsAccount("12345678901237");
         bank.addAccount(customer,firstAccount);
 
         Customer c = (Customer) bank.getCustomerList().get(0);
         assertEquals(firstAccount, c.accountList.get(0));
 
-
         Account secondAccount = new SavingsAccount("12345678904321");
-        customer.addAccount(secondAccount);
         bank.addAccount(customer,secondAccount);
 
-
         assertEquals(secondAccount, c.accountList.get(1));
-
 
         firstAccount.deposit(120000);
 
@@ -80,17 +69,14 @@ public class JohannesTest {
     public void can_Not_Make_A_Too_Large_Transfer_From_Savings_To_Current_Account() throws Exception {
         Bank bank = new Bank("MinBank", "1234", "12345678901234", "12340000000002", "12340000000009");
         Customer customer = new Customer("firstname", "lastname", "address", "phone");
-        bank.addCustomer(customer);
 
         Account firstAccount = new SavingsAccount("12345678901235");
-        customer.addAccount(firstAccount);
         bank.addAccount(customer,firstAccount);
 
         Customer c = (Customer) bank.getCustomerList().get(0);
         assertEquals(firstAccount, c.accountList.get(0));
 
         Account secondAccount = new CurrentAccount("12345678904321");
-        customer.addAccount(secondAccount);
         bank.addAccount(customer,secondAccount);
 
         assertEquals(secondAccount, c.accountList.get(1));
