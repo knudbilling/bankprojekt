@@ -1,11 +1,7 @@
 Model over GUI vinduer.
 
-TODO-list:
-	Medarbejder - Konto - rentesats:
-	Medarbejder - Konto - overtræk:
-	Medarbejder - Konto - udbetal:
-	Medarbejder - Konto - indsæt:
-	* Fejlmeddelelser?
+Evt. fikseret vindue-størrelse, med mulighed for sideskift ved lister? (25 linier?)
+
 
 Forside er en "vælg brugertype":
 +--------------------------------------------------------------------------+
@@ -26,7 +22,7 @@ Hvis brugertypen er "kunde":
 |   						"BANKNAME" INTERFACE						   |
 +--------------------------------------------------------------------------+
 |																		   |
-|	Indtast kundenummer:												   |
+|	Indtast kundenummer: ________										   |
 |																		   |
 |	Tast "B" for at gå tilbage.											   |
 |	Tast "Q" for at afslutte.											   |
@@ -42,7 +38,7 @@ Kundenummer ikke fundet:
 |																		   |
 |	Kundenummer ikke fundet. Prøv igen.									   |
 |																		   |
-|	Indtast kundenummer:												   |
+|	Indtast kundenummer: ________										   |
 |																		   |
 |	Tast "B" for at gå tilbage.											   |
 |	Tast "Q" for at afslutte.											   |
@@ -74,13 +70,13 @@ Kontooversigt:
 |   						"BANKNAME" INTERFACE						   |
 +--------------------------------------------------------------------------+
 |																		   |
-|	Konto: <<regNumber>> <<accountNumber>>								   |
+|	Konto: <<regNumber>> <<accountNumber>>								   | <-- Speciel tekst hvis kunden ingen konti har?
 |		Indestående: <<amount>> DKK										   |
-|		For yderligere info tast "1"									   |
+|		Tast "1" for yderligere info.									   |
 |																		   |
 |	Konto: <<regNumber>> <<accountNumber>>								   |
 |		Indestående: <<amount>> DKK										   |
-|		For yderligere info tast "2"									   |
+|		Tast "2" for yderligere info.									   |
 |																		   |
 |	Tast "B" for at gå tilbage.											   |
 |	Tast "Q" for at afslutte.											   |
@@ -115,7 +111,7 @@ Overførsler - vælg "fra"-konto:
 |																		   |
 |	Hvilken af dine konti vil du overføre penge fra?					   |
 |																		   |
-|   Tast "1" for Konto: <<regNumber>> <<accountNumber>>					   |
+|   Tast "1" for Konto: <<regNumber>> <<accountNumber>>					   | <-- Ved overførsler til andres konti vil kun currentAccounts listes.
 |   Tast "2" for Konto: <<regNumber>> <<accountNumber>>					   |
 |   Tast "3" for Konto: <<regNumber>> <<accountNumber>>					   |
 |																		   |
@@ -172,12 +168,60 @@ Overførsler til andre - regNummer:
 |																		   |
 +--------------------------------------------------------------------------+
 
+Overførsler til andre - invalid regNummer:
++--------------------------------------------------------------------------+
+|   						"BANKNAME" INTERFACE						   |
++--------------------------------------------------------------------------+
+|																		   |
+|	Ugyldigt registreringsnummer. Prøv igen.							   |
+|																		   |
+|	Indtast registreringsnummer på modtagerkonto: ____					   |
+|																		   |
+|	Tast "B" for at gå tilbage.											   |
+|	Tast "Q" for at afslutte.											   |
+|																		   |
+|	Godkend med "Enter".												   |
+|																		   |
++--------------------------------------------------------------------------+
+
 Overførsler til andre - kontoNummer:
 +--------------------------------------------------------------------------+
 |   						"BANKNAME" INTERFACE						   |
 +--------------------------------------------------------------------------+
 |																		   |
-|	Indtast kontonummer på modtagerkonto: ____							   |
+|	Indtast kontonummer på modtagerkonto: ________						   |
+|																		   |
+|	Tast "B" for at gå tilbage.											   |
+|	Tast "Q" for at afslutte.											   |
+|																		   |
+|	Godkend med "Enter".												   |
+|																		   |
++--------------------------------------------------------------------------+
+
+Overførsler til andre - invalid kontonummer: (IllegalAccount)
++--------------------------------------------------------------------------+
+|   						"BANKNAME" INTERFACE						   |
++--------------------------------------------------------------------------+
+|																		   |
+|	Ugyldigt kontonummer. Prøv igen.									   |
+|																		   |
+|	Indtast kontonummer på modtagerkonto: ________						   |
+|																		   |
+|	Tast "B" for at gå tilbage.											   |
+|	Tast "Q" for at afslutte.											   |
+|																		   |
+|	Godkend med "Enter".												   |
+|																		   |
++--------------------------------------------------------------------------+
+
+Overførsler til andre - ingen CurrentAccount:
++--------------------------------------------------------------------------+
+|   						"BANKNAME" INTERFACE						   |
++--------------------------------------------------------------------------+
+|																		   |
+|	Denne type transaktion kan kun foretages på en lønkonto.			   |
+|	Hvis du ønsker en konto af denne type, bedes du henvende			   |
+|	dig hos en medarbejder.												   |
 |																		   |
 |	Tast "B" for at gå tilbage.											   |
 |	Tast "Q" for at afslutte.											   |
@@ -195,7 +239,7 @@ Overførsler - beløb:
 |		fra Konto: <<regNumber>> <<accountNumber>>						   |
 |		til Konto: <<regNumber>> <<accountNumber>>						   |
 |																		   |
-|	Indtast beløb du ønsker at overføre: ___ DKK						   | <-- Hvilket format? (10000 = 100kr) eller (100,00 = 100kr)?
+|	Indtast beløb du ønsker at overføre: ________ DKK					   | <-- Hvilket format? (10000 = 100kr) eller (100,00 = 100kr)?
 |																		   |
 |	Tast "B" for at gå tilbage.											   |
 |	Tast "Q" for at afslutte.											   |
@@ -223,6 +267,9 @@ Overførsler - godkendt:
 |	Godkend med "Enter".												   |
 |																		   |
 +--------------------------------------------------------------------------+
+
+Overførsler - NoOverDraftAllowed:
+Overførsler - NegativeAmount:
 
 
 
@@ -263,7 +310,7 @@ Søgning - navn:
 |   						"BANKNAME" INTERFACE						   |
 +--------------------------------------------------------------------------+
 |																		   |
-|	Indtast navn: _________												   |
+|	Indtast navn: ________												   |
 |																		   |
 |	Godkend med "Enter".												   |
 |																		   |
@@ -279,7 +326,7 @@ Søgning - navn - flere matches:
 | 	<<idNo>>, <<firstName>> <<lastName>>, <<address>>, <<phoneNo>>		   |
 | 	<<idNo>>, <<firstName>> <<lastName>>, <<address>>, <<phoneNo>>		   |
 |																		   |
-|	Indtast kundenummer for at vælge kunde:								   |
+|	Indtast kundenummer for at vælge kunde:	________					   |
 |																		   |
 |	Tast "B" for at gå tilbage.											   |
 |	Tast "Q" for at afslutte.											   |
@@ -293,7 +340,7 @@ Søgning - kundenummer:
 |   						"BANKNAME" INTERFACE						   |
 +--------------------------------------------------------------------------+
 |																		   |
-|	Indtast kundenummer: _________										   |
+|	Indtast kundenummer: ________										   |
 |																		   |
 |	Tast "B" for at gå tilbage.											   |
 |	Tast "Q" for at afslutte.											   |
@@ -307,7 +354,21 @@ Søgning - kontonummer:
 |   						"BANKNAME" INTERFACE						   |
 +--------------------------------------------------------------------------+
 |																		   |
-|	Indtast kontonummer: _________										   |
+|	Indtast kontonummer: ________										   |
+|																		   |
+|	Tast "B" for at gå tilbage.											   |
+|	Tast "Q" for at afslutte.											   |
+|																		   |
+|	Godkend med "Enter".												   |
+|																		   |
++--------------------------------------------------------------------------+
+
+Søgning - ingen matches:
++--------------------------------------------------------------------------+
+|   						"BANKNAME" INTERFACE						   |
++--------------------------------------------------------------------------+
+|																		   |
+|	Søgning matchede ingen kunder.										   |
 |																		   |
 |	Tast "B" for at gå tilbage.											   |
 |	Tast "Q" for at afslutte.											   |
@@ -364,6 +425,76 @@ Medarbejder - Konto:
 +--------------------------------------------------------------------------+
 
 Medarbejder - Konto - rentesats:
++--------------------------------------------------------------------------+
+|   						"BANKNAME" INTERFACE						   |
++--------------------------------------------------------------------------+
+|																		   |
+|	Nuværende rentesats: <<renteSats>>									   |
+|	Indtast ny rentesats: ________										   |
+|																		   |
+|	Tast "B" for at gå tilbage.											   |
+|	Tast "Q" for at afslutte.											   |
+|																		   |
+|	Godkend med "Enter".												   |
+|																		   |
++--------------------------------------------------------------------------+
+
 Medarbejder - Konto - overtræk:
++--------------------------------------------------------------------------+
+|   						"BANKNAME" INTERFACE						   |
++--------------------------------------------------------------------------+
+|																		   |
+|	Nuværende overtræk tilladt: <<overdraftAllowed>>					   |
+|	Indtast nye tilladte overtræk: ________	DKK							   |
+|																		   |
+|	Tast "B" for at gå tilbage.											   |
+|	Tast "Q" for at afslutte.											   |
+|																		   |
+|	Godkend med "Enter".												   |
+|																		   |
++--------------------------------------------------------------------------+
+
 Medarbejder - Konto - udbetal:
++--------------------------------------------------------------------------+
+|   						"BANKNAME" INTERFACE						   |
++--------------------------------------------------------------------------+
+|																		   |
+|	Nuværende indestående: <<amount>>									   |
+|	Indtast beløb til udbetaling: ________ DKK							   |
+|																		   |
+|	Tast "B" for at gå tilbage.											   |
+|	Tast "Q" for at afslutte.											   |
+|																		   |
+|	Godkend med "Enter".												   |
+|																		   |
++--------------------------------------------------------------------------+
+
 Medarbejder - Konto - indsæt:
++--------------------------------------------------------------------------+
+|   						"BANKNAME" INTERFACE						   |
++--------------------------------------------------------------------------+
+|																		   |
+|	Nuværende indestående: <<amount>>									   |
+|	Indtast beløb til indsættelse: ________								   |
+|																		   |
+|	Tast "B" for at gå tilbage.											   |
+|	Tast "Q" for at afslutte.											   |
+|																		   |
+|	Godkend med "Enter".												   |
+|																		   |
++--------------------------------------------------------------------------+
+
+NotEnoughCash:
++--------------------------------------------------------------------------+
+|   						"BANKNAME" INTERFACE						   |
++--------------------------------------------------------------------------+
+|																		   |
+|	Dette kan ikke lade sig gøre, da banken ikke har					   |
+|	penge tilsvarende dette beløb.										   |
+|																		   |
+|	Tast "B" for at gå tilbage.											   |
+|	Tast "Q" for at afslutte.											   |
+|																		   |
+|	Godkend med "Enter".												   |
+|																		   |
++--------------------------------------------------------------------------+
