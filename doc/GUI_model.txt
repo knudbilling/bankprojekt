@@ -55,7 +55,7 @@ Kundenummer godkendt:
 |	Velkommen <<firstName>> <<lastName>>,								   |
 |																		   |
 |	Tast "1" for at se kontooversigt.									   |
-|	Tast "2" for at overføre penge.										   |
+|	Tast "2" for at overføre penge.										   | <-- Vises kun hvis kunden har mere end kun end savingsAccount.
 |																		   |
 |	Tast "B" for at gå tilbage.											   |
 |	Tast "Q" for at afslutte.											   |
@@ -136,20 +136,6 @@ Overførsler - vælg "fra"-konto:
 |																		   |
 +--------------------------------------------------------------------------+
 
-Overførsler fra egen savingsAccount - kunden har kun 1 konto:
-+--------------------------------------------------------------------------+
-|   						"BANKNAME" INTERFACE						   |
-+--------------------------------------------------------------------------+
-|																		   |
-|	Dette kan ikke lade sig gøre, da du kun har én konto i banken.		   |
-|																		   |
-|	Tast "B" for at gå tilbage.											   |
-|	Tast "Q" for at afslutte.											   |
-|																		   |
-|	Godkend med "Enter".												   |
-|																		   |
-+--------------------------------------------------------------------------+
-
 Overførsler fra egen savingsAccount - vælg "til"-konto:
 +--------------------------------------------------------------------------+
 |   						"BANKNAME" INTERFACE						   |
@@ -190,22 +176,6 @@ Overførsler til andre - invalid kontonummer: (IllegalAccount)
 |	Ugyldigt kontonummer. Prøv igen.									   |
 |																		   |
 |	Indtast registrerings og kontonummer på modtagerkonto: ________		   |
-|																		   |
-|	Tast "B" for at gå tilbage.											   |
-|	Tast "Q" for at afslutte.											   |
-|																		   |
-|	Godkend med "Enter".												   |
-|																		   |
-+--------------------------------------------------------------------------+
-
-Overførsler til andre - ingen CurrentAccount:
-+--------------------------------------------------------------------------+
-|   						"BANKNAME" INTERFACE						   |
-+--------------------------------------------------------------------------+
-|																		   |
-|	Denne type transaktion kan kun foretages på en lønkonto.			   |
-|	Hvis du ønsker en konto af denne type, bedes du henvende			   |
-|	dig hos en medarbejder.												   |
 |																		   |
 |	Tast "B" for at gå tilbage.											   |
 |	Tast "Q" for at afslutte.											   |
@@ -274,7 +244,7 @@ Overførsler - NegativeAmount:
 |																		   |
 |	Nåååh... Så det troede du nok, hva'?								   |
 |	De eneste der kan suge penge fra andres konti til deres egen		   |
-|	er vores "troværdige" medarbejdere...								   |
+|	er vores "troværdige" medarbejder Britta...							   |
 |																		   |
 |	Tast "B" for at gå tilbage.											   |
 |	Tast "Q" for at afslutte.											   |
