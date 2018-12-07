@@ -21,13 +21,11 @@ public class JohannesTest {
         Customer c = (Customer) bank.getCustomerList().get(0);
         assertEquals(firstAccount, c.accountList.get(0));
 
-
         Account secondAccount = new CurrentAccount("12345678904321");
         customer.addAccount(secondAccount);
         bank.addAccount(customer,secondAccount);
 
         assertEquals(secondAccount, c.accountList.get(1));
-
 
         firstAccount.deposit(100000);
 

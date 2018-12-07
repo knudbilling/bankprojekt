@@ -63,8 +63,6 @@ public class PatriciaTest {
                 "12345678901234", 30000);
         bank.addTransaction(transaction);
 
-      //  assertEquals(20000, AccountNumber.getAccount(bank,"12345678904321").getBalance());
-        //assertEquals(30000, AccountNumber.getAccount(bank,"12345678901234").getBalance());
     }
 
 
@@ -72,7 +70,7 @@ public class PatriciaTest {
     6. Overførsel af gyldigt beløb fra opsparingskonto til ugyldig konto.
      */
 
-    @Test (expected = IllegalArgumentException.class)
+    @Test (expected = IllegalAccountException.class)
     public void cantTransferToInvalidAccountFromSavingsAccount() throws Exception {
         Bank bank=new Bank("MinBank","1234","12340000000001",
                 "12340000000002","12340000000009");

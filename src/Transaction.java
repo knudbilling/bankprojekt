@@ -30,7 +30,7 @@ public class Transaction {
      * @param toAccountNumber the account number to move money to
      * @param amount the amount to move expressed in 'øre'
      */
-    public Transaction(Bank bank, String fromAccountNumber, String toAccountNumber, long amount) throws NegativeAmountException {
+    public Transaction(Bank bank, String fromAccountNumber, String toAccountNumber, long amount) throws NegativeAmountException, IllegalAccountException {
 
         // Error on: amount is negative
         if(amount<0)
@@ -46,7 +46,7 @@ public class Transaction {
         // Error on: fromAccount is not local
         if(!AccountNumber.isLocal(bank,fromAccountNumber)) {
             System.out.println("***ERROR: Trying to transfer from an external account***");
-            throw new IllegalArgumentException();
+            throw new IllegalAccountException();
         }
         this.fromAccount=bank.getAccount(fromAccountNumber);
 
@@ -66,7 +66,7 @@ public class Transaction {
                 this.toAccount=bank.getAccount(bank.getInterBankAccountNumber());
             } else {
                 System.out.println("***ERROR: Trying to transfer to a non-existing external account***");
-                throw new IllegalArgumentException();
+               throw new IllegalAccountException();
             }
         }
     }

@@ -209,6 +209,10 @@ public class MySQLPersistence implements Persistence {
                     System.out.println("***ERROR: Negative amoount error***");
                     e.printStackTrace();
                 }
+                catch (IllegalAccountException e){
+                    System.out.println("***ERROR: Trying to transfer to a non-existing external account***");
+                    e.printStackTrace();
+                }
                 transaction.timestamp = resultSet.getDate("TimeStamp");
                 transaction.bankReference = resultSet.getString("Reference");
 
