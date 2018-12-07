@@ -8,7 +8,7 @@ Forside er en "vælg brugertype":
 |   						"BANKNAME" INTERFACE						   | MAIN
 +--------------------------------------------------------------------------+
 |																		   |
-|  	Tast "1" hvis du er kunde.											   |
+|	Tast "1" hvis du er kunde.											   |
 |	Tast "2" hvis du er medarbejder i banken.							   |
 |	Tast "3" hvis du er administrator.									   |
 |																		   |
@@ -442,7 +442,7 @@ Medarbejder - Konto - rentesats:
 
 Medarbejder - Konto - overtræk:
 +--------------------------------------------------------------------------+
-|   						"BANKNAME" INTERFACE						   |
+|   						"BANKNAME" INTERFACE						   | EMPLOYEE_OVERDRAFT
 +--------------------------------------------------------------------------+
 |																		   |
 |	Nuværende overtræk tilladt: <<overdraftAllowed>>					   |
@@ -457,7 +457,7 @@ Medarbejder - Konto - overtræk:
 
 Medarbejder - Konto - udbetal:
 +--------------------------------------------------------------------------+
-|   						"BANKNAME" INTERFACE						   |
+|   						"BANKNAME" INTERFACE						   | EMPLOYEE_WITHDRAWAL
 +--------------------------------------------------------------------------+
 |																		   |
 |	Nuværende indestående: <<amount>>									   |
@@ -472,7 +472,7 @@ Medarbejder - Konto - udbetal:
 
 Medarbejder - Konto - indsæt:
 +--------------------------------------------------------------------------+
-|   						"BANKNAME" INTERFACE						   |
+|   						"BANKNAME" INTERFACE						   | EMPLOYEE_DEPOSIT
 +--------------------------------------------------------------------------+
 |																		   |
 |	Nuværende indestående: <<amount>>									   |
@@ -487,7 +487,7 @@ Medarbejder - Konto - indsæt:
 
 NotEnoughCash:
 +--------------------------------------------------------------------------+
-|   						"BANKNAME" INTERFACE						   |
+|   						"BANKNAME" INTERFACE						   | NOT_ENOUGH_CASH
 +--------------------------------------------------------------------------+
 |																		   |
 |	Dette kan ikke lade sig gøre, da banken ikke har					   |
@@ -502,7 +502,7 @@ NotEnoughCash:
 
 Administrator:
 +--------------------------------------------------------------------------+
-|   						"BANKNAME" INTERFACE						   |
+|   						"BANKNAME" INTERFACE						   | ADMIN
 +--------------------------------------------------------------------------+
 |																		   | << Disse linjer tilføjes som verifikation for foretaget aktion.
 |	Banken nulstillet./Back-up foretaget./Database genindlæst.			   | << 
@@ -521,7 +521,7 @@ Administrator:
 
 Administrator - Status:
 +--------------------------------------------------------------------------+
-|   						"BANKNAME" INTERFACE						   |
+|   						"BANKNAME" INTERFACE						   | ADMIN_STATUS
 +--------------------------------------------------------------------------+
 |																		   |
 |	Vi er stadig en bank. Gå væk.
