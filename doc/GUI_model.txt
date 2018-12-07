@@ -1,6 +1,8 @@
 Model over GUI vinduer.
 
 
+
+
 Forside er en "vælg brugertype":
 +--------------------------------------------------------------------------+
 |   						"BANKNAME" INTERFACE						   |
@@ -53,8 +55,7 @@ Kundenummer godkendt:
 |	Velkommen <<firstName>> <<lastName>>,								   |
 |																		   |
 |	Tast "1" for at se kontooversigt.									   |
-|	Tast "2" for at overføre penge mellem egne konti.					   |
-|	Tast "3" for at overføre penge til andre konti.						   |
+|	Tast "2" for at overføre penge.										   |
 |																		   |
 |	Tast "B" for at gå tilbage.											   |
 |	Tast "Q" for at afslutte.											   |
@@ -124,7 +125,7 @@ Overførsler - vælg "fra"-konto:
 |																		   |
 |	Hvilken af dine konti vil du overføre penge fra?					   |
 |																		   |
-|   Tast "1" for Konto: <<regNumber>> <<accountNumber>>					   | <-- Ved overførsler til andres konti vil kun currentAccounts listes.
+|   Tast "1" for Konto: <<regNumber>> <<accountNumber>>					   |
 |   Tast "2" for Konto: <<regNumber>> <<accountNumber>>					   |
 |   Tast "3" for Konto: <<regNumber>> <<accountNumber>>					   |
 |																		   |
@@ -135,7 +136,7 @@ Overførsler - vælg "fra"-konto:
 |																		   |
 +--------------------------------------------------------------------------+
 
-Overførsler mellem egne konti - kunden har kun 1 konto:
+Overførsler fra egen savingsAccount - kunden har kun 1 konto:
 +--------------------------------------------------------------------------+
 |   						"BANKNAME" INTERFACE						   |
 +--------------------------------------------------------------------------+
@@ -149,7 +150,7 @@ Overførsler mellem egne konti - kunden har kun 1 konto:
 |																		   |
 +--------------------------------------------------------------------------+
 
-Overførsler mellem egne konti - vælg "til"-konto:
+Overførsler fra egen savingsAccount - vælg "til"-konto:
 +--------------------------------------------------------------------------+
 |   						"BANKNAME" INTERFACE						   |
 +--------------------------------------------------------------------------+
@@ -167,42 +168,12 @@ Overførsler mellem egne konti - vælg "til"-konto:
 |																		   |
 +--------------------------------------------------------------------------+
 
-Overførsler til andre - regNummer:
-+--------------------------------------------------------------------------+
-|   						"BANKNAME" INTERFACE						   |
-+--------------------------------------------------------------------------+
-|																		   |
-|	Indtast registreringsnummer på modtagerkonto: ____					   |
-|																		   |
-|	Tast "B" for at gå tilbage.											   |
-|	Tast "Q" for at afslutte.											   |
-|																		   |
-|	Godkend med "Enter".												   |
-|																		   |
-+--------------------------------------------------------------------------+
-
-Overførsler til andre - invalid regNummer:
-+--------------------------------------------------------------------------+
-|   						"BANKNAME" INTERFACE						   |
-+--------------------------------------------------------------------------+
-|																		   |
-|	Ugyldigt registreringsnummer. Prøv igen.							   |
-|																		   |
-|	Indtast registreringsnummer på modtagerkonto: ____					   |
-|																		   |
-|	Tast "B" for at gå tilbage.											   |
-|	Tast "Q" for at afslutte.											   |
-|																		   |
-|	Godkend med "Enter".												   |
-|																		   |
-+--------------------------------------------------------------------------+
-
 Overførsler til andre - kontoNummer:
 +--------------------------------------------------------------------------+
 |   						"BANKNAME" INTERFACE						   |
 +--------------------------------------------------------------------------+
 |																		   |
-|	Indtast kontonummer på modtagerkonto: ________						   |
+|	Indtast registrerings og kontonummer på modtagerkonto: ________		   |
 |																		   |
 |	Tast "B" for at gå tilbage.											   |
 |	Tast "Q" for at afslutte.											   |
@@ -218,7 +189,7 @@ Overførsler til andre - invalid kontonummer: (IllegalAccount)
 |																		   |
 |	Ugyldigt kontonummer. Prøv igen.									   |
 |																		   |
-|	Indtast kontonummer på modtagerkonto: ________						   |
+|	Indtast registrerings og kontonummer på modtagerkonto: ________		   |
 |																		   |
 |	Tast "B" for at gå tilbage.											   |
 |	Tast "Q" for at afslutte.											   |
@@ -282,8 +253,35 @@ Overførsler - godkendt:
 +--------------------------------------------------------------------------+
 
 Overførsler - NoOverDraftAllowed:
-Overførsler - NegativeAmount:
++--------------------------------------------------------------------------+
+|   						"BANKNAME" INTERFACE						   |
++--------------------------------------------------------------------------+
+|																		   |
+|	Dette kan ikke lade sig gøre, da overtræk ville forekomme.			   |
+|	Overtræk er ikke tilladt på en opsparingskonto.						   |
+|																		   |
+|	Tast "B" for at gå tilbage.											   |
+|	Tast "Q" for at afslutte.											   |
+|																		   |
+|	Godkend med "Enter".												   |
+|																		   |
++--------------------------------------------------------------------------+
 
+Overførsler - NegativeAmount:
++--------------------------------------------------------------------------+
+|   						"BANKNAME" INTERFACE						   |
++--------------------------------------------------------------------------+
+|																		   |
+|	Nåååh... Så det troede du nok, hva'?								   |
+|	De eneste der kan suge penge fra andres konti til deres egen		   |
+|	er vores "troværdige" medarbejdere...								   |
+|																		   |
+|	Tast "B" for at gå tilbage.											   |
+|	Tast "Q" for at afslutte.											   |
+|																		   |
+|	Godkend med "Enter".												   |
+|																		   |
++--------------------------------------------------------------------------+
 
 
 Hvis brugertypen er "medarbejder":
@@ -400,9 +398,9 @@ Medarbejder - Kunde:
 |	Adresse:		<<address>>											   |
 |	Telefonnummer:	<<phoneNo>>											   |
 |																		   |
-|   Tast "1" for Konto: <<regNumber>> <<accountNumber>>					   |
-|   Tast "2" for Konto: <<regNumber>> <<accountNumber>>					   |
-|   Tast "3" for Konto: <<regNumber>> <<accountNumber>>					   |
+|   Tast "1" for Konto: <<regNumber>> <<accountNumber>>	<<balance>>		   |
+|   Tast "2" for Konto: <<regNumber>> <<accountNumber>>	<<balance>>		   |
+|   Tast "3" for Konto: <<regNumber>> <<accountNumber>>	<<balance>>		   |
 |																		   |
 |	Tast "4" for at oprette ny konto.									   |
 |																		   |
@@ -419,7 +417,7 @@ Medarbejder - Konto:
 +--------------------------------------------------------------------------+
 |																		   |
 |	Reg. nummer:		<<regNumber>>									   |
-|	Kontonummber:		<<accountNumber>>								   |
+|	Kontonummer:		<<accountNumber>>								   |
 |	Type: 				<<accountType>>									   |
 |	Indestående: 		<<amount>> DKK									   |
 |	Rentesats:			<<renteSats>>									   |
