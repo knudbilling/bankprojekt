@@ -31,7 +31,6 @@ public class JohannesTest {
         bank.addTransaction(testTransaction);
 
         assertEquals(60000, firstAccount.getBalance());
-
         assertEquals(40000,secondAccount.getBalance());
     }
     // Test 2 - Overførsel af gyldigt beløb fra opsparingskonto til egen opsparingskonto
@@ -79,10 +78,8 @@ public class JohannesTest {
 
         assertEquals(secondAccount, c.accountList.get(1));
 
-
         Transaction putMoneyInAccount = new Transaction(bank, bank.getCashAccountNumber(),firstAccount.getAccountNumber(),3000);
         bank.addTransaction(putMoneyInAccount);
-
 
         Transaction testTransaction = new Transaction(bank,firstAccount.getAccountNumber(), secondAccount.getAccountNumber(), 4000);
         bank.addTransaction(testTransaction);
