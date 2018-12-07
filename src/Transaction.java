@@ -40,12 +40,12 @@ public class Transaction {
         // fromAccount
         // Error on: fromAccount is in an invalid format
         if(!AccountNumber.isValidFormat(fromAccountNumber)) {
-            System.out.println("***ERROR: Account number not in a valid format***");
+//            System.out.println("***ERROR: Account number not in a valid format***");
             throw new NumberFormatException();
         }
         // Error on: fromAccount is not local
         if(!AccountNumber.isLocal(bank,fromAccountNumber)) {
-            System.out.println("***ERROR: Trying to transfer from an external account***");
+//            System.out.println("***ERROR: Trying to transfer from an external account***");
             throw new IllegalAccountException();
         }
         this.fromAccount=bank.getAccount(fromAccountNumber);
@@ -53,7 +53,7 @@ public class Transaction {
         // toAccount
         // Error on: toAccount is in an invalid format
         if(!AccountNumber.isValidFormat(toAccountNumber)) {
-            System.out.println("ERROR: Account number is not in a valid format***");
+//            System.out.println("ERROR: Account number is not in a valid format***");
             throw new NumberFormatException();
         }
 
@@ -65,7 +65,7 @@ public class Transaction {
                 this.bankReference = toAccountNumber;
                 this.toAccount=bank.getAccount(bank.getInterBankAccountNumber());
             } else {
-                System.out.println("***ERROR: Trying to transfer to a non-existing external account***");
+//                System.out.println("***ERROR: Trying to transfer to a non-existing external account***");
                throw new IllegalAccountException();
             }
         }
