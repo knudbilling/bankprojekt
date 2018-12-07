@@ -1,7 +1,7 @@
 public class GUIConstructor {
 
-    //CUSTOMER_ACCESS --> customerAccessScreen(false);
-    //CUSTOMER_INVALID --> customerAccessScreen(true);
+    //CUSTOMER_ACCESS --> customerAccessScreen(true);
+    //CUSTOMER_INVALID --> customerAccessScreen(false);
 
 
     public static String headerBlock;
@@ -54,8 +54,12 @@ public class GUIConstructor {
     }
 
 
-    public String mainScreen() {
+    public String mainScreen(boolean valid) {
         String screen = headerBlock;
+        if(!valid){
+            screen += "|    Udefineret input. Prøv igen.                                          |\n" +
+                      "|                                                                          |\n";
+        }
         screen +=
                 "|    Tast \"1\" hvis du er kunde.                                            |\n" +
                 "|    Tast \"2\" hvis du er medarbejder i banken.                             |\n" +
@@ -66,9 +70,9 @@ public class GUIConstructor {
         return screen;
     }
 
-    public String customerAccessScreen(boolean invalid) {
+    public String customerAccessScreen(boolean valid) {
         String screen = headerBlock;
-        if(invalid){
+        if(!valid){
             screen += "|    Kundenummer ikke fundet. Prøv igen.                                   |\n" +
                       "|                                                                          |\n";
         }
@@ -84,6 +88,12 @@ public class GUIConstructor {
         //        "|                                                                          |"
 
         screen += "|    Velkommen " + firstName + " " + lastName + ",";
+
+        int nameLen = firstName.length() + lastName.length();
+        for(int i = 0; i < 50-nameLen; ) {
+            screen += " ";
+        }
+        screen += "|\n";
         screen += "|                                                                          |\n" +
                   "|    Tast \"1\" for at se kontooversigt.                                     |\n" +
                   "|    Tast \"2\" for at overføre penge.                                       |";
