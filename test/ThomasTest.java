@@ -25,7 +25,7 @@ public class ThomasTest{
 
         //Setting up recipients account.
         Account accountRecipient = new CurrentAccount ("98000000000002");
-        customerSender.addAccount(accountRecipient);
+        customerRecipient.addAccount(accountRecipient);
         bank.addAccount(customerRecipient,accountRecipient);
 
         //Deposit DKK 10.000,00 into sender's account.
@@ -60,8 +60,8 @@ public class ThomasTest{
 
         //Setting up recipients account.
         Account accountRecipient = new CurrentAccount ("98000000000002");
-        customerSender.addAccount(accountRecipient);
-        bank.addAccount(customerSender,accountRecipient);
+        customerRecipient.addAccount(accountRecipient);
+        bank.addAccount(customerRecipient,accountRecipient);
 
         //Deposit DKK 10.000,00 into sender's account.
         Transaction transaction = new Transaction(bank,bank.getCashAccountNumber(), "98000000000001", 10000_00);
@@ -95,8 +95,8 @@ public class ThomasTest{
 
         //Setting up recipients account.
         Account accountRecipient = new CurrentAccount ("98000000000002");
-        customerSender.addAccount(accountRecipient);
-        bank.addAccount(customerSender,accountRecipient);
+        customerRecipient.addAccount(accountRecipient);
+        bank.addAccount(customerRecipient,accountRecipient);
 
         //Deposit DKK 10.000,00 into sender's account.
         Transaction transaction = new Transaction(bank,bank.getCashAccountNumber(), "98000000000001", 10000_00);
