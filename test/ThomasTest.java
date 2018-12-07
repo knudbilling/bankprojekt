@@ -15,8 +15,6 @@ public class ThomasTest{
         Bank bank = new Bank("MinBank", "9800", "98001234567890", "98000987654321", "98000000000009");
         Customer customerSender = new Customer ("firstname", "lastname", "address", "phone");
         Customer customerRecipient = new Customer ("firstname", "lastname", "address", "phone");
-        bank.addCustomer(customerSender);
-        bank.addCustomer(customerRecipient);
 
         //Setting up sender's account.
         Account accountSender = new CurrentAccount("98000000000001");
@@ -48,8 +46,6 @@ public class ThomasTest{
         Bank bank = new Bank("MinBank", "9800", "98001234567890", "98000987654321", "98000000000009");
         Customer customerSender = new Customer ("firstname", "lastname", "address", "phone");
         Customer customerRecipient = new Customer ("firstname", "lastname", "address", "phone");
-        bank.addCustomer(customerSender);
-        bank.addCustomer(customerRecipient);
 
         //Setting up sender's account.
         Account accountSender = new CurrentAccount("98000000000001");
@@ -81,8 +77,6 @@ public class ThomasTest{
         Bank bank = new Bank("MinBank", "9800", "98001234567890", "98000987654321", "98000000000009");
         Customer customerSender = new Customer ("firstname", "lastname", "address", "phone");
         Customer customerRecipient = new Customer ("firstname", "lastname", "address", "phone");
-        bank.addCustomer(customerSender);
-        bank.addCustomer(customerRecipient);
 
         //Setting up sender's account.
         Account accountSender = new CurrentAccount("98000000000001");
