@@ -28,4 +28,6 @@ public interface Persistence {
      * Reset persistent storage so that it contains no data.
      */
     void resetPersistence();
+
+    void resetBank(String registrationNumber);
 }

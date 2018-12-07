@@ -330,6 +330,14 @@ public class MySQLPersistence implements Persistence {
     }
 
     @Override
+    public void resetBank(String registrationNumber){
+        executeUpdate("delete * from transactions where BankRegistrationNumber="+registrationNumber+";");
+        executeUpdate("delete * from accounts where BankRegistrationNumber="+registrationNumber+";");
+        executeUpdate("delete * from customers where BankRegistrationNumber="+registrationNumber+";");
+        executeUpdate("delete * from banks where BankRegistrationNumber="+registrationNumber+";");
+    }
+
+    @Override
     public void resetPersistence() {
         executeUpdate("drop database if exists " + DB_DATABASE + ";");
         executeUpdate("create database if not exists " + DB_DATABASE + ";");
