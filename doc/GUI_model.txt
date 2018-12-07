@@ -1,7 +1,5 @@
 Model over GUI vinduer.
 
-Evt. fikseret vindue-størrelse, med mulighed for sideskift ved lister? (25 linier?)
-
 
 Forside er en "vælg brugertype":
 +--------------------------------------------------------------------------+
@@ -70,13 +68,28 @@ Kontooversigt:
 |   						"BANKNAME" INTERFACE						   |
 +--------------------------------------------------------------------------+
 |																		   |
-|	Konto: <<regNumber>> <<accountNumber>>								   | <-- Speciel tekst hvis kunden ingen konti har?
+|	Konto: <<regNumber>> <<accountNumber>>								   |
 |		Indestående: <<amount>> DKK										   |
 |		Tast "1" for yderligere info.									   |
 |																		   |
 |	Konto: <<regNumber>> <<accountNumber>>								   |
 |		Indestående: <<amount>> DKK										   |
 |		Tast "2" for yderligere info.									   |
+|																		   |
+|	Tast "B" for at gå tilbage.											   |
+|	Tast "Q" for at afslutte.											   |
+|																		   |
+|	Godkend med "Enter".												   |
+|																		   |
++--------------------------------------------------------------------------+
+
+Kontooversigt - ingen konti:
++--------------------------------------------------------------------------+
+|   						"BANKNAME" INTERFACE						   |
++--------------------------------------------------------------------------+
+|																		   |
+|	Du har endnu ingen konti.											   |
+|	Hvis du ønsker en konto bedes du henvende dig hos en medarbejder.	   |
 |																		   |
 |	Tast "B" for at gå tilbage.											   |
 |	Tast "Q" for at afslutte.											   |
@@ -239,7 +252,7 @@ Overførsler - beløb:
 |		fra Konto: <<regNumber>> <<accountNumber>>						   |
 |		til Konto: <<regNumber>> <<accountNumber>>						   |
 |																		   |
-|	Indtast beløb du ønsker at overføre: ________ DKK					   | <-- Hvilket format? (10000 = 100kr) eller (100,00 = 100kr)?
+|	Indtast beløb du ønsker at overføre: ________ DKK					   |
 |																		   |
 |	Tast "B" for at gå tilbage.											   |
 |	Tast "Q" for at afslutte.											   |
