@@ -13,43 +13,6 @@ import static org.junit.Assert.*;
  */
 
 public class PatriciaTest {
-    @Test
-    public void canMakeNewCustomer() throws Exception {
-        Bank bank=new Bank("MinBank","1234","12345678901234",
-                "12340000000002","12340000000009");
-        Customer customer=new Customer("firstname","lastname","address","phone");
-        bank.addCustomer(customer);
-
-        assertEquals(customer, bank.getCustomerList().get(0));
-    }
-    @Test
-    public void canMakeNewSavingsAccount() throws Exception {
-        Bank bank=new Bank("MinBank","1234","12345678901234",
-                "12340000000002","12340000000009");
-        Customer customer=new Customer("firstname","lastname","address","phone");
-        bank.addCustomer(customer);
-
-        Account account = new SavingsAccount("12345678901234");
-        customer.addAccount(account);
-
-
-        Customer c = (Customer) bank.getCustomerList().get(0);
-        assertEquals(account, c.accountList.get(0));
-    }
-    @Test
-    public void canMakeNewCurrentAccount() throws Exception {
-        Bank bank=new Bank("MinBank","1234","12345678901234",
-                "12340000000002","12340000000009");
-        Customer customer=new Customer("firstname","lastname","address","phone");
-        bank.addCustomer(customer);
-
-        Account account = new CurrentAccount("12345678901234");
-        customer.addAccount(account);
-
-
-        Customer c = (Customer) bank.getCustomerList().get(0);
-        assertEquals(account, c.accountList.get(0));
-    }
 
 
     /*Test 4
