@@ -185,87 +185,80 @@ public class MySQLPersistence implements Persistence {
 
     @Override
     public Bank load(String registrationNumber) {
-        ResultSet resultSet = null;
         Bank bank;
-        Account account;
-        Transaction transaction = null;
 
-        bank = loadBank(registrationNumber, resultSet);
-        if (bank == null)
+        if ((bank = loadBank(registrationNumber)) == null)
             return null;
 
-        loadCustomers(registrationNumber, resultSet, bank);
+        loadCustomers(registrationNumber, bank);
+        loadAccounts(registrationNumber, bank);
+        loadTransactions(registrationNumber, bank);
 
-        loadAccounts(registrationNumber, resultSet, bank);
+        return bank;
+    }
 
-        String query = "select * from transactions where BankRegistrationNumber = ?;";
-        try {
-            PreparedStatement pst = connection.prepareStatement(query);
-            pst.setString(1, registrationNumber);
-            resultSet = pst.executeQuery();
-        } catch (SQLException e) {
-            System.out.println("***ERROR: Failed to query database***");
-            e.printStackTrace();
-        }
+    private void loadTransactions(String registrationNumber, Bank bank) {
+        Transaction transaction=null;
+        ResultSet resultSet = queryRegistrationNumber("select * from transactions where BankRegistrationNumber = ?;",registrationNumber);
+
         try {
             while (resultSet.next()) {
                 try {
                     transaction = new Transaction(bank, bank.getRegNo() + resultSet.getString("FromAccountNumber"), bank.getRegNo() + resultSet.getString("ToAccountNumber"), resultSet.getLong("Amount"));
                 } catch (NegativeAmountException e) {
-                    return null;
+                    System.out.println("***ERROR: Negative amoount error***");
+                    e.printStackTrace();
                 }
                 transaction.timestamp = resultSet.getDate("TimeStamp");
                 transaction.bankReference = resultSet.getString("Reference");
 
                 try {
                     bank.addTransaction(transaction);
-                } catch (Exception e) {return null;}
+                } catch (NegativeAmountException e) {
+                    System.out.println("***ERROR: Trying to transfer a negative amount***");
+                    e.printStackTrace();
+                } catch (NoOverdraftAllowedException e) {
+                    System.out.println("***ERROR: Trying to transfer more than allowed***");
+                    e.printStackTrace();
+                } catch (NotEnoughCashException e) {
+                    System.out.println("***ERROR: Cash holding negative***");
+                    e.printStackTrace();
+                } catch (IllegalAccountException e) {
+                    System.out.println("***ERROR: Account error***");
+                    e.printStackTrace();
+                }
 
             }
         } catch (SQLException e) {
             System.out.println("***ERROR: Failed getting transaction data from database***");
             e.printStackTrace();
         }
-        return bank;
     }
 
-    private void loadAccounts(String registrationNumber, ResultSet resultSet, Bank bank) {
+    private void loadAccounts(String registrationNumber, Bank bank) {
         Account account;
-        Customer customer=null;
+        Customer customer = null;
 
-        String query = "select * from accounts where BankRegistrationNumber = ?;";
-        try {
-            PreparedStatement pst = connection.prepareStatement(query);
-            pst.setString(1, registrationNumber);
-            resultSet = pst.executeQuery();
-        } catch (SQLException e) {
-            System.out.println("***ERROR: Failed to query database***");
-            e.printStackTrace();
-        }
+        ResultSet resultSet=queryRegistrationNumber("select * from accounts where BankRegistrationNumber = ?;",registrationNumber);
+
         try {
             while (resultSet.next()) {
 
-                if (resultSet.getString("AccountType").equals("C")) {
-                    account = new CurrentAccount(bank.getRegNo() +resultSet.getString("AccountNumber"));
-                } else {
-                    account = new SavingsAccount(bank.getRegNo() +resultSet.getString("AccountNumber"));
-                }
-                int customerId = resultSet.getInt("CustomerID");
-                List<Customer> customerList = bank.getCustomerList();
-                customer=null;
-                for (int i = 0; i < customerList.size(); i++) {
-                    if (customerList.get(i).getidNo() == customerId) {
-                        customer=customerList.get(i);
-                        break;
-                    }
-                }
+                customer = bank.getCustomer(resultSet.getInt("CustomerID"));
+
+                if (resultSet.getString("AccountType").equals("C"))
+                    account = new CurrentAccount(bank.getRegNo() + resultSet.getString("AccountNumber"));
+                else // Assume AccountType is "S"
+                    account = new SavingsAccount(bank.getRegNo() + resultSet.getString("AccountNumber"));
+
                 try {
-                    bank.addAccount(customer,account);
-                } catch (DuplicateAccountException e){
+                    bank.addAccount(customer, account);
+                } catch (DuplicateAccountException e) {
                     System.out.println("***ERROR: Duplicate account number***");
                     e.printStackTrace();
-                } catch (DuplicateCustomerException e){
+                } catch (DuplicateCustomerException e) {
                     System.out.println("***ERROR: Duplicate customer number***");
+                    e.printStackTrace();
                 }
             }
         } catch (SQLException e) {
@@ -274,17 +267,10 @@ public class MySQLPersistence implements Persistence {
         }
     }
 
-    private void loadCustomers(String registrationNumber, ResultSet resultSet, Bank bank) {
+    private void loadCustomers(String registrationNumber, Bank bank) {
         Customer customer;
-        String query = "select * from customers where BankRegistrationNumber = ?;";
-        try {
-            PreparedStatement pst = connection.prepareStatement(query);
-            pst.setString(1, registrationNumber);
-            resultSet = pst.executeQuery();
-        } catch (SQLException e) {
-            System.out.println("***ERROR: Failed to query database***");
-            e.printStackTrace();
-        }
+        ResultSet resultSet = queryRegistrationNumber("select * from customers where BankRegistrationNumber = ?;", registrationNumber);
+
         try {
             while (resultSet.next()) {
 
@@ -298,15 +284,14 @@ public class MySQLPersistence implements Persistence {
         } catch (SQLException e) {
             System.out.println("***ERROR: Failed getting data from database***");
             e.printStackTrace();
-        } catch (DuplicateCustomerException e){
+        } catch (DuplicateCustomerException e) {
             System.out.println("***ERROR: Duplicate customer***");
             e.printStackTrace();
         }
     }
 
-    private Bank loadBank(String registrationNumber, ResultSet resultSet) {
-        Bank bank = null;
-        String query = "select * from banks where RegistrationNumber=?;";
+    private ResultSet queryRegistrationNumber(String query, String registrationNumber) {
+        ResultSet resultSet = null;
         try {
             PreparedStatement pst = connection.prepareStatement(query);
             pst.setString(1, registrationNumber);
@@ -315,6 +300,13 @@ public class MySQLPersistence implements Persistence {
             System.out.println("***ERROR: Failed to query database***");
             e.printStackTrace();
         }
+        return resultSet;
+    }
+
+    private Bank loadBank(String registrationNumber) {
+        Bank bank = null;
+        ResultSet resultSet = queryRegistrationNumber("select * from banks where RegistrationNumber=?;", registrationNumber);
+
         try {
             if (!resultSet.next())
                 return null;
@@ -326,7 +318,7 @@ public class MySQLPersistence implements Persistence {
         } catch (SQLException e) {
             System.out.println("***ERROR: Failed getting data from database***");
             e.printStackTrace();
-        } catch (DuplicateAccountException e){
+        } catch (DuplicateAccountException e) {
             System.out.println("***ERROR: Duplicate account***");
             e.printStackTrace();
         }
