@@ -5,11 +5,12 @@ Model over GUI vinduer.
 
 Forside er en "vælg brugertype":
 +--------------------------------------------------------------------------+
-|   						"BANKNAME" INTERFACE						   |
+|   						"BANKNAME" INTERFACE						   | MAIN
 +--------------------------------------------------------------------------+
 |																		   |
 |  	Tast "1" hvis du er kunde.											   |
 |	Tast "2" hvis du er medarbejder i banken.							   |
+|	Tast "3" hvis du er administrator.									   |
 |																		   |
 |	Tast "Q" for at afslutte.											   |
 |																		   |
@@ -19,7 +20,7 @@ Forside er en "vælg brugertype":
 
 Hvis brugertypen er "kunde":
 +--------------------------------------------------------------------------+
-|   						"BANKNAME" INTERFACE						   |
+|   						"BANKNAME" INTERFACE						   | CUSTOMER_ACCESS
 +--------------------------------------------------------------------------+
 |																		   |
 |	Indtast kundenummer: ________										   |
@@ -33,7 +34,7 @@ Hvis brugertypen er "kunde":
 
 Kundenummer ikke fundet:
 +--------------------------------------------------------------------------+
-|   						"BANKNAME" INTERFACE						   |
+|   						"BANKNAME" INTERFACE						   | CUSTOMER_INVALID
 +--------------------------------------------------------------------------+
 |																		   |
 |	Kundenummer ikke fundet. Prøv igen.									   |
@@ -49,7 +50,7 @@ Kundenummer ikke fundet:
 
 Kundenummer godkendt:
 +--------------------------------------------------------------------------+
-|   						"BANKNAME" INTERFACE						   |
+|   						"BANKNAME" INTERFACE						   | CUSTOMER
 +--------------------------------------------------------------------------+
 |																		   |
 |	Velkommen <<firstName>> <<lastName>>,								   |
@@ -66,7 +67,7 @@ Kundenummer godkendt:
 
 Kontooversigt:
 +--------------------------------------------------------------------------+
-|   						"BANKNAME" INTERFACE						   |
+|   						"BANKNAME" INTERFACE						   | CUSTOMER_ACCOUNTS
 +--------------------------------------------------------------------------+
 |																		   |
 |	Konto: <<regNumber>> <<accountNumber>>								   |
@@ -86,7 +87,7 @@ Kontooversigt:
 
 Kontooversigt - ingen konti:
 +--------------------------------------------------------------------------+
-|   						"BANKNAME" INTERFACE						   |
+|   						"BANKNAME" INTERFACE						   | Variation af CUSTOMER_ACCOUNTS
 +--------------------------------------------------------------------------+
 |																		   |
 |	Du har endnu ingen konti.											   |
@@ -101,7 +102,7 @@ Kontooversigt - ingen konti:
 
 Yderligere info om konto:
 +--------------------------------------------------------------------------+
-|   						"BANKNAME" INTERFACE						   |
+|   						"BANKNAME" INTERFACE						   | CUSTOMER_ACCOUNT_INFO
 +--------------------------------------------------------------------------+
 |																		   |
 |	Reg. nummer:		<<regNumber>>									   |
@@ -120,7 +121,7 @@ Yderligere info om konto:
 
 Overførsler - vælg "fra"-konto:
 +--------------------------------------------------------------------------+
-|   						"BANKNAME" INTERFACE						   |
+|   						"BANKNAME" INTERFACE						   | CUSTOMER_TRANSACTION_FROM
 +--------------------------------------------------------------------------+
 |																		   |
 |	Hvilken af dine konti vil du overføre penge fra?					   |
@@ -138,7 +139,7 @@ Overførsler - vælg "fra"-konto:
 
 Overførsler fra egen savingsAccount - vælg "til"-konto:
 +--------------------------------------------------------------------------+
-|   						"BANKNAME" INTERFACE						   |
+|   						"BANKNAME" INTERFACE						   | CUSTOMER_TRANSACTION_FROM_SAVINGS
 +--------------------------------------------------------------------------+
 |																		   |
 |	Hvilken af dine konti vil du overføre penge til?					   |
@@ -156,7 +157,7 @@ Overførsler fra egen savingsAccount - vælg "til"-konto:
 
 Overførsler til andre - kontoNummer:
 +--------------------------------------------------------------------------+
-|   						"BANKNAME" INTERFACE						   |
+|   						"BANKNAME" INTERFACE						   | CUSTOMER_TRANSACTION_TO
 +--------------------------------------------------------------------------+
 |																		   |
 |	Indtast registrerings og kontonummer på modtagerkonto: ________		   |
@@ -170,7 +171,7 @@ Overførsler til andre - kontoNummer:
 
 Overførsler til andre - invalid kontonummer: (IllegalAccount)
 +--------------------------------------------------------------------------+
-|   						"BANKNAME" INTERFACE						   |
+|   						"BANKNAME" INTERFACE						   | CUSTOMER_TRANSACTION_TO_INVALID
 +--------------------------------------------------------------------------+
 |																		   |
 |	Ugyldigt kontonummer. Prøv igen.									   |
@@ -186,8 +187,28 @@ Overførsler til andre - invalid kontonummer: (IllegalAccount)
 
 Overførsler - beløb:
 +--------------------------------------------------------------------------+
-|   						"BANKNAME" INTERFACE						   |
+|   						"BANKNAME" INTERFACE						   | CUSTOMER_TRANSACTION_AMOUNT
 +--------------------------------------------------------------------------+
+|																		   |
+|	Overførsel															   |
+|		fra Konto: <<regNumber>> <<accountNumber>>						   |
+|		til Konto: <<regNumber>> <<accountNumber>>						   |
+|																		   |
+|	Indtast beløb du ønsker at overføre: ________ DKK					   |
+|																		   |
+|	Tast "B" for at gå tilbage.											   |
+|	Tast "Q" for at afslutte.											   |
+|																		   |
+|	Godkend med "Enter".												   |
+|																		   |
++--------------------------------------------------------------------------+
+
+Overførsler - beløb ugyldigt:
++--------------------------------------------------------------------------+
+|   						"BANKNAME" INTERFACE						   | CUSTOMER_TRANSACTION_AMOUNT_INVALID
++--------------------------------------------------------------------------+
+|																		   |
+|	Ugyldigt beløb. Prøv igen.											   |
 |																		   |
 |	Overførsel															   |
 |		fra Konto: <<regNumber>> <<accountNumber>>						   |
@@ -204,7 +225,7 @@ Overførsler - beløb:
 
 Overførsler - godkendt:
 +--------------------------------------------------------------------------+
-|   						"BANKNAME" INTERFACE						   |
+|   						"BANKNAME" INTERFACE						   | CUSTOMER_TRANSACTION_SUCCESS
 +--------------------------------------------------------------------------+
 |																		   |
 |	Overførsel gennemført.												   |
@@ -223,7 +244,7 @@ Overførsler - godkendt:
 
 Overførsler - NoOverDraftAllowed:
 +--------------------------------------------------------------------------+
-|   						"BANKNAME" INTERFACE						   |
+|   						"BANKNAME" INTERFACE						   | CUSTOMER_TRANSACTION_ILLEGAL_OVERDRAFT
 +--------------------------------------------------------------------------+
 |																		   |
 |	Dette kan ikke lade sig gøre, da overtræk ville forekomme.			   |
@@ -238,7 +259,7 @@ Overførsler - NoOverDraftAllowed:
 
 Overførsler - NegativeAmount:
 +--------------------------------------------------------------------------+
-|   						"BANKNAME" INTERFACE						   |
+|   						"BANKNAME" INTERFACE						   | CUSTOMER_TRANSACTION_NEGATIVE_AMOUNT
 +--------------------------------------------------------------------------+
 |																		   |
 |	Nåååh... Så det troede du nok, hva'?								   |
@@ -255,7 +276,7 @@ Overførsler - NegativeAmount:
 
 Hvis brugertypen er "medarbejder":
 +--------------------------------------------------------------------------+
-|   						"BANKNAME" INTERFACE						   |
+|   						"BANKNAME" INTERFACE						   | EMPLOYEE
 +--------------------------------------------------------------------------+
 |																		   |
 |	Tast "1" for at oprette ny kunde.									   |
@@ -270,7 +291,7 @@ Hvis brugertypen er "medarbejder":
 
 Søgning:
 +--------------------------------------------------------------------------+
-|   						"BANKNAME" INTERFACE						   |
+|   						"BANKNAME" INTERFACE						   | EMPLOYEE_SEARCH
 +--------------------------------------------------------------------------+
 |																		   |
 |	Søg på:																   |
@@ -287,7 +308,7 @@ Søgning:
 
 Søgning - navn:
 +--------------------------------------------------------------------------+
-|   						"BANKNAME" INTERFACE						   |
+|   						"BANKNAME" INTERFACE						   | EMPLOYEE_SEARCH_NAME
 +--------------------------------------------------------------------------+
 |																		   |
 |	Indtast navn: ________												   |
@@ -298,7 +319,7 @@ Søgning - navn:
 
 Søgning - navn - flere matches:
 +--------------------------------------------------------------------------+
-|   						"BANKNAME" INTERFACE						   |
+|   						"BANKNAME" INTERFACE						   | EMPLOYEE_SEARCH_MATCHES
 +--------------------------------------------------------------------------+
 |																		   |
 | 	<<idNo>>, <<firstName>> <<lastName>>, <<address>>, <<phoneNo>>		   |
@@ -317,7 +338,7 @@ Søgning - navn - flere matches:
 
 Søgning - kundenummer:
 +--------------------------------------------------------------------------+
-|   						"BANKNAME" INTERFACE						   |
+|   						"BANKNAME" INTERFACE						   | EMPLOYEE_SEARCH_IDNUMBER
 +--------------------------------------------------------------------------+
 |																		   |
 |	Indtast kundenummer: ________										   |
@@ -331,7 +352,7 @@ Søgning - kundenummer:
 
 Søgning - kontonummer:
 +--------------------------------------------------------------------------+
-|   						"BANKNAME" INTERFACE						   |
+|   						"BANKNAME" INTERFACE						   | EMPLOYEE_SEARCH_ACCOUNT
 +--------------------------------------------------------------------------+
 |																		   |
 |	Indtast kontonummer: ________										   |
@@ -345,7 +366,7 @@ Søgning - kontonummer:
 
 Søgning - ingen matches:
 +--------------------------------------------------------------------------+
-|   						"BANKNAME" INTERFACE						   |
+|   						"BANKNAME" INTERFACE						   | EMPLOYEE_SEARCH_NOMATCH
 +--------------------------------------------------------------------------+
 |																		   |
 |	Søgning matchede ingen kunder.										   |
@@ -359,7 +380,7 @@ Søgning - ingen matches:
 
 Medarbejder - Kunde:
 +--------------------------------------------------------------------------+
-|   						"BANKNAME" INTERFACE						   |
+|   						"BANKNAME" INTERFACE						   | EMPLOYEE_CUSTOMER
 +--------------------------------------------------------------------------+
 |																		   |
 |	Kundenummer: 	<<idNo>>											   |
@@ -382,7 +403,7 @@ Medarbejder - Kunde:
 
 Medarbejder - Konto:
 +--------------------------------------------------------------------------+
-|   						"BANKNAME" INTERFACE						   |
+|   						"BANKNAME" INTERFACE						   | EMPLOYEE_ACCOUNT
 +--------------------------------------------------------------------------+
 |																		   |
 |	Reg. nummer:		<<regNumber>>									   |
@@ -406,7 +427,7 @@ Medarbejder - Konto:
 
 Medarbejder - Konto - rentesats:
 +--------------------------------------------------------------------------+
-|   						"BANKNAME" INTERFACE						   |
+|   						"BANKNAME" INTERFACE						   | EMPLOYEE_INTEREST_RATE
 +--------------------------------------------------------------------------+
 |																		   |
 |	Nuværende rentesats: <<renteSats>>									   |
@@ -471,6 +492,39 @@ NotEnoughCash:
 |																		   |
 |	Dette kan ikke lade sig gøre, da banken ikke har					   |
 |	penge tilsvarende dette beløb.										   |
+|																		   |
+|	Tast "B" for at gå tilbage.											   |
+|	Tast "Q" for at afslutte.											   |
+|																		   |
+|	Godkend med "Enter".												   |
+|																		   |
++--------------------------------------------------------------------------+
+
+Administrator:
++--------------------------------------------------------------------------+
+|   						"BANKNAME" INTERFACE						   |
++--------------------------------------------------------------------------+
+|																		   | << Disse linjer tilføjes som verifikation for foretaget aktion.
+|	Banken nulstillet./Back-up foretaget./Database genindlæst.			   | << 
+|																		   |
+|	Tast "0" for at nulstille banken.									   |
+|	Tast "1" for at tage back-up.										   |
+|	Tast "2" for at genindlæse database.								   |
+|	Tast "3" for at vise dagens status.									   |
+|																		   |
+|	Tast "B" for at gå tilbage.											   |
+|	Tast "Q" for at afslutte.											   |
+|																		   |
+|	Godkend med "Enter".												   |
+|																		   |
++--------------------------------------------------------------------------+
+
+Administrator - Status:
++--------------------------------------------------------------------------+
+|   						"BANKNAME" INTERFACE						   |
++--------------------------------------------------------------------------+
+|																		   |
+|	Vi er stadig en bank. Gå væk.
 |																		   |
 |	Tast "B" for at gå tilbage.											   |
 |	Tast "Q" for at afslutte.											   |
