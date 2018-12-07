@@ -212,8 +212,7 @@ Overførsler - godkendt:
 |	Velkommen <<firstName>> <<lastName>>,								   | <-- Interface fra 'Kundenummer godkendt'.
 |																		   |
 |	Tast "1" for at se kontooversigt.									   |
-|	Tast "2" for at overføre penge mellem egne konti.					   |
-|	Tast "3" for at overføre penge til andre konti.						   |
+|	Tast "2" for at overføre penge.										   |
 |																		   |
 |	Tast "B" for at gå tilbage.											   |
 |	Tast "Q" for at afslutte.											   |
