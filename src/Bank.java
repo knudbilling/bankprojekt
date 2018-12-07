@@ -173,6 +173,14 @@ public class Bank {
         return 0;
     }
 
+    public Customer getCustomer(int customerNumber){
+        for(int i=0;i<customerList.size();i++){
+            if(customerList.get(i).getidNo()==customerNumber)
+                return customerList.get(i);
+        }
+        return null;
+    }
+
     public Account getAccount(String accountNumber){
         for(int i=0;i<this.getAccountList().size();i++){
             if(this.getAccountList().get(i).accountNumber.equals(accountNumber))
