@@ -1,4 +1,3 @@
-import javax.naming.OperationNotSupportedException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -31,11 +30,12 @@ public class KnudGUI {
 
     /**
      * Examine if a string is "M" or "Q"
+     *
      * @param string the string to examine
      * @return true if string is "M" or "Q"
      */
-    private static boolean isMQ(String string){
-        switch(string){
+    private static boolean isMQ(String string) {
+        switch (string) {
             case "M":
             case "Q":
                 return true;
@@ -45,11 +45,12 @@ public class KnudGUI {
 
     /**
      * Examine if a string is "B", "M" or "Q"
+     *
      * @param string the string to examine
      * @return true is string is "B", "M" or "Q"
      */
-    private static boolean isBMQ(String string){
-        switch(string){
+    private static boolean isBMQ(String string) {
+        switch (string) {
             case "B":
             case "M":
             case "Q":
@@ -60,11 +61,12 @@ public class KnudGUI {
 
     /**
      * Transform lowercase "b", "m" and "q" to uppercase
+     *
      * @param result the string to transform
      * @return "B", "M" or "Q" if input is "b", "m" or "q", otherwise the original string is returned
      */
-    private static String cleanBMQ(String result){
-        switch(result){
+    private static String cleanBMQ(String result) {
+        switch (result) {
             case "b":
                 return "B";
             case "m":
@@ -75,7 +77,7 @@ public class KnudGUI {
         return result;
     }
 
-    private void mainFlow() throws OperationNotSupportedException {
+    private void mainFlow() {
         String result;
 
         do {
@@ -100,14 +102,14 @@ public class KnudGUI {
 
         while (true) {
             mainDisplay();
-            result = this.scanner.next();
-            this.scanner.nextLine();
+            result = scanner.next();
+            scanner.nextLine();
             switch (result) {
                 case "1":
                 case "2":
                 case "3":
-                case "Q":
                     return result;
+                case "Q":
                 case "q":
                     return "Q";
             }
@@ -128,10 +130,10 @@ public class KnudGUI {
 
         while (true) {
             result = customerAccessGUI();
-            if(isBMQ(result)) return result;
+            if (isBMQ(result)) return result;
 
             result = customerFlow();
-            if(isMQ(result)) return result;
+            if (isMQ(result)) return result;
         }
     }
 
@@ -142,9 +144,9 @@ public class KnudGUI {
 
         while (true) {
             customerAccessDisplay(customerFound);
-            result = cleanBMQ(this.scanner.next());
-            this.scanner.nextLine();
-            if(isBMQ(result)) return result;
+            result = cleanBMQ(scanner.next());
+            scanner.nextLine();
+            if (isBMQ(result)) return result;
 
             try {
                 customerNumber = Integer.parseInt(result);
@@ -171,7 +173,7 @@ public class KnudGUI {
 
         while (true) {
             result = customerGUI();
-            if(isBMQ(result)) return result;
+            if (isBMQ(result)) return result;
             switch (result) {
                 case "1":
                     result = customerAccountsFlow();
@@ -180,28 +182,45 @@ public class KnudGUI {
                     result = customerTransactionFromFlow();
                     break;
             }
-            if(isMQ(result)) return result;
+            if (isMQ(result)) return result;
         }
     }
 
     private String customerGUI() {
         String result;
+        boolean customerCanTransfer = false;
+        Customer customer = bank.getCustomer(customerNumber);
+
+        if (customer.accountList.size() > 1) {
+            customerCanTransfer = true;
+        } else if (customer.accountList.size() == 1) {
+            if (customer.accountList.get(0) instanceof CurrentAccount)
+                customerCanTransfer = true;
+        }
 
         while (true) {
-            customerDisplay();
+            customerDisplay(customerCanTransfer);
             result = cleanBMQ(scanner.next());
             scanner.nextLine();
-            if(isBMQ(result)) return result;
+            if (isBMQ(result)) return result;
             switch (result) {
                 case "1":
-                case "2":
                     return result;
+                case "2":
+                    if (customerCanTransfer) return result;
             }
         }
     }
 
-    private void customerDisplay(){
-        //TODO
+    private void customerDisplay(boolean customerCanTransfer) {
+        Customer customer = bank.getCustomer(customerNumber);
+
+        System.out.println(customer.firstName + " " + customer.lastName);
+        System.out.println("1 kontooversigt");
+        if (customerCanTransfer) {
+            System.out.println("2 overførsel");
+        }
+        System.out.println("BMQ");
     }
 
     private String customerAccountInfoFlow() {
@@ -210,13 +229,17 @@ public class KnudGUI {
 
     private String customerAccountInfoGUI() {
         String result;
-        customerAccountInfoDisplay();
-        //TODO
-        return "";
+        while (true) {
+            customerAccountInfoDisplay();
+            result = cleanBMQ(scanner.next());
+            scanner.nextLine();
+            if (isBMQ(result)) return result;
+        }
     }
 
-    private void customerAccountInfoDisplay(){
-        //TODO
+    private void customerAccountInfoDisplay() {
+        System.out.println("Oplysninger om konto");
+        System.out.println("BMQ");
     }
 
     private String customerTransactionFromFlow() {
@@ -224,25 +247,41 @@ public class KnudGUI {
 
         while (true) {
             result = customerTransactionFromGUI();
-            if(isBMQ(result)) return result;
+            if (isBMQ(result)) return result;
             if (this.bank.getAccount(this.accountNumber) instanceof SavingsAccount) {
                 result = customerTransactionFromSavingsFlow();
             } else {
                 result = customerTransactionToFlow();
             }
-            if(isMQ(result)) return result;
+            if (isMQ(result)) return result;
         }
     }
 
     private String customerTransactionFromGUI() {
-        // return one of: accountNumber, B, M, Q
-        customerTransactionFromDislay();
-        //TODO
-        return "";
+        String result;
+        List<Account> accountList = bank.getCustomer(customerNumber).accountList;
+        while (true) {
+            customerTransactionFromDisplay();
+            result = cleanBMQ(scanner.next());
+            scanner.nextLine();
+            if (isBMQ(result)) return result;
+            if (AccountNumber.isValidFormat(result) && AccountNumber.isLocal(bank, result) && bank.getAccount(result) != null) {
+                for(int i=0;i<accountList.size();i++){
+                    if(accountList.get(i).getAccountNumber().equals(result))
+                        return result;
+                }
+            }
+        }
     }
 
-    private void customerTransactionFromDislay(){
-        //TODO
+    private void customerTransactionFromDisplay() {
+        Customer customer = bank.getCustomer(customerNumber);
+        List<Account> accountList = customer.accountList;
+
+        for (int i = 0; i < accountList.size(); i++)
+            System.out.println(accountList.get(i).getAccountNumber() + " : " + accountList.get(i).getBalance());
+        System.out.println("kontonummer:");
+        System.out.println("BMQ");
     }
 
     private String customerTransactionFromSavingsFlow() {
@@ -250,29 +289,41 @@ public class KnudGUI {
 
         while (true) {
             result = customerTransactionFromSavingsGUI();
-            if(isBMQ(result)) return result;
+            if (isBMQ(result)) return result;
             result = customerTransactionAmountFlow();
-            if(isMQ(result)) return result;
+            if (isMQ(result)) return result;
         }
     }
 
     private String customerTransactionFromSavingsGUI() {
+        String result;
         //TODO
-        customerTransactionFromSavingsDisplay();
-        return "";
+        while(true) {
+            customerTransactionFromSavingsDisplay();
+            result = cleanBMQ(scanner.next());
+            scanner.nextLine();
+            if (isBMQ(result)) return result;
+            // check its own account
+        }
     }
 
-    private void customerTransactionFromSavingsDisplay(){
-        //TODO
+    private void customerTransactionFromSavingsDisplay() {
+        List<Account> accountList = bank.getCustomer(customerNumber).accountList;
+
+        for(int i=0;i<accountList.size();i++){
+            if(!accountList.get(i).getAccountNumber().equals(accountNumber))
+                System.out.println(accountList.get(i).getAccountNumber()+" "+accountList.get(i).getBalance());
+        }
+        System.out.println("BMQ");
     }
 
     private String customerTransactionToFlow() {
         String result;
         while (true) {
             result = customerTransactionToGUI();
-            if(isBMQ(result)) return result;
+            if (isBMQ(result)) return result;
             result = customerTransactionAmountFlow();
-            if(isMQ(result)) return result;
+            if (isMQ(result)) return result;
         }
     }
 
@@ -284,7 +335,7 @@ public class KnudGUI {
         return "";
     }
 
-    private void customerTransactionToDisplay(){
+    private void customerTransactionToDisplay() {
         //TODO
     }
 
@@ -294,7 +345,7 @@ public class KnudGUI {
 
         while (true) {
             result = customerTransactionAmountGUI();
-            if(isBMQ(result)) return result;
+            if (isBMQ(result)) return result;
 
             try {
                 transaction = new Transaction(bank, accountNumber, toAccountNumber, amount);
@@ -320,7 +371,7 @@ public class KnudGUI {
         return "";
     }
 
-    private void customerTransactionAmountDisplay(){
+    private void customerTransactionAmountDisplay() {
         //TODO
     }
 
@@ -338,9 +389,9 @@ public class KnudGUI {
 
         while (true) {
             result = customerAccountsGUI();
-            if(isBMQ(result)) return result;
+            if (isBMQ(result)) return result;
             result = customerAccountInfoFlow();
-            if(isMQ(result)) return result;
+            if (isMQ(result)) return result;
         }
     }
 
@@ -351,7 +402,7 @@ public class KnudGUI {
         return "";
     }
 
-    private void customerAccountsDisplay(){
+    private void customerAccountsDisplay() {
         //TODO
     }
 
@@ -359,7 +410,7 @@ public class KnudGUI {
         String result;
         while (true) {
             result = employeeGUI();
-            if(isBMQ(result)) return result;
+            if (isBMQ(result)) return result;
 
             switch (result) {
                 case "1":
@@ -369,7 +420,7 @@ public class KnudGUI {
                     result = employeeSearchFlow();
                     break;
             }
-            if(isMQ(result)) return result;
+            if (isMQ(result)) return result;
         }
     }
 
@@ -380,7 +431,7 @@ public class KnudGUI {
             employeeDisplay();
             result = cleanBMQ(scanner.next());
             scanner.nextLine();
-            if(isBMQ(result)) return result;
+            if (isBMQ(result)) return result;
             switch (result) {
                 case "1":
                 case "2":
@@ -413,7 +464,7 @@ public class KnudGUI {
                     result = employeeSearchAccountNumberFlow();
                     break;
             }
-            if(isMQ(result)) return result;
+            if (isMQ(result)) return result;
         }
     }
 
@@ -424,7 +475,7 @@ public class KnudGUI {
             employeeSearchDisplay();
             result = cleanBMQ(scanner.next());
             scanner.nextLine();
-            if(isBMQ(result)) return result;
+            if (isBMQ(result)) return result;
             switch (result) {
                 case "1":
                 case "2":
@@ -445,18 +496,18 @@ public class KnudGUI {
 
     private String employeeNewCustomerFlow() {
         String result;
-        result=employeeNewCustomerGUI();
+        result = employeeNewCustomerGUI();
         // TODO
         return "";
     }
 
-    private String employeeNewCustomerGUI(){
+    private String employeeNewCustomerGUI() {
         //TODO
         employeeNewCustomerDisplay();
         return "";
     }
 
-    private void employeeNewCustomerDisplay(){
+    private void employeeNewCustomerDisplay() {
         //TODO
     }
 
@@ -465,7 +516,7 @@ public class KnudGUI {
         String customerName;
         List<Customer> customerList;
 
-        while(true) {
+        while (true) {
             customerList = new ArrayList<>();
             result = employeeSearchNameGUI();
 
@@ -477,13 +528,13 @@ public class KnudGUI {
             }
 
             if (customerList.size() == 0) {
-                result=employeeSearchNoMatchFlow();
+                result = employeeSearchNoMatchFlow();
             } else if (customerList.size() == 1) {
                 result = employeeCustomerFlow();
             } else { // >1
                 result = employeeSearchMatchesFlow();
             }
-            if(isMQ(result)) return result;
+            if (isMQ(result)) return result;
         }
     }
 
@@ -498,39 +549,39 @@ public class KnudGUI {
         System.out.println("Indtast navn");
     }
 
-    private String employeeSearchNoMatchFlow(){
+    private String employeeSearchNoMatchFlow() {
         String result;
-        result=employeeSearchNoMatchGUI();
+        result = employeeSearchNoMatchGUI();
         return result;
         //TODO
     }
 
-    private String employeeSearchNoMatchGUI(){
+    private String employeeSearchNoMatchGUI() {
         String result;
         employeeSearchNoMatchDisplay();
         return "";
         //TODO
     }
 
-    private void employeeSearchNoMatchDisplay(){
+    private void employeeSearchNoMatchDisplay() {
         //TODO
     }
 
-    private String employeeSearchMatchesFlow(){
+    private String employeeSearchMatchesFlow() {
         String result;
-        result=employeeSearchMatchesGUI();
+        result = employeeSearchMatchesGUI();
         return result;
         //TODO
     }
 
-    private String employeeSearchMatchesGUI(){
+    private String employeeSearchMatchesGUI() {
         String result;
         employeeSearchMatchesDisplay();
         return "";
         //TODO
     }
 
-    private void employeeSearchMatchesDisplay(){
+    private void employeeSearchMatchesDisplay() {
         //TODO
     }
 
@@ -539,9 +590,9 @@ public class KnudGUI {
 
         while (true) {
             result = employeeSearchCustomerNumberGUI();
-            if(isBMQ(result)) return result;
+            if (isBMQ(result)) return result;
             result = employeeCustomerFlow();
-            if(isMQ(result)) return result;
+            if (isMQ(result)) return result;
         }
     }
 
@@ -553,7 +604,7 @@ public class KnudGUI {
             employeeSearchCustomerNumberDisplay();
             result = cleanBMQ(scanner.next());
             scanner.nextLine();
-            if(isBMQ(result)) return result;
+            if (isBMQ(result)) return result;
 
             try {
                 customerNumber = Integer.parseInt(result);
@@ -594,9 +645,9 @@ public class KnudGUI {
         String result;
         while (true) {
             result = employeeCustomerGUI();
-            if(isBMQ(result)) return result;
+            if (isBMQ(result)) return result;
             result = employeeAccountFlow();
-            if(isMQ(result)) return result;
+            if (isMQ(result)) return result;
         }
     }
 
@@ -606,7 +657,7 @@ public class KnudGUI {
             employeeCustomerDisplay();
             result = cleanBMQ(scanner.next());
             scanner.nextLine();
-            if(isBMQ(result)) return result;
+            if (isBMQ(result)) return result;
             switch (result) {
                 case "N":
                 case "n":
@@ -635,7 +686,7 @@ public class KnudGUI {
         String result;
         while (true) {
             result = employeeAccountGUI();
-            if(isBMQ(result)) return result;
+            if (isBMQ(result)) return result;
             switch (result) {
                 case "1":
                     result = employeeInterestRateFlow();
@@ -650,7 +701,7 @@ public class KnudGUI {
                     result = employeeDepositFlow();
                     break;
             }
-            if(isMQ(result)) return result;
+            if (isMQ(result)) return result;
 
         }
     }
@@ -661,7 +712,7 @@ public class KnudGUI {
             employeeAccountDisplay();
             result = cleanBMQ(scanner.next());
             scanner.nextLine();
-            if(isBMQ(result)) return result;
+            if (isBMQ(result)) return result;
             switch (result) {
                 case "1":
                 case "2":
@@ -689,7 +740,7 @@ public class KnudGUI {
         Account account;
 
         result = employeeInterestRateGUI();
-        if(isBMQ(result)) return result;
+        if (isBMQ(result)) return result;
         interestRate = Double.parseDouble(result);
         account = bank.getAccount(accountNumber);
         account.setInterestRate((int) (interestRate * 100));
@@ -705,7 +756,7 @@ public class KnudGUI {
             employeeInterestRateDisplay();
             result = cleanBMQ(scanner.next());
             scanner.nextLine();
-            if(isBMQ(result)) return result;
+            if (isBMQ(result)) return result;
             try {
                 Double.parseDouble(result);
                 return result;
@@ -729,7 +780,7 @@ public class KnudGUI {
         long allowedOverdraft;
 
         result = employeeOverDraftGUI();
-        if(isBMQ(result)) return result;
+        if (isBMQ(result)) return result;
         allowedOverdraft = (long) Double.parseDouble(result);
         account = bank.getAccount(accountNumber);
         account.setAllowedOverdraft(allowedOverdraft);
@@ -747,7 +798,7 @@ public class KnudGUI {
             result = cleanBMQ(scanner.next());
             scanner.nextLine();
 
-            if(isBMQ(result)) return result;
+            if (isBMQ(result)) return result;
             try {
                 doubleResult = Double.parseDouble(result) * 100.0;
                 return "" + ((long) doubleResult);
@@ -770,10 +821,10 @@ public class KnudGUI {
         Transaction transaction = null;
         int error;
 
-        while(true) {
+        while (true) {
             error = 0;
             result = employeeWithdrawGUI();
-            if(isBMQ(result)) return result;
+            if (isBMQ(result)) return result;
             amount = Long.parseLong(result);
 
             try {
@@ -802,7 +853,7 @@ public class KnudGUI {
                     result = employeeNotEnoughCashFlow();
                     break;
             }
-            if(isMQ(result)) return result;
+            if (isMQ(result)) return result;
         }
     }
 
@@ -814,7 +865,7 @@ public class KnudGUI {
             employeeWithdrawDisplay();
             result = cleanBMQ(scanner.next());
             scanner.nextLine();
-            if(isBMQ(result)) return result;
+            if (isBMQ(result)) return result;
             try {
                 doubleResult = Double.parseDouble(result) * 100.0;
                 if (doubleResult > 0)
@@ -833,38 +884,38 @@ public class KnudGUI {
         System.out.println("Q Quit");
     }
 
-    private String employeeNoOverdraftAllowedFlow(){
+    private String employeeNoOverdraftAllowedFlow() {
         String result;
-        result=employeeNoOverdraftAllowedGUI();
+        result = employeeNoOverdraftAllowedGUI();
         return result;
         //TODO
     }
 
-    private String employeeNoOverdraftAllowedGUI(){
+    private String employeeNoOverdraftAllowedGUI() {
         String result;
         employeeNoOverdraftAllowedDisplay();
         return "";
         //TODO
     }
 
-    private void employeeNoOverdraftAllowedDisplay(){
+    private void employeeNoOverdraftAllowedDisplay() {
         //TODO
     }
 
-    private String employeeNotEnoughCashFlow(){
+    private String employeeNotEnoughCashFlow() {
         String result;
-        result=employeeNotEnoughCashGUI();
+        result = employeeNotEnoughCashGUI();
         return result;
     }
 
-    private String employeeNotEnoughCashGUI(){
+    private String employeeNotEnoughCashGUI() {
         String result;
         employeeNotEnoughCashDisplay();
         return "";
         //TODO
     }
 
-    private void employeeNotEnoughCashDisplay(){
+    private void employeeNotEnoughCashDisplay() {
         //TODO
     }
 
@@ -886,14 +937,20 @@ public class KnudGUI {
         //TODO
     }
 
-    private String adminFlow() throws OperationNotSupportedException {
-        adminGUI();
-        throw new OperationNotSupportedException();
+    private String adminFlow() {
+        String result;
+        //TODO
+        result = adminGUI();
+        return "";
     }
 
     private String adminGUI() {
         //TODO
+        adminDisplay();
         return "";
     }
 
+    private void adminDisplay() {
+        //TODO
+    }
 }
