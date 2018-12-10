@@ -68,7 +68,7 @@ public class GUI {
 
         GUI kg = new GUI(theBank, thePersistence);
         kg.mainFlow();
-        System.out.println("Goodbye, come again!");
+        System.out.println("Thank you, come again!");
     }
 
 
