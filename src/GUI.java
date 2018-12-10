@@ -11,48 +11,43 @@ public class GUI {
     String accountNumber;
     String toAccountNumber;
     long amount;
-    public String headerBlock = "";
-    public static String backLine =
-            "|                                                                          |\n" +
-                    "|    Tast \"B\" for at gå tilbage.                                           |\n";
 
-    public static String endLine =
-            "|    Tast \"Q\" for at afslutte.                                             |\n";
+    static final int LINE_WIDTH=76;
+    static final int PRE_WS=4;
+    static final String spaces="                                                                                                                      ";
+    static final String line="+-----------------------------------------------------------------------------------------------------------------------";
 
-    public static String mainLine =
-            "|    Tast \"M\" for at gå til  hovedmenu.                                    |\n";
+    public String headerBlock;
+    public static String backLine =fillLine(LINE_WIDTH)
+            + fillLine("Tast \"B\" for at gå tilbage.",LINE_WIDTH,4);
 
+    public static String endLine = fillLine("Tast \"Q\" for at afslutte.",LINE_WIDTH,4);
 
+    public static String mainLine = fillLine("Tast \"M\" for at gå til  hovedmenu.",LINE_WIDTH,4);
 
-    public static String bottom =
-            "|                                                                          |\n" +
-                    "|    Godkend med \"Enter\".                                                  |\n" +
-                    "|                                                                          |\n" +
-                    "+--------------------------------------------------------------------------+\n\n";
+    public static String bottom = fillLine(LINE_WIDTH)
+            + fillLine("Godkend med \"Enter\".",LINE_WIDTH,4)
+            + fillLine(LINE_WIDTH)
+            + horisontalLine(LINE_WIDTH);
 
+    static String horisontalLine(int length){
+        return line.substring(0,length-1)+"+\n";
+    }
+
+    static String fillLine(String string,int length,int preWS){
+        return "|"+spaces.substring(0,preWS)+string+spaces.substring(0,length-(2+preWS+string.length()))+"|\n";
+    }
+
+    static String fillLine(int length){
+        return "|"+spaces.substring(0,length-2)+"|\n";
+    }
 
     private String generateHeader(String bankName) {
 
-        int i;
-        String header = "+--------------------------------------------------------------------------+\n";
-        header += "|";
-
-        int numSpaces = 74 - bankName.length();
-
-        for (i = 0; i < numSpaces/2; i++) {
-            header += " ";
-        }
-
-        header += bankName;
-
-        for (; i < numSpaces; i++) {
-            header += " ";
-        }
-
-        header +=
-                "|\n" +
-                        "+--------------------------------------------------------------------------+\n" +
-                        "|                                                                          |\n";
+        String header = horisontalLine(LINE_WIDTH)
+                + fillLine(bankName,LINE_WIDTH,(LINE_WIDTH- bankName.length())/2-1)
+                + horisontalLine(LINE_WIDTH)
+                +fillLine(LINE_WIDTH);
 
         return header;
     }
@@ -162,14 +157,14 @@ public class GUI {
     }
 
     private void mainDisplay() {
-        String screen = headerBlock;
-        screen +=
-                "|    Tast \"1\" hvis du er kunde.                                            |\n" +
-                        "|    Tast \"2\" hvis du er medarbejder i banken.                             |\n" +
-                        "|    Tast \"3\" hvis du er administrator.                                    |\n" +
-                        "|                                                                          |\n";
-        screen += endLine;
-        screen += bottom;
+        String screen = headerBlock
+                + fillLine("Tast \"1\" hvis du er kunde.",76,4)
+                + fillLine("Tast \"2\" hvis du er medarbejder i banken.",76,4)
+                + fillLine("Tast \"3\" hvis du er administrator.",76,4)
+                + fillLine(76)
+                + endLine
+                + bottom;
+
         System.out.println(screen);
     }
 
