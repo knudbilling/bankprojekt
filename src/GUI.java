@@ -14,8 +14,8 @@ public class GUI {
 
     static final int LINE_WIDTH = 76;
     static final int PRE_WS = 4;
-    static final String spaces = "                                                                                                                      ";
-    static final String line = "+-----------------------------------------------------------------------------------------------------------------------";
+    static final String spaces = "                                                                                                                                            ";
+    static final String line = "+-------------------------------------------------------------------------------------------------------------------------------------------";
 
     public String headerBlock;
     public static String backLine = fillLine()
@@ -368,16 +368,16 @@ public class GUI {
         String accountType;
         String screen;
 
-        screen=headerBlock
-                +fillLine("Hvilken af dine konti vil du overføre penge fra?")
-                +fillLine();
+        screen = headerBlock
+                + fillLine("Hvilken af dine konti vil du overføre penge fra?")
+                + fillLine();
 
         for (int i = 0; i < accountList.size(); i++) {
             if (accountList.get(i) instanceof CurrentAccount) accountType = "lønkonto";
             else accountType = "opsparingskonto";
-            screen+=fillLine(String.format("%s : %20.2f    %15s", accountList.get(i).getAccountNumber(), accountList.get(i).getBalance() / 100.0, accountType));
+            screen += fillLine(String.format("%s : %20.2f    %15s", accountList.get(i).getAccountNumber(), accountList.get(i).getBalance() / 100.0, accountType));
         }
-        screen+=backLine + mainLine + endLine + bottom;
+        screen += backLine + mainLine + endLine + bottom;
         System.out.println(screen);
     }
 
@@ -413,22 +413,22 @@ public class GUI {
 
     private void customerTransactionFromSavingsDisplay() {
         String accountType;
+        String screen;
 
         List<Account> accountList = bank.getCustomer(customerNumber).accountList;
 
-        System.out.print(headerBlock);
-        System.out.println("|    Hvilken af dine konti vil du overføre penge til?                      |");
-        System.out.println("|                                                                          |");
+        screen = headerBlock
+                + fillLine("Hvilken af dine konti vil du overføre penge til?")
+                + fillLine();
         for (int i = 0; i < accountList.size(); i++) {
             if (!accountList.get(i).getAccountNumber().equals(accountNumber)) {
                 if (accountList.get(i) instanceof CurrentAccount) accountType = "lønkonto";
                 else accountType = "opsparingskonto";
-                System.out.printf("|    %s : %20.2f    %15s              |%n", accountList.get(i).getAccountNumber(), accountList.get(i).getBalance() / 100.0, accountType);
+                screen += fillLine(String.format("%s : %20.2f    %15s", accountList.get(i).getAccountNumber(), accountList.get(i).getBalance() / 100.0, accountType));
             }
         }
-        System.out.println(backLine + mainLine + endLine + bottom);
-
-
+        screen += backLine + mainLine + endLine + bottom;
+        System.out.println(screen);
     }
 
     private String customerTransactionToFlow() {
@@ -464,11 +464,12 @@ public class GUI {
     }
 
     private void customerTransactionToDisplay() {
-
-        System.out.print(headerBlock);
-        System.out.println("|    Hvilken konto vil du overføre til?                                    |");
-        System.out.println("|                                                                          |");
-        System.out.println(backLine + mainLine + endLine + bottom);
+        String screen;
+        screen = headerBlock
+                + fillLine("Hvilken konto vil du overføre til?")
+                + fillLine()
+                + backLine + mainLine + endLine + bottom;
+        System.out.println(screen);
     }
 
     private String customerTransactionAmountFlow() {
@@ -521,10 +522,12 @@ public class GUI {
     }
 
     private void customerTransactionAmountDisplay() {
-        System.out.print(headerBlock);
-        System.out.println("|    Hvor meget vil du overføre?                                           |");
-        System.out.println("|                                                                          |");
-        System.out.println(backLine + mainLine + endLine + bottom);
+        String screen;
+        screen = headerBlock
+                + fillLine("Hvor meget vil du overføre?")
+                + fillLine()
+                + backLine + mainLine + endLine + bottom;
+        System.out.println(screen);
     }
 
     private void customerTransactionIllegalOverDraftDisplay() {
@@ -573,19 +576,22 @@ public class GUI {
 
     private void customerAccountsDisplay() {
         String accountType;
+        String screen;
 
         List<Account> accountList = bank.getCustomer(customerNumber).accountList;
-        System.out.print(headerBlock);
-        System.out.println("|    Kontooversigt:                                                        |");
-        System.out.println("|                                                                          |");
+        screen = headerBlock
+                + fillLine("Kontooversigt:")
+                + fillLine();
+
         for (int i = 0; i < accountList.size(); i++) {
             if (accountList.get(i) instanceof CurrentAccount) accountType = "lønkonto";
             else accountType = "opsparingskonto";
-            System.out.printf("|    %s : %20.2f    %15s              |%n", accountList.get(i).getAccountNumber(), accountList.get(i).getBalance() / 100.0, accountType);
+            screen += fillLine(String.format("%s : %20.2f    %15s", accountList.get(i).getAccountNumber(), accountList.get(i).getBalance() / 100.0, accountType));
         }
-        System.out.println("|                                                                          |");
-        System.out.println("|    Indtast kontonummer for yderligere information:                       |");
-        System.out.println(backLine + mainLine + endLine + bottom);
+        screen += fillLine()
+                + fillLine("Indtast kontonummer for yderligere information:")
+                + backLine + mainLine + endLine + bottom;
+        System.out.println(screen);
     }
 
     private String employeeFlow() {
@@ -909,9 +915,9 @@ public class GUI {
             }
             //If the account exists, and is not for internal use in banking system.
             if (bank.getAccount(result) != null) {
-                if(result != bank.getCashAccountNumber()) {
-                    if(result != bank.getInterBankAccountNumber()) {
-                        if(result != bank.getOwnAccountNumber()) {
+                if (result != bank.getCashAccountNumber()) {
+                    if (result != bank.getInterBankAccountNumber()) {
+                        if (result != bank.getOwnAccountNumber()) {
                             accountNumber = result;
                             return result;
                         }
@@ -1025,35 +1031,35 @@ public class GUI {
         int numSpaces = 50;
 
         screen += "|    Kontonummer:        " + accountNumber;
-        for(int i = 0; i < numSpaces-accountNumber.length(); i++) {
+        for (int i = 0; i < numSpaces - accountNumber.length(); i++) {
             screen += " ";
         }
         screen += "|\n";
 
         String accountType = (bank.getAccount(accountNumber) instanceof SavingsAccount) ? "Opsparingskonto" : "Lønkonto";
         screen += "|    Type:               " + accountType;
-        for(int i = 0; i < numSpaces-accountType.length(); i++) {
+        for (int i = 0; i < numSpaces - accountType.length(); i++) {
             screen += " ";
         }
         screen += "|\n";
 
-        String balance = "" + bank.getAccount(accountNumber).getBalance()/100.0 + " DKK";
+        String balance = "" + bank.getAccount(accountNumber).getBalance() / 100.0 + " DKK";
         screen += "|    Indestående:        " + balance;
-        for(int i = 0; i < numSpaces-balance.length(); i++) {
+        for (int i = 0; i < numSpaces - balance.length(); i++) {
             screen += " ";
         }
         screen += "|\n";
 
         String interestRate = "" + bank.getAccount(accountNumber).getInterestRate();
         screen += "|    Rentesats:          " + interestRate;
-        for(int i = 0; i < numSpaces-interestRate.length(); i++) {
+        for (int i = 0; i < numSpaces - interestRate.length(); i++) {
             screen += " ";
         }
         screen += "|\n";
 
-        String allowedOverdraft = "" + bank.getAccount(accountNumber).getAllowedOverdraft()/100.0 + " DKK";
+        String allowedOverdraft = "" + bank.getAccount(accountNumber).getAllowedOverdraft() / 100.0 + " DKK";
         screen += "|    Tilladt overtræk:   " + allowedOverdraft;
-        for(int i = 0; i < numSpaces-allowedOverdraft.length(); i++) {
+        for (int i = 0; i < numSpaces - allowedOverdraft.length(); i++) {
             screen += " ";
         }
         screen += "|\n";
@@ -1317,13 +1323,15 @@ public class GUI {
     }
 
     private void adminDisplay() {
-        System.out.print(headerBlock);
-        System.out.println("|    Tast \"0\" for at nulstille banken                                      |");
-        System.out.println("|    Tast \"1\" for at tage back-up                                          |");
-        System.out.println("|    Tast \"2\" for at genindlæse database                                   |");
-        System.out.println("|    Tast \"3\" for at vise dagens status                                    |");
-        System.out.println("|                                                                          |");
-        System.out.println(backLine + mainLine + endLine + bottom);
+        String screen;
+        screen = headerBlock
+                + fillLine("Tast \"0\" for at nulstille banken")
+                + fillLine("Tast \"1\" for at tage back-up")
+                + fillLine("Tast \"2\" for at genindlæse database")
+                + fillLine("Tast \"3\" for at vise dagens status")
+                + fillLine()
+                + backLine + mainLine + endLine + bottom;
+        System.out.println(screen);
     }
 
     private String adminResetFlow() {
