@@ -12,42 +12,55 @@ public class GUI {
     String toAccountNumber;
     long amount;
 
-    static final int LINE_WIDTH=76;
-    static final int PRE_WS=4;
-    static final String spaces="                                                                                                                      ";
-    static final String line="+-----------------------------------------------------------------------------------------------------------------------";
+    static final int LINE_WIDTH = 76;
+    static final int PRE_WS = 4;
+    static final String spaces = "                                                                                                                      ";
+    static final String line = "+-----------------------------------------------------------------------------------------------------------------------";
 
     public String headerBlock;
-    public static String backLine =fillLine(LINE_WIDTH)
-            + fillLine("Tast \"B\" for at gå tilbage.",LINE_WIDTH,4);
+    public static String backLine = fillLine()
+            + fillLine("Tast \"B\" for at gå tilbage.");
 
-    public static String endLine = fillLine("Tast \"Q\" for at afslutte.",LINE_WIDTH,4);
+    public static String endLine = fillLine("Tast \"Q\" for at afslutte.");
 
-    public static String mainLine = fillLine("Tast \"M\" for at gå til  hovedmenu.",LINE_WIDTH,4);
+    public static String mainLine = fillLine("Tast \"M\" for at gå til  hovedmenu.");
 
-    public static String bottom = fillLine(LINE_WIDTH)
-            + fillLine("Godkend med \"Enter\".",LINE_WIDTH,4)
-            + fillLine(LINE_WIDTH)
-            + horisontalLine(LINE_WIDTH);
+    public static String bottom = fillLine()
+            + fillLine("Godkend med \"Enter\"")
+            + fillLine()
+            + horisontalLine();
 
-    static String horisontalLine(int length){
-        return line.substring(0,length-1)+"+\n";
+    static String horisontalLine(int length) {
+        return line.substring(0, length - 1) + "+\n";
     }
 
-    static String fillLine(String string,int length,int preWS){
-        return "|"+spaces.substring(0,preWS)+string+spaces.substring(0,length-(2+preWS+string.length()))+"|\n";
+    static String horisontalLine() {
+        return horisontalLine(LINE_WIDTH);
     }
 
-    static String fillLine(int length){
-        return "|"+spaces.substring(0,length-2)+"|\n";
+    static String fillLine(String string, int length, int preWS) {
+        return "|" + spaces.substring(0, preWS) + string + spaces.substring(0, length - (2 + preWS + string.length())) + "|\n";
+    }
+
+    static String fillLine(int length) {
+        return "|" + spaces.substring(0, length - 2) + "|\n";
+    }
+
+    static String fillLine() {
+        return fillLine(LINE_WIDTH);
+    }
+
+    static String fillLine(String string) {
+        return fillLine(string, LINE_WIDTH, PRE_WS);
+
     }
 
     private String generateHeader(String bankName) {
 
         String header = horisontalLine(LINE_WIDTH)
-                + fillLine(bankName,LINE_WIDTH,(LINE_WIDTH- bankName.length())/2-1)
+                + fillLine(bankName, LINE_WIDTH, (LINE_WIDTH - bankName.length()) / 2 - 1)
                 + horisontalLine(LINE_WIDTH)
-                +fillLine(LINE_WIDTH);
+                + fillLine(LINE_WIDTH);
 
         return header;
     }
@@ -56,7 +69,7 @@ public class GUI {
         Bank theBank;
         //Bank theBank = new Bank("Roskilde Bank", "9800", "0000000001", "0000000002", "0000000003");
         Persistence thePersistence = new MySQLPersistence("localhost", 3306, "bank", "user", "1234");
-        theBank=thePersistence.load("9800");
+        theBank = thePersistence.load("9800");
 
         GUI kg = new GUI(theBank, thePersistence);
         kg.mainFlow();
@@ -158,10 +171,10 @@ public class GUI {
 
     private void mainDisplay() {
         String screen = headerBlock
-                + fillLine("Tast \"1\" hvis du er kunde.",76,4)
-                + fillLine("Tast \"2\" hvis du er medarbejder i banken.",76,4)
-                + fillLine("Tast \"3\" hvis du er administrator.",76,4)
-                + fillLine(76)
+                + fillLine("Tast \"1\" hvis du er kunde.")
+                + fillLine("Tast \"2\" hvis du er medarbejder i banken.")
+                + fillLine("Tast \"3\" hvis du er administrator.")
+                + fillLine()
                 + endLine
                 + bottom;
 
@@ -207,14 +220,14 @@ public class GUI {
     private void customerAccessDisplay(boolean customerFound) {
         String screen = headerBlock;
         if (!customerFound) {
-            screen += "|    Kundenummer ikke fundet. Prøv igen.                                   |\n" +
-                    "|                                                                          |\n";
+            screen += fillLine("Kundenummer ikke fundet. Prøv igen.")
+                    + fillLine();
         }
-        screen += "|    Indtast kundenummer: ________                                         |\n";
-        screen += backLine;
-        screen += mainLine;
-        screen += endLine;
-        screen += bottom;
+        screen += fillLine("Indtast kundenummer: ________")
+                + backLine
+                + mainLine
+                + endLine
+                + bottom;
         System.out.println(screen);
     }
 
@@ -263,23 +276,20 @@ public class GUI {
 
     private void customerDisplay(boolean customerCanTransfer) {
         Customer customer = bank.getCustomer(customerNumber);
-        String screen = headerBlock;
+        String screen;
 
-        screen += "|    Velkommen " + customer.firstName + " " + customer.lastName + ",";
+        screen = headerBlock
+                + fillLine("Velkommen " + customer.firstName + " " + customer.lastName + ",")
+                + fillLine()
+                + fillLine("Tast \"1\" for at se kontooversigt.");
 
-        int nameLen = customer.firstName.length() + customer.lastName.length();
-        for(int i = 0; i < 58-nameLen;i++ ) {
-            screen += " ";
-        }
-        screen += "|\n";
-        screen += "|                                                                          |\n" +
-                "|    Tast \"1\" for at se kontooversigt.                                     |\n";
-        if(customerCanTransfer)
-                screen+="|    Tast \"2\" for at overføre penge.                                       |\n";
-        screen += backLine;
-        screen+=mainLine;
-        screen+=endLine;
-        screen += bottom;
+        if (customerCanTransfer)
+            screen += fillLine("Tast \"2\" for at overføre penge.");
+
+        screen += backLine
+                + mainLine
+                + endLine
+                + bottom;
         System.out.println(screen);
     }
 
@@ -298,23 +308,26 @@ public class GUI {
     }
 
     private void customerAccountInfoDisplay() {
-        Account account=bank.getAccount(accountNumber);
+        Account account = bank.getAccount(accountNumber);
         String accountType;
-        if(account instanceof CurrentAccount)
-            accountType="Lønkonto       ";
-        else
-            accountType="Opsparingskonto";
+        String screen;
 
-        System.out.print(headerBlock);
-        System.out.println("|    Reg. nummer:       "+AccountNumber.getRegistrationNumber(accountNumber)+"                                               |");
-        System.out.println("|    Kontonummer:       "+AccountNumber.getShortNumber(accountNumber)+"                                         |");
-        System.out.println("|    Type:              "+accountType+"                                    |");
-        System.out.printf("|    Indestående:       %20.2f                               |%n",account.getBalance()/100.0);
-        System.out.printf("|    Rentesats:         %20.2f                               |%n",account.getInterestRate()/100.0);
-        System.out.printf("|    Tilladt overtræk:  %20.2f                               |%n",account.getAllowedOverdraft()/100.0);
-        System.out.println("|                                                                          |");
-        System.out.println(backLine+mainLine+endLine+bottom);
+        if (account instanceof CurrentAccount)
+            accountType = "Lønkonto       ";
+        else
+            accountType = "Opsparingskonto";
+
+        screen = headerBlock
+                + fillLine("Reg. nummer:                       " + AccountNumber.getRegistrationNumber(accountNumber))
+                + fillLine("Kontonummer:                 " + AccountNumber.getShortNumber(accountNumber))
+                + fillLine("Type:                   " + accountType)
+                + fillLine(String.format("Indestående:       %20.2f", account.getBalance() / 100.0))
+                + fillLine(String.format("Rentesats:         %20.2f", account.getInterestRate() / 100.0))
+                + fillLine(String.format("Tilladt overtræk:  %20.2f", account.getAllowedOverdraft() / 100.0))
+                + fillLine() + backLine + mainLine + endLine + bottom;
+        System.out.println(screen);
     }
+
 
     private String customerTransactionFromFlow() {
         String result;
@@ -322,7 +335,7 @@ public class GUI {
         while (true) {
             result = customerTransactionFromGUI();
             if (isBMQ(result)) return result;
-            accountNumber=result;
+            accountNumber = result;
             if (this.bank.getAccount(this.accountNumber) instanceof SavingsAccount) {
                 result = customerTransactionFromSavingsFlow();
             } else {
@@ -353,16 +366,19 @@ public class GUI {
         Customer customer = bank.getCustomer(customerNumber);
         List<Account> accountList = customer.accountList;
         String accountType;
+        String screen;
 
-        System.out.print(headerBlock);
-        System.out.println("|    Hvilken af dine konti vil du overføre penge fra?                      |");
-        System.out.println("|                                                                          |");
+        screen=headerBlock
+                +fillLine("Hvilken af dine konti vil du overføre penge fra?")
+                +fillLine();
+
         for (int i = 0; i < accountList.size(); i++) {
-            if(accountList.get(i) instanceof CurrentAccount) accountType="lønkonto";
-            else accountType="opsparingskonto";
-            System.out.printf("|    %s : %20.2f    %15s              |%n", accountList.get(i).getAccountNumber(), accountList.get(i).getBalance() / 100.0,accountType);
+            if (accountList.get(i) instanceof CurrentAccount) accountType = "lønkonto";
+            else accountType = "opsparingskonto";
+            screen+=fillLine(String.format("%s : %20.2f    %15s", accountList.get(i).getAccountNumber(), accountList.get(i).getBalance() / 100.0, accountType));
         }
-        System.out.println(backLine+mainLine+endLine+bottom);
+        screen+=backLine + mainLine + endLine + bottom;
+        System.out.println(screen);
     }
 
     private String customerTransactionFromSavingsFlow() {
@@ -371,7 +387,7 @@ public class GUI {
         while (true) {
             result = customerTransactionFromSavingsGUI();
             if (isBMQ(result)) return result;
-            toAccountNumber=result;
+            toAccountNumber = result;
             result = customerTransactionAmountFlow();
             if (isMQ(result)) return result;
         }
@@ -379,16 +395,16 @@ public class GUI {
 
     private String customerTransactionFromSavingsGUI() {
         String result;
-        List<Account> accountList=bank.getCustomer(customerNumber).accountList;
+        List<Account> accountList = bank.getCustomer(customerNumber).accountList;
 
         while (true) {
             customerTransactionFromSavingsDisplay();
             result = cleanBMQ(scanner.next());
             scanner.nextLine();
             if (isBMQ(result)) return result;
-            if(AccountNumber.isValidFormat(result)){
-                for(int i=0;i<accountList.size();i++){
-                    if(accountList.get(i).getAccountNumber().equals(result))
+            if (AccountNumber.isValidFormat(result)) {
+                for (int i = 0; i < accountList.size(); i++) {
+                    if (accountList.get(i).getAccountNumber().equals(result))
                         return result;
                 }
             }
@@ -410,7 +426,7 @@ public class GUI {
                 System.out.printf("|    %s : %20.2f    %15s              |%n", accountList.get(i).getAccountNumber(), accountList.get(i).getBalance() / 100.0, accountType);
             }
         }
-        System.out.println(backLine+mainLine+endLine+bottom);
+        System.out.println(backLine + mainLine + endLine + bottom);
 
 
     }
@@ -420,7 +436,7 @@ public class GUI {
         while (true) {
             result = customerTransactionToGUI();
             if (isBMQ(result)) return result;
-            toAccountNumber=result;
+            toAccountNumber = result;
             result = customerTransactionAmountFlow();
             if (isMQ(result)) return result;
         }
@@ -428,7 +444,7 @@ public class GUI {
 
     private String customerTransactionToGUI() {
         String result;
-        while(true) {
+        while (true) {
             customerTransactionToDisplay();
             result = cleanBMQ(scanner.next());
             scanner.nextLine();
@@ -452,7 +468,7 @@ public class GUI {
         System.out.print(headerBlock);
         System.out.println("|    Hvilken konto vil du overføre til?                                    |");
         System.out.println("|                                                                          |");
-        System.out.println(backLine+mainLine+endLine+bottom);
+        System.out.println(backLine + mainLine + endLine + bottom);
     }
 
     private String customerTransactionAmountFlow() {
@@ -463,18 +479,18 @@ public class GUI {
             result = customerTransactionAmountGUI();
             if (isBMQ(result)) return result;
 
-            amount=Long.parseLong(result);
+            amount = Long.parseLong(result);
 
             try {
                 transaction = new Transaction(bank, accountNumber, toAccountNumber, amount);
             } catch (Exception e) { // Should never execute
                 e.printStackTrace();
-                System.out.println(accountNumber+" "+toAccountNumber+" "+amount);
+                System.out.println(accountNumber + " " + toAccountNumber + " " + amount);
                 System.exit(1);
             }
             try {
                 bank.addTransaction(transaction);
-                persistence.addTransaction(bank,transaction);
+                persistence.addTransaction(bank, transaction);
                 customerTransactionSuccessDisplay();
                 return "M";
             } catch (NoOverdraftAllowedException e) {
@@ -490,15 +506,15 @@ public class GUI {
         String result;
         double amount;
 
-        while(true) {
+        while (true) {
             customerTransactionAmountDisplay();
             result = cleanBMQ(scanner.next());
             scanner.nextLine();
             if (isBMQ(result)) return result;
             try {
-                 amount = Double.parseDouble(result);
-                if(amount>0)
-                    return ""+(long)(amount*100.0);
+                amount = Double.parseDouble(result);
+                if (amount > 0)
+                    return "" + (long) (amount * 100.0);
             } catch (NumberFormatException ignore) {
             }
         }
@@ -508,7 +524,7 @@ public class GUI {
         System.out.print(headerBlock);
         System.out.println("|    Hvor meget vil du overføre?                                           |");
         System.out.println("|                                                                          |");
-        System.out.println(backLine+mainLine+endLine+bottom);
+        System.out.println(backLine + mainLine + endLine + bottom);
     }
 
     private void customerTransactionIllegalOverDraftDisplay() {
@@ -526,7 +542,7 @@ public class GUI {
         while (true) {
             result = customerAccountsGUI();
             if (isBMQ(result)) return result;
-            accountNumber=result;
+            accountNumber = result;
             result = customerAccountInfoFlow();
             if (isMQ(result)) return result;
         }
@@ -534,10 +550,10 @@ public class GUI {
 
     private String customerAccountsGUI() {
         String result;
-        List<Account> accountList=bank.getCustomer(customerNumber).accountList;
+        List<Account> accountList = bank.getCustomer(customerNumber).accountList;
         boolean validAccount;
 
-        while(true) {
+        while (true) {
             validAccount = false;
             customerAccountsDisplay();
             result = cleanBMQ(scanner.next());
@@ -563,13 +579,13 @@ public class GUI {
         System.out.println("|    Kontooversigt:                                                        |");
         System.out.println("|                                                                          |");
         for (int i = 0; i < accountList.size(); i++) {
-            if(accountList.get(i) instanceof CurrentAccount) accountType="lønkonto";
-            else accountType="opsparingskonto";
-            System.out.printf("|    %s : %20.2f    %15s              |%n", accountList.get(i).getAccountNumber(), accountList.get(i).getBalance() / 100.0,accountType);
+            if (accountList.get(i) instanceof CurrentAccount) accountType = "lønkonto";
+            else accountType = "opsparingskonto";
+            System.out.printf("|    %s : %20.2f    %15s              |%n", accountList.get(i).getAccountNumber(), accountList.get(i).getBalance() / 100.0, accountType);
         }
         System.out.println("|                                                                          |");
         System.out.println("|    Indtast kontonummer for yderligere information:                       |");
-        System.out.println(backLine+mainLine+endLine+bottom);
+        System.out.println(backLine + mainLine + endLine + bottom);
     }
 
     private String employeeFlow() {
@@ -609,7 +625,7 @@ public class GUI {
     private void employeeDisplay() {
         String screen = headerBlock;
         screen += "|    Tast \"1\" for at oprette ny kunde.                                     | TODO employeeNewCustomerFlow()\n" +
-                  "|    Tast \"2\" for at foretage søgning.                                     |\n";
+                "|    Tast \"2\" for at foretage søgning.                                     |\n";
         screen += backLine;
         screen += mainLine;
         screen += endLine;
@@ -657,10 +673,10 @@ public class GUI {
 
     private void employeeSearchDisplay() {
         String screen = headerBlock;
-        screen += "|    Søg på:                                                               |\n"+
-                  "|        Tast \"1\" for navn.                                                |\n" +
-                  "|        Tast \"2\" for kundenummer.                                         |\n" +
-                  "|        Tast \"3\" for kontonummer.                                         |\n";
+        screen += "|    Søg på:                                                               |\n" +
+                "|        Tast \"1\" for navn.                                                |\n" +
+                "|        Tast \"2\" for kundenummer.                                         |\n" +
+                "|        Tast \"3\" for kontonummer.                                         |\n";
         screen += backLine;
         screen += mainLine;
         screen += endLine;
@@ -731,16 +747,16 @@ public class GUI {
 
     private String employeeSearchNoMatchFlow() {
         String result;
-        while(true) {
+        while (true) {
             result = employeeSearchNoMatchGUI();
-            if(isBMQ(result)) return result;
+            if (isBMQ(result)) return result;
         }
 
     }
 
     private String employeeSearchNoMatchGUI() {
         String result;
-        while(true) {
+        while (true) {
             employeeSearchNoMatchDisplay();
             result = cleanBMQ(scanner.next());
             scanner.nextLine();
@@ -856,9 +872,9 @@ public class GUI {
 
     private void employeeSearchAccountNumberDisplay(boolean accountFound) {
         String screen = headerBlock;
-        if(!accountFound) {
-            screen += "|    Kontonummer ikke fundet. Prøv igen.                                   |\n"+
-                      "|                                                                          |\n";
+        if (!accountFound) {
+            screen += "|    Kontonummer ikke fundet. Prøv igen.                                   |\n" +
+                    "|                                                                          |\n";
         }
         screen += "|    Indtast kontonummer: ________                                         |\n";
         screen += backLine;
@@ -903,29 +919,29 @@ public class GUI {
         String screen = headerBlock;
 
         screen += "|    Kundenummer:    " + customerNumber;
-        String custNumAsString = ""+customerNumber;
-        for(int i = 0; i < numSpaces-custNumAsString.length(); i++) {
+        String custNumAsString = "" + customerNumber;
+        for (int i = 0; i < numSpaces - custNumAsString.length(); i++) {
             screen += " ";
         }
         screen += "|\n";
 
         String fullName = customer.firstName + " " + customer.lastName;
         screen += "|    Navn:           " + fullName;
-        for(int i = 0; i < numSpaces-fullName.length(); i++) {
+        for (int i = 0; i < numSpaces - fullName.length(); i++) {
             screen += " ";
         }
         screen += "|\n";
 
         String address = customer.address;
         screen += "|    Addresse:       " + address;
-        for(int i = 0; i < numSpaces-address.length(); i++) {
+        for (int i = 0; i < numSpaces - address.length(); i++) {
             screen += " ";
         }
         screen += "|\n";
 
         String phoneNo = customer.phoneNo;
         screen += "|    Telefonnummer:  " + phoneNo;
-        for(int i = 0; i < numSpaces-phoneNo.length(); i++) {
+        for (int i = 0; i < numSpaces - phoneNo.length(); i++) {
             screen += " ";
         }
         screen += "|\n";
@@ -933,10 +949,10 @@ public class GUI {
         screen += "|                                                                          |\n";
 
         for (int i = 0; i < accountList.size(); i++) {
-            String accLine = "|    Tast \"" + (i+1) + "\" for Konto: " + accountList.get(i).accountNumber +
-                             "    Indestående: " + accountList.get(i).getBalance() + " DKK";
+            String accLine = "|    Tast \"" + (i + 1) + "\" for Konto: " + accountList.get(i).accountNumber +
+                    "    Indestående: " + accountList.get(i).getBalance() + " DKK";
             String spaces = "";
-            for(int j = 0; j < 75-accLine.length(); j++) {
+            for (int j = 0; j < 75 - accLine.length(); j++) {
                 spaces += " ";
             }
             screen += accLine + spaces + "|\n";
@@ -1213,7 +1229,7 @@ public class GUI {
 
     private String adminFlow() {
         String result;
-        while(true) {
+        while (true) {
             result = adminGUI();
             if (isBMQ(result)) return result;
             switch (result) {
@@ -1236,7 +1252,7 @@ public class GUI {
     private String adminGUI() {
         String result;
 
-        while(true) {
+        while (true) {
             adminDisplay();
             result = cleanBMQ(scanner.next());
             scanner.nextLine();
@@ -1248,7 +1264,7 @@ public class GUI {
                 case "3":
                     return result;
             }
-            if(isMQ(result)) return result;
+            if (isMQ(result)) return result;
         }
     }
 
@@ -1259,70 +1275,70 @@ public class GUI {
         System.out.println("|    Tast \"2\" for at genindlæse database                                   |");
         System.out.println("|    Tast \"3\" for at vise dagens status                                    |");
         System.out.println("|                                                                          |");
-        System.out.println(backLine+mainLine+endLine+bottom);
+        System.out.println(backLine + mainLine + endLine + bottom);
     }
 
-    private String adminResetFlow(){
+    private String adminResetFlow() {
         String result;
-        result=adminResetGUI();
+        result = adminResetGUI();
         return "";
         //TODO
     }
 
-    private String adminResetGUI(){
+    private String adminResetGUI() {
         String result;
         adminResetDisplay();
         return "";
         //TODO
     }
 
-    private void adminResetDisplay(){
+    private void adminResetDisplay() {
         //TODO
     }
 
-    private String adminBackupFlow(){
+    private String adminBackupFlow() {
         String result;
-        result=adminBackupGUI();
+        result = adminBackupGUI();
         return "";
         //TODO
     }
 
-    private String adminBackupGUI(){
+    private String adminBackupGUI() {
         String result;
         adminBackupDisplay();
         return "";
         //TODO
     }
 
-    private void adminBackupDisplay(){
+    private void adminBackupDisplay() {
         //TODO
     }
 
-    private String adminReloadFlow(){
+    private String adminReloadFlow() {
         String result;
-        result=adminReloadGUI();
+        result = adminReloadGUI();
         return "";
         //TODO
     }
 
-    private String adminReloadGUI(){
+    private String adminReloadGUI() {
         String result;
         adminReloadDisplay();
         return "";
         //TODO
     }
 
-    private void adminReloadDisplay(){
+    private void adminReloadDisplay() {
         //TODO
     }
 
-    private String adminStatusFlow(){
-        return(adminStatusGUI());
+    private String adminStatusFlow() {
+        return (adminStatusGUI());
     }
 
-    private String adminStatusGUI(){
+    private String adminStatusGUI() {
         String result;
-        while(true) {
+        while (true) {
             adminStatusDisplay();
             result = cleanBMQ(scanner.next());
             scanner.nextLine();
@@ -1330,14 +1346,14 @@ public class GUI {
         }
     }
 
-    private void adminStatusDisplay(){
-        if(bank.booksAreBalancing())
+    private void adminStatusDisplay() {
+        if (bank.booksAreBalancing())
             System.out.println("Regnskabet stemmer, alt er OK!");
         else
             System.out.println("Regnskabet stemmer ikke. Skynd dig væk inden Finanstilsynet kommer!");
-        System.out.println("Kontantbeholdning: "+(-bank.getAccount(bank.getCashAccountNumber()).getBalance()/100.0));
-        System.out.println("Egen konto: "+bank.getAccount(bank.getOwnAccountNumber()).getBalance()/100.0);
-        System.out.println("Andre bankers konto: "+bank.getAccount(bank.getInterBankAccountNumber()).getBalance()/100.0);
+        System.out.println("Kontantbeholdning: " + (-bank.getAccount(bank.getCashAccountNumber()).getBalance() / 100.0));
+        System.out.println("Egen konto: " + bank.getAccount(bank.getOwnAccountNumber()).getBalance() / 100.0);
+        System.out.println("Andre bankers konto: " + bank.getAccount(bank.getInterBankAccountNumber()).getBalance() / 100.0);
         System.out.println("BMQ");
 
 
