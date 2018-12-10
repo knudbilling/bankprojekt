@@ -54,7 +54,6 @@ public class GUI {
 
     static String fillLine(String string) {
         return fillLine(string, LINE_WIDTH, PRE_WS);
-
     }
 
     private String generateHeader(String bankName) {
@@ -225,7 +224,7 @@ public class GUI {
             screen += fillLine("Kundenummer ikke fundet. Prøv igen.")
                     + fillLine();
         }
-        screen += fillLine("Indtast kundenummer: ________")
+        screen += fillLine("Indtast kundenummer:")
                 + footerBlock;
         System.out.println(screen);
     }
@@ -351,8 +350,8 @@ public class GUI {
             scanner.nextLine();
             if (isBMQ(result)) return result;
             if (AccountNumber.isValidFormat(result) && AccountNumber.isLocal(bank, result) && bank.getAccount(result) != null) {
-                for (int i = 0; i < accountList.size(); i++) {
-                    if (accountList.get(i).getAccountNumber().equals(result))
+                for (Account account : accountList) {
+                    if (account.getAccountNumber().equals(result))
                         return result;
                 }
             }
@@ -369,10 +368,10 @@ public class GUI {
                 + fillLine("Hvilken af dine konti vil du overføre penge fra?")
                 + fillLine();
 
-        for (int i = 0; i < accountList.size(); i++) {
-            if (accountList.get(i) instanceof CurrentAccount) accountType = "lønkonto";
+        for (Account account : accountList) {
+            if (account instanceof CurrentAccount) accountType = "lønkonto";
             else accountType = "opsparingskonto";
-            screen += fillLine(String.format("%s : %20.2f    %15s", accountList.get(i).getAccountNumber(), accountList.get(i).getBalance() / 100.0, accountType));
+            screen += fillLine(String.format("%s : %20.2f    %15s", account.getAccountNumber(), account.getBalance() / 100.0, accountType));
         }
         screen += footerBlock;
         System.out.println(screen);
@@ -400,8 +399,8 @@ public class GUI {
             scanner.nextLine();
             if (isBMQ(result)) return result;
             if (AccountNumber.isValidFormat(result)) {
-                for (int i = 0; i < accountList.size(); i++) {
-                    if (accountList.get(i).getAccountNumber().equals(result))
+                for (Account account : accountList) {
+                    if (account.getAccountNumber().equals(result))
                         return result;
                 }
             }
@@ -417,11 +416,11 @@ public class GUI {
         screen = headerBlock
                 + fillLine("Hvilken af dine konti vil du overføre penge til?")
                 + fillLine();
-        for (int i = 0; i < accountList.size(); i++) {
-            if (!accountList.get(i).getAccountNumber().equals(accountNumber)) {
-                if (accountList.get(i) instanceof CurrentAccount) accountType = "lønkonto";
+        for (Account account : accountList) {
+            if (!account.getAccountNumber().equals(accountNumber)) {
+                if (account instanceof CurrentAccount) accountType = "lønkonto";
                 else accountType = "opsparingskonto";
-                screen += fillLine(String.format("%s : %20.2f    %15s", accountList.get(i).getAccountNumber(), accountList.get(i).getBalance() / 100.0, accountType));
+                screen += fillLine(String.format("%s : %20.2f    %15s", account.getAccountNumber(), account.getBalance() / 100.0, accountType));
             }
         }
         screen += footerBlock;
@@ -560,8 +559,8 @@ public class GUI {
             scanner.nextLine();
             if (isBMQ(result)) return result;
             if (AccountNumber.isValidFormat(result)) {
-                for (int i = 0; i < accountList.size(); i++) {
-                    if (accountList.get(i).getAccountNumber().equals(result)) {
+                for (Account account : accountList) {
+                    if (account.getAccountNumber().equals(result)) {
                         validAccount = true;
                     }
                 }
@@ -580,10 +579,10 @@ public class GUI {
                 + fillLine("Kontooversigt:")
                 + fillLine();
 
-        for (int i = 0; i < accountList.size(); i++) {
-            if (accountList.get(i) instanceof CurrentAccount) accountType = "lønkonto";
+        for (Account account : accountList) {
+            if (account instanceof CurrentAccount) accountType = "lønkonto";
             else accountType = "opsparingskonto";
-            screen += fillLine(String.format("%s : %20.2f    %15s", accountList.get(i).getAccountNumber(), accountList.get(i).getBalance() / 100.0, accountType));
+            screen += fillLine(String.format("%s : %20.2f    %15s", account.getAccountNumber(), account.getBalance() / 100.0, accountType));
         }
         screen += fillLine()
                 + fillLine("Indtast kontonummer for yderligere information:")
@@ -1409,7 +1408,7 @@ public class GUI {
                 + fillLine("Tast \"2\" for at genindlæse database")
                 + fillLine("Tast \"3\" for at vise dagens status")
                 + fillLine()
-                + backLine + mainLine + endLine + bottom;
+                + footerBlock;
         System.out.println(screen);
     }
 
