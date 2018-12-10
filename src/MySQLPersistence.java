@@ -38,6 +38,7 @@ public class MySQLPersistence implements Persistence {
         } catch (SQLException e) {
             System.out.println("***ERROR: JDBC driver for MySQL not found***");
             e.printStackTrace();
+            System.exit(3);
         }
 
         // Connect to MySQL
@@ -46,6 +47,7 @@ public class MySQLPersistence implements Persistence {
         } catch (SQLException e) {
             System.out.println("***ERROR: Could not connect to MySQL***");
             e.printStackTrace();
+            System.exit(4);
         }
 
         executeUpdate("create database if not exists " + DB_DATABASE + ";");

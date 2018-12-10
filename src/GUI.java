@@ -33,22 +33,19 @@ public class GUI {
 
     private String generateHeader(String bankName) {
 
+        int i;
         String header = "+--------------------------------------------------------------------------+\n";
         header += "|";
 
-        int numSpaces = (74 - bankName.length()) / 2;
+        int numSpaces = 74 - bankName.length();
 
-        for (int i = 0; i < numSpaces; i++) {
+        for (i = 0; i < numSpaces/2; i++) {
             header += " ";
         }
 
         header += bankName;
 
-        for (int i = 0; i < numSpaces; i++) {
-            header += " ";
-        }
-
-        if (!(bankName.length() % 2 == 0)) {
+        for (; i < numSpaces; i++) {
             header += " ";
         }
 
@@ -360,11 +357,18 @@ public class GUI {
     private void customerTransactionFromDisplay() {
         Customer customer = bank.getCustomer(customerNumber);
         List<Account> accountList = customer.accountList;
+        String accountType;
 
-        for (int i = 0; i < accountList.size(); i++)
-            System.out.println(accountList.get(i).getAccountNumber() + " : " + accountList.get(i).getBalance());
-        System.out.println("kontonummer:");
-        System.out.println("BMQ");
+        System.out.print(headerBlock);
+        System.out.println("|    Hvilken af dine konti vil du overføre penge fra?                      |");
+        System.out.println("|                                                                          |");
+        for (int i = 0; i < accountList.size(); i++) {
+            if(accountList.get(i) instanceof CurrentAccount) accountType="lønkonto";
+            else accountType="opsparingskonto";
+            System.out.printf("|    %s : %20.2f    %15s              |%n", accountList.get(i).getAccountNumber(), accountList.get(i).getBalance() / 100.0,accountType);
+        }
+        System.out.println("|                                                                          |");
+        System.out.println(backLine+mainLine+endLine+bottom);
     }
 
     private String customerTransactionFromSavingsFlow() {
@@ -1085,18 +1089,134 @@ public class GUI {
 
     private String adminFlow() {
         String result;
-        //TODO
-        result = adminGUI();
-        return "";
+        while(true) {
+            result = adminGUI();
+            if (isBMQ(result)) return result;
+            switch (result) {
+                case "0":
+                    result = adminResetFlow();
+                    break;
+                case "1":
+                    result = adminBackupFlow();
+                    break;
+                case "2":
+                    result = adminReloadFlow();
+                    break;
+                case "3":
+                    result = adminStatusFlow();
+                    break;
+            }
+        }
     }
 
     private String adminGUI() {
-        //TODO
-        adminDisplay();
-        return "";
+        String result;
+
+        while(true) {
+            adminDisplay();
+            result = cleanBMQ(scanner.next());
+            scanner.nextLine();
+            if (isBMQ(result)) return result;
+            switch (result) {
+                case "0":
+                case "1":
+                case "2":
+                case "3":
+                    return result;
+            }
+            if(isMQ(result)) return result;
+        }
     }
 
     private void adminDisplay() {
+        System.out.print(headerBlock);
+        System.out.println("|    Tast \"0\" for at nulstille banken                                      |");
+        System.out.println("|    Tast \"1\" for at tage back-up                                          |");
+        System.out.println("|    Tast \"2\" for at genindlæse database                                   |");
+        System.out.println("|    Tast \"3\" for at vise dagens status                                    |");
+        System.out.println("|                                                                          |");
+        System.out.println(backLine+mainLine+endLine+bottom);
+    }
+
+    private String adminResetFlow(){
+        String result;
+        result=adminResetGUI();
+        return "";
+        //TODO
+    }
+
+    private String adminResetGUI(){
+        String result;
+        adminResetDisplay();
+        return "";
+        //TODO
+    }
+
+    private void adminResetDisplay(){
+        //TODO
+    }
+
+    private String adminBackupFlow(){
+        String result;
+        result=adminBackupGUI();
+        return "";
+        //TODO
+    }
+
+    private String adminBackupGUI(){
+        String result;
+        adminBackupDisplay();
+        return "";
+        //TODO
+    }
+
+    private void adminBackupDisplay(){
+        //TODO
+    }
+
+    private String adminReloadFlow(){
+        String result;
+        result=adminReloadGUI();
+        return "";
+        //TODO
+    }
+
+    private String adminReloadGUI(){
+        String result;
+        adminReloadDisplay();
+        return "";
+        //TODO
+    }
+
+    private void adminReloadDisplay(){
+        //TODO
+    }
+
+    private String adminStatusFlow(){
+        return(adminStatusGUI());
+    }
+
+    private String adminStatusGUI(){
+        String result;
+        while(true) {
+            adminStatusDisplay();
+            result = cleanBMQ(scanner.next());
+            scanner.nextLine();
+            if (isBMQ(result)) return result;
+        }
+    }
+
+    private void adminStatusDisplay(){
+        if(bank.booksAreBalancing())
+            System.out.println("Regnskabet stemmer, alt er OK!");
+        else
+            System.out.println("Regnskabet stemmer ikke. Skynd dig væk inden Finanstilsynet kommer!");
+        System.out.println("Kontantbeholdning: "+(-bank.getAccount(bank.getCashAccountNumber()).getBalance()/100.0));
+        System.out.println("Egen konto: "+bank.getAccount(bank.getOwnAccountNumber()).getBalance()/100.0);
+        System.out.println("Andre bankers konto: "+bank.getAccount(bank.getInterBankAccountNumber()).getBalance()/100.0);
+        System.out.println("BMQ");
+
+
         //TODO
     }
 }
