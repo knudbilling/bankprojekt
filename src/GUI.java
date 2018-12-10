@@ -20,7 +20,7 @@ public class GUI {
             "|    Tast \"Q\" for at afslutte.                                             |\n";
 
     public static String mainLine =
-            "|    Tast \"M\" for at gå til  hovedmenu.                                    |\n";
+            "|    Tast \"M\" for at gå til hovedmenu.                                     |\n";
 
 
 
