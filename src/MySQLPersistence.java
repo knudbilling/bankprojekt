@@ -204,7 +204,7 @@ public class MySQLPersistence implements Persistence {
         try {
             while (resultSet.next()) {
                 try {
-                    transaction = new Transaction(bank, bank.getRegNo() + resultSet.getString("FromAccountNumber"), bank.getRegNo() + resultSet.getString("ToAccountNumber"), resultSet.getLong("Amount"));
+                    transaction = new Transaction(bank, bank.getRegNo() + resultSet.getString("FromAccount"), bank.getRegNo() + resultSet.getString("ToAccount"), resultSet.getLong("Amount"));
                 } catch (NegativeAmountException e) {
                     System.out.println("***ERROR: Negative amoount error***");
                     e.printStackTrace();
@@ -316,9 +316,9 @@ public class MySQLPersistence implements Persistence {
                 return null;
             bank = new Bank(resultSet.getString("name"),
                     resultSet.getString("registrationnumber"),
-                    resultSet.getString("ownaccountnumber"),
-                    resultSet.getString("cashaccountnumber"),
-                    resultSet.getString("interbankaccountnumber"));
+                    registrationNumber+resultSet.getString("ownaccountnumber"),
+                    registrationNumber+resultSet.getString("cashaccountnumber"),
+                    registrationNumber+resultSet.getString("interbankaccountnumber"));
         } catch (SQLException e) {
             System.out.println("***ERROR: Failed getting data from database***");
             e.printStackTrace();
