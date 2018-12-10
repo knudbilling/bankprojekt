@@ -11,21 +11,71 @@ public class KnudGUI {
     String accountNumber;
     String toAccountNumber;
     long amount;
+    public String headerBlock = "";
+    public static String backLine =
+            "|                                                                          |\n" +
+                    "|    Tast \"B\" for at gå tilbage.                                           |\n";
 
-    /*
-    public static void main(String[] args) throws OperationNotSupportedException, DuplicateAccountException {
-        Bank theBank = new Bank("Roskilde Bank", "9800", "0000000001", "0000000002", "0000000003");
-        Persistence thePersistence = new MySQLPersistence("192.168.1.102", 3306, "bank", "user", "1234");
+    public static String endLine =
+            "|    Tast \"Q\" for at afslutte.                                             |\n";
+
+    public static String mainLine =
+            "|    Tast \"M\" for at gå til  hovedmenu.                                    |\n";
+
+
+
+    public static String bottom =
+            "|                                                                          |\n" +
+                    "|    Godkend med \"Enter\".                                                  |\n" +
+                    "|                                                                          |\n" +
+                    "+--------------------------------------------------------------------------+\n\n";
+
+
+    private String generateHeader(String bankName) {
+
+        String header = "+--------------------------------------------------------------------------+\n";
+        header += "|";
+
+        int numSpaces = (74 - bankName.length()) / 2;
+
+        for (int i = 0; i < numSpaces; i++) {
+            header += " ";
+        }
+
+        header += bankName;
+
+        for (int i = 0; i < numSpaces; i++) {
+            header += " ";
+        }
+
+        if (!(bankName.length() % 2 == 0)) {
+            header += " ";
+        }
+
+        header +=
+                "|\n" +
+                        "+--------------------------------------------------------------------------+\n" +
+                        "|                                                                          |\n";
+
+        return header;
+    }
+
+    public static void main(String[] args) throws DuplicateAccountException {
+        Bank theBank;
+        //Bank theBank = new Bank("Roskilde Bank", "9800", "0000000001", "0000000002", "0000000003");
+        Persistence thePersistence = new MySQLPersistence("localhost", 3306, "bank", "user", "1234");
+        theBank=thePersistence.load("9800");
 
         KnudGUI kg = new KnudGUI(theBank, thePersistence);
         kg.mainFlow();
         System.out.println("Goodbye, come again!");
     }
-    */
+
 
     public KnudGUI(Bank newBank, Persistence newPersistence) {
         this.bank = newBank;
         this.persistence = newPersistence;
+        headerBlock = generateHeader(bank.getName());
     }
 
     /**
@@ -79,7 +129,6 @@ public class KnudGUI {
 
     private void mainFlow() {
         String result;
-
         do {
             result = mainGUI();
 
@@ -99,7 +148,6 @@ public class KnudGUI {
 
     private String mainGUI() {
         String result;
-
         while (true) {
             mainDisplay();
             result = scanner.next();
@@ -117,12 +165,15 @@ public class KnudGUI {
     }
 
     private void mainDisplay() {
-        System.out.println("Main Screen");
-        System.out.println("Vælg:");
-        System.out.println("1 for kunde");
-        System.out.println("2 for medarbejder");
-        System.out.println("3 for administrator");
-        System.out.println("Q for at afslutte programmet");
+        String screen = headerBlock;
+        screen +=
+                "|    Tast \"1\" hvis du er kunde.                                            |\n" +
+                        "|    Tast \"2\" hvis du er medarbejder i banken.                             |\n" +
+                        "|    Tast \"3\" hvis du er administrator.                                    |\n" +
+                        "|                                                                          |\n";
+        screen += endLine;
+        screen += bottom;
+        System.out.println(screen);
     }
 
     private String customerAccessFlow() {
@@ -162,15 +213,21 @@ public class KnudGUI {
     }
 
     private void customerAccessDisplay(boolean customerFound) {
-        if (!customerFound)
-            System.out.println("NOT FOUND! TRY AGAIN");
-        System.out.println("customerScreen\nkundenummer:\nBack\nMain\nQuit");
-
+        String screen = headerBlock;
+        if (!customerFound) {
+            screen += "|    Kundenummer ikke fundet. Prøv igen.                                   |\n" +
+                    "|                                                                          |\n";
+        }
+        screen += "|    Indtast kundenummer: ________                                         |\n";
+        screen += backLine;
+        screen += mainLine;
+        screen += endLine;
+        screen += bottom;
+        System.out.println(screen);
     }
 
     private String customerFlow() {
         String result;
-
         while (true) {
             result = customerGUI();
             if (isBMQ(result)) return result;
@@ -214,13 +271,24 @@ public class KnudGUI {
 
     private void customerDisplay(boolean customerCanTransfer) {
         Customer customer = bank.getCustomer(customerNumber);
+        String screen = headerBlock;
 
-        System.out.println(customer.firstName + " " + customer.lastName);
-        System.out.println("1 kontooversigt");
-        if (customerCanTransfer) {
-            System.out.println("2 overførsel");
+        screen += "|    Velkommen " + customer.firstName + " " + customer.lastName + ",";
+
+        int nameLen = customer.firstName.length() + customer.lastName.length();
+        for(int i = 0; i < 58-nameLen;i++ ) {
+            screen += " ";
         }
-        System.out.println("BMQ");
+        screen += "|\n";
+        screen += "|                                                                          |\n" +
+                "|    Tast \"1\" for at se kontooversigt.                                     |\n";
+        if(customerCanTransfer)
+                screen+="|    Tast \"2\" for at overføre penge.                                       |\n";
+        screen += backLine;
+        screen+=mainLine;
+        screen+=endLine;
+        screen += bottom;
+        System.out.println(screen);
     }
 
     private String customerAccountInfoFlow() {
@@ -238,8 +306,22 @@ public class KnudGUI {
     }
 
     private void customerAccountInfoDisplay() {
-        System.out.println("Oplysninger om konto");
-        System.out.println("BMQ");
+        Account account=bank.getAccount(accountNumber);
+        String accountType;
+        if(account instanceof CurrentAccount)
+            accountType="Lønkonto       ";
+        else
+            accountType="Opsparingskonto";
+
+        System.out.print(headerBlock);
+        System.out.println("|    Reg. nummer:       "+AccountNumber.getRegistrationNumber(accountNumber)+"|");
+        System.out.println("|    Kontonummer:       "+AccountNumber.getShortNumber(accountNumber)+"|");
+        System.out.println("|    Type:              "+accountType+"|");
+        System.out.printf("|    Indestående:       %f20.2   |%n",account.getBalance()/100.0);
+        System.out.printf("|    Rentesats:         %f20.2   |%n",account.getInterestRate()/100.0);
+        System.out.printf("|    Tilladt overtræk:  %f20.2   |%n",account.getAllowedOverdraft()/100.0);
+        System.out.println("|                                                                          |");
+        System.out.println(backLine+mainLine+endLine+bottom);
     }
 
     private String customerTransactionFromFlow() {
@@ -266,8 +348,8 @@ public class KnudGUI {
             scanner.nextLine();
             if (isBMQ(result)) return result;
             if (AccountNumber.isValidFormat(result) && AccountNumber.isLocal(bank, result) && bank.getAccount(result) != null) {
-                for(int i=0;i<accountList.size();i++){
-                    if(accountList.get(i).getAccountNumber().equals(result))
+                for (int i = 0; i < accountList.size(); i++) {
+                    if (accountList.get(i).getAccountNumber().equals(result))
                         return result;
                 }
             }
@@ -298,7 +380,7 @@ public class KnudGUI {
     private String customerTransactionFromSavingsGUI() {
         String result;
         //TODO
-        while(true) {
+        while (true) {
             customerTransactionFromSavingsDisplay();
             result = cleanBMQ(scanner.next());
             scanner.nextLine();
@@ -310,9 +392,9 @@ public class KnudGUI {
     private void customerTransactionFromSavingsDisplay() {
         List<Account> accountList = bank.getCustomer(customerNumber).accountList;
 
-        for(int i=0;i<accountList.size();i++){
-            if(!accountList.get(i).getAccountNumber().equals(accountNumber))
-                System.out.println(accountList.get(i).getAccountNumber()+" "+accountList.get(i).getBalance());
+        for (int i = 0; i < accountList.size(); i++) {
+            if (!accountList.get(i).getAccountNumber().equals(accountNumber))
+                System.out.println(accountList.get(i).getAccountNumber() + " " + accountList.get(i).getBalance());
         }
         System.out.println("BMQ");
     }
