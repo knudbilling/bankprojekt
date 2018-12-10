@@ -58,9 +58,13 @@ public class AccountNumber {
     }
 
     public static boolean exists(Bank bank, String accountNumber){
-        for(int i=0;i<bank.getAccountList().size();i++){
-            if(bank.getAccountList().get(i).accountNumber.equals(accountNumber))
-                return true;
+        if(isLocal(bank,accountNumber)) {
+            for (int i = 0; i < bank.getAccountList().size(); i++) {
+                if (bank.getAccountList().get(i).accountNumber.equals(accountNumber))
+                    return true;
+            }
+        } else {
+            return BankRegister.accountExists(accountNumber);
         }
         return false;
     }
