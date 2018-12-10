@@ -29,7 +29,7 @@ public class MySQLPersistence implements Persistence {
         DB_USERNAME = userName;
         DB_PASSWORD = password;
 
-        String DB_Url = "jdbc:mysql://" + DB_HOSTNAME + ":" + DB_PORT + "/" + "?serverTimeZone=01:00";
+        String DB_Url = "jdbc:mysql://" + DB_HOSTNAME + ":" + DB_PORT + "/" + "?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=CET";
 
         // Check that correct driver exists
         // Only for telling the user what's wrong if we cannot connect to MySQL
