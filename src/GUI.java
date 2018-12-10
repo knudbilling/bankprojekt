@@ -311,12 +311,12 @@ public class GUI {
             accountType="Opsparingskonto";
 
         System.out.print(headerBlock);
-        System.out.println("|    Reg. nummer:       "+AccountNumber.getRegistrationNumber(accountNumber)+"|");
-        System.out.println("|    Kontonummer:       "+AccountNumber.getShortNumber(accountNumber)+"|");
-        System.out.println("|    Type:              "+accountType+"|");
-        System.out.printf("|    Indestående:       %20.2f   |%n",account.getBalance()/100.0);
-        System.out.printf("|    Rentesats:         %20.2f   |%n",account.getInterestRate()/100.0);
-        System.out.printf("|    Tilladt overtræk:  %20.2f   |%n",account.getAllowedOverdraft()/100.0);
+        System.out.println("|    Reg. nummer:       "+AccountNumber.getRegistrationNumber(accountNumber)+"                                               |");
+        System.out.println("|    Kontonummer:       "+AccountNumber.getShortNumber(accountNumber)+"                                         |");
+        System.out.println("|    Type:              "+accountType+"                                    |");
+        System.out.printf("|    Indestående:       %20.2f                               |%n",account.getBalance()/100.0);
+        System.out.printf("|    Rentesats:         %20.2f                               |%n",account.getInterestRate()/100.0);
+        System.out.printf("|    Tilladt overtræk:  %20.2f                               |%n",account.getAllowedOverdraft()/100.0);
         System.out.println("|                                                                          |");
         System.out.println(backLine+mainLine+endLine+bottom);
     }
