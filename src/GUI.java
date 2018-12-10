@@ -713,7 +713,7 @@ public class GUI {
 
             for (int i = 0; i < bank.getCustomerList().size(); i++) {
                 customerName = bank.getCustomerList().get(i).firstName + " " + bank.getCustomerList().get(i).lastName;
-                if (customerName.equals(result)) { // TODO
+                if (customerName.equals(result)) {
                     customerList.add(bank.getCustomerList().get(i));
                 }
             }
@@ -838,7 +838,6 @@ public class GUI {
 
     private String employeeSearchAccountNumberFlow() {
         String result;
-        //TODO
         while (true) {
             result = employeeSearchAccountNumberGUI();
             if (isBMQ(result)) return result;
@@ -865,6 +864,7 @@ public class GUI {
                     return "" + accountNumber;
                 }
             } catch (NumberFormatException e) {
+                //If this is thrown, then the input is not a number, and cannot be a valid accountNumber.
             }
             accountFound = false;
         }
@@ -907,8 +907,17 @@ public class GUI {
                 case "n":
                     return "N";
             }
-            if (bank.getAccount(result) != null)
-                return result;
+            //If the account exists, and is not for internal use in banking system.
+            if (bank.getAccount(result) != null) {
+                if(result != bank.getCashAccountNumber()) {
+                    if(result != bank.getInterBankAccountNumber()) {
+                        if(result != bank.getOwnAccountNumber()) {
+                            accountNumber = result;
+                            return result;
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -962,8 +971,6 @@ public class GUI {
 
         screen += "|    Tast \"N\" for at oprette ny konto.                                     |\n";
 
-        System.out.println("N Ny konto");
-
         screen += backLine;
         screen += mainLine;
         screen += endLine;
@@ -1014,14 +1021,55 @@ public class GUI {
     }
 
     private void employeeAccountDisplay() {
-        System.out.println("OPlysninger om konto her");
+        String screen = headerBlock;
+        int numSpaces = 50;
+
+        screen += "|    Kontonummer:        " + accountNumber;
+        for(int i = 0; i < numSpaces-accountNumber.length(); i++) {
+            screen += " ";
+        }
+        screen += "|\n";
+
+        String accountType = (bank.getAccount(accountNumber) instanceof SavingsAccount) ? "Opsparingskonto" : "Lønkonto";
+        screen += "|    Type:               " + accountType;
+        for(int i = 0; i < numSpaces-accountType.length(); i++) {
+            screen += " ";
+        }
+        screen += "|\n";
+
+        String balance = "" + bank.getAccount(accountNumber).getBalance()/100.0 + " DKK";
+        screen += "|    Indestående:        " + balance;
+        for(int i = 0; i < numSpaces-balance.length(); i++) {
+            screen += " ";
+        }
+        screen += "|\n";
+
+        String interestRate = "" + bank.getAccount(accountNumber).getInterestRate();
+        screen += "|    Rentesats:          " + interestRate;
+        for(int i = 0; i < numSpaces-interestRate.length(); i++) {
+            screen += " ";
+        }
+        screen += "|\n";
+
+        String allowedOverdraft = "" + bank.getAccount(accountNumber).getAllowedOverdraft()/100.0 + " DKK";
+        screen += "|    Tilladt overtræk:   " + allowedOverdraft;
+        for(int i = 0; i < numSpaces-allowedOverdraft.length(); i++) {
+            screen += " ";
+        }
+        screen += "|\n";
+
+
         System.out.println("1 rentesats");
         System.out.println("2 overtræk");
         System.out.println("3 udbetal");
         System.out.println("4 indbetal");
-        System.out.println("B Back");
-        System.out.println("M Main");
-        System.out.println("Q Quit");
+
+        screen += backLine;
+        screen += mainLine;
+        screen += endLine;
+        screen += bottom;
+
+        System.out.println(screen);
     }
 
     private String employeeInterestRateFlow() {
