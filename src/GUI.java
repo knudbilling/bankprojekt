@@ -1499,6 +1499,9 @@ public class GUI {
         }
         screen += "|\n";
 
+        // Eller bare:
+        // screen+=fillLine("Kontantbeholdning:      " + cashAmount);
+
         String ownBalance = "" + (bank.getAccount(bank.getOwnAccountNumber()).getBalance() / 100.0) + " DKK";
         screen += "|    Egen konto:             " + ownBalance;
         for (int i = 0; i < numSpaces - ownBalance.length(); i++) {
