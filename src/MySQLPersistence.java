@@ -29,7 +29,7 @@ public class MySQLPersistence implements Persistence {
         DB_USERNAME = userName;
         DB_PASSWORD = password;
 
-        String DB_Url = "jdbc:mysql://" + DB_HOSTNAME + ":" + DB_PORT + "/" + "?serverTimeZone=CET";
+        String DB_Url = "jdbc:mysql://" + DB_HOSTNAME + ":" + DB_PORT + "/" + "?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=CET";
 
         // Check that correct driver exists
         // Only for telling the user what's wrong if we cannot connect to MySQL
@@ -204,7 +204,7 @@ public class MySQLPersistence implements Persistence {
         try {
             while (resultSet.next()) {
                 try {
-                    transaction = new Transaction(bank, bank.getRegNo() + resultSet.getString("FromAccountNumber"), bank.getRegNo() + resultSet.getString("ToAccountNumber"), resultSet.getLong("Amount"));
+                    transaction = new Transaction(bank, bank.getRegNo() + resultSet.getString("FromAccount"), bank.getRegNo() + resultSet.getString("ToAccount"), resultSet.getLong("Amount"));
                 } catch (NegativeAmountException e) {
                     System.out.println("***ERROR: Negative amoount error***");
                     e.printStackTrace();
@@ -316,9 +316,9 @@ public class MySQLPersistence implements Persistence {
                 return null;
             bank = new Bank(resultSet.getString("name"),
                     resultSet.getString("registrationnumber"),
-                    resultSet.getString("ownaccountnumber"),
-                    resultSet.getString("cashaccountnumber"),
-                    resultSet.getString("interbankaccountnumber"));
+                    registrationNumber+resultSet.getString("ownaccountnumber"),
+                    registrationNumber+resultSet.getString("cashaccountnumber"),
+                    registrationNumber+resultSet.getString("interbankaccountnumber"));
         } catch (SQLException e) {
             System.out.println("***ERROR: Failed getting data from database***");
             e.printStackTrace();
@@ -327,6 +327,14 @@ public class MySQLPersistence implements Persistence {
             e.printStackTrace();
         }
         return bank;
+    }
+
+    @Override
+    public void resetBank(String registrationNumber){
+        executeUpdate("delete * from transactions where BankRegistrationNumber="+registrationNumber+";");
+        executeUpdate("delete * from accounts where BankRegistrationNumber="+registrationNumber+";");
+        executeUpdate("delete * from customers where BankRegistrationNumber="+registrationNumber+";");
+        executeUpdate("delete * from banks where BankRegistrationNumber="+registrationNumber+";");
     }
 
     @Override
@@ -359,6 +367,7 @@ public class MySQLPersistence implements Persistence {
                 "ToAccount varchar(10), " +
                 "Amount bigint, " +
                 "Reference varchar(45), " +
+                "TimeStamp date, "+
                 "primary key (ID) " +
                 ");");
         executeUpdate("create table banks (" +

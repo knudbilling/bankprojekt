@@ -7,21 +7,10 @@ public class Transaction {
     Date timestamp;
     String bankReference;
 
+    // Instance initializer
     {
         this.timestamp=new Date();
     }
-
-    /**
-     * Constructs a transaction from two account objects
-     * @param fromAccount
-     * @param toAccount
-     * @param amount
-     */
-//    public Transaction(Account fromAccount, Account toAccount, long amount){
-//        this.fromAccount=fromAccount;
-//        this.toAccount=toAccount;
-//        this.amount=amount;
-//    }
 
     /**
      * Constructs a transaction from two account numbers
@@ -40,12 +29,10 @@ public class Transaction {
         // fromAccount
         // Error on: fromAccount is in an invalid format
         if(!AccountNumber.isValidFormat(fromAccountNumber)) {
-            System.out.println("***ERROR: Account number not in a valid format***");
             throw new NumberFormatException();
         }
         // Error on: fromAccount is not local
         if(!AccountNumber.isLocal(bank,fromAccountNumber)) {
-            System.out.println("***ERROR: Trying to transfer from an external account***");
             throw new IllegalAccountException();
         }
         this.fromAccount=bank.getAccount(fromAccountNumber);
@@ -53,19 +40,18 @@ public class Transaction {
         // toAccount
         // Error on: toAccount is in an invalid format
         if(!AccountNumber.isValidFormat(toAccountNumber)) {
-            System.out.println("ERROR: Account number is not in a valid format***");
             throw new NumberFormatException();
         }
 
         // Local toAccount
         if(AccountNumber.isLocal(bank,toAccountNumber)) {
             this.toAccount = bank.getAccount(toAccountNumber);
-        } else { // External toAccount
+        // External toAccount
+        } else {
             if (BankRegister.accountExists(toAccountNumber)) {
                 this.bankReference = toAccountNumber;
                 this.toAccount=bank.getAccount(bank.getInterBankAccountNumber());
             } else {
-                System.out.println("***ERROR: Trying to transfer to a non-existing external account***");
                throw new IllegalAccountException();
             }
         }

@@ -32,6 +32,7 @@ public class AccountNumber {
      * @return True is account number is valid. Otherwise false.
      */
     public static boolean isValidFormat(String accountNumber){
+        if(accountNumber==null) return false;
         if(accountNumber.length()!=14)
             return false;
         for(int i=0;i<accountNumber.length();i++){
@@ -57,9 +58,13 @@ public class AccountNumber {
     }
 
     public static boolean exists(Bank bank, String accountNumber){
-        for(int i=0;i<bank.getAccountList().size();i++){
-            if(bank.getAccountList().get(i).accountNumber.equals(accountNumber))
-                return true;
+        if(isLocal(bank,accountNumber)) {
+            for (int i = 0; i < bank.getAccountList().size(); i++) {
+                if (bank.getAccountList().get(i).accountNumber.equals(accountNumber))
+                    return true;
+            }
+        } else {
+            return BankRegister.accountExists(accountNumber);
         }
         return false;
     }
