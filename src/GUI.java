@@ -1489,7 +1489,7 @@ public class GUI {
         int numSpaces = 46;
 
         if (bank.booksAreBalancing()) {
-            screen += "|    Regnskabet stemmer, alt er OK!                                        |\n";
+            screen += fillLine("Regnskabet stemmer, alt er OK!");
         } else {
             screen += "|    Regnskabet stemmer ikke.                                              |\n";
             screen += "|    Skynd dig væk inden Finanstilsynet kommer!                            |\n";
