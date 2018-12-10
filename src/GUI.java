@@ -30,6 +30,8 @@ public class GUI {
             + fillLine()
             + horisontalLine();
 
+    public static String footerBlock = backLine + mainLine + endLine + bottom;
+
     static String horisontalLine(int length) {
         return line.substring(0, length - 1) + "+\n";
     }
@@ -224,10 +226,7 @@ public class GUI {
                     + fillLine();
         }
         screen += fillLine("Indtast kundenummer: ________")
-                + backLine
-                + mainLine
-                + endLine
-                + bottom;
+                + footerBlock;
         System.out.println(screen);
     }
 
@@ -286,10 +285,7 @@ public class GUI {
         if (customerCanTransfer)
             screen += fillLine("Tast \"2\" for at overføre penge.");
 
-        screen += backLine
-                + mainLine
-                + endLine
-                + bottom;
+        screen += footerBlock;
         System.out.println(screen);
     }
 
@@ -324,7 +320,8 @@ public class GUI {
                 + fillLine(String.format("Indestående:       %20.2f", account.getBalance() / 100.0))
                 + fillLine(String.format("Rentesats:         %20.2f", account.getInterestRate() / 100.0))
                 + fillLine(String.format("Tilladt overtræk:  %20.2f", account.getAllowedOverdraft() / 100.0))
-                + fillLine() + backLine + mainLine + endLine + bottom;
+                + fillLine()
+                + footerBlock;
         System.out.println(screen);
     }
 
@@ -377,7 +374,7 @@ public class GUI {
             else accountType = "opsparingskonto";
             screen += fillLine(String.format("%s : %20.2f    %15s", accountList.get(i).getAccountNumber(), accountList.get(i).getBalance() / 100.0, accountType));
         }
-        screen += backLine + mainLine + endLine + bottom;
+        screen += footerBlock;
         System.out.println(screen);
     }
 
@@ -427,7 +424,7 @@ public class GUI {
                 screen += fillLine(String.format("%s : %20.2f    %15s", accountList.get(i).getAccountNumber(), accountList.get(i).getBalance() / 100.0, accountType));
             }
         }
-        screen += backLine + mainLine + endLine + bottom;
+        screen += footerBlock;
         System.out.println(screen);
     }
 
@@ -468,7 +465,7 @@ public class GUI {
         screen = headerBlock
                 + fillLine("Hvilken konto vil du overføre til?")
                 + fillLine()
-                + backLine + mainLine + endLine + bottom;
+                + footerBlock;
         System.out.println(screen);
     }
 
@@ -526,7 +523,7 @@ public class GUI {
         screen = headerBlock
                 + fillLine("Hvor meget vil du overføre?")
                 + fillLine()
-                + backLine + mainLine + endLine + bottom;
+                + footerBlock;
         System.out.println(screen);
     }
 
@@ -590,7 +587,7 @@ public class GUI {
         }
         screen += fillLine()
                 + fillLine("Indtast kontonummer for yderligere information:")
-                + backLine + mainLine + endLine + bottom;
+                + footerBlock;
         System.out.println(screen);
     }
 
