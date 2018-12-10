@@ -1069,7 +1069,7 @@ public class GUI {
         }
         screen += "|\n";
 
-        String interestRate = "" + bank.getAccount(accountNumber).getInterestRate()/100.0;
+        String interestRate = "" + bank.getAccount(accountNumber).getInterestRate() / 100.0;
         screen += "|    Rentesats:          " + interestRate;
         for (int i = 0; i < numSpaces - interestRate.length(); i++) {
             screen += " ";
@@ -1135,7 +1135,7 @@ public class GUI {
 
         String interestRate = "" + (account.getInterestRate() / 100.0);
         screen += "|    Nuværende rentesats: " + interestRate;
-        for(int i = 0; i < numSpaces-interestRate.length(); i++) {
+        for (int i = 0; i < numSpaces - interestRate.length(); i++) {
             screen += " ";
         }
         screen += "|\n";
@@ -1189,7 +1189,7 @@ public class GUI {
 
         String allowedOverdraft = "" + (account.getAllowedOverdraft() / 100.0);
         screen += "|    Nuværende overtræk tilladt: " + allowedOverdraft;
-        for(int i = 0; i < numSpaces-allowedOverdraft.length(); i++) {
+        for (int i = 0; i < numSpaces - allowedOverdraft.length(); i++) {
             screen += " ";
         }
         screen += "|\n";
@@ -1267,9 +1267,9 @@ public class GUI {
         String screen = headerBlock;
         int numSpaces = 50;
 
-        String balance = "" + (account.getBalance()/100.0) + " DKK";
+        String balance = "" + (account.getBalance() / 100.0) + " DKK";
         screen += "|    Nuværende indestående" + balance;
-        for(int i = 0; i < numSpaces-balance.length(); i++) {
+        for (int i = 0; i < numSpaces - balance.length(); i++) {
             screen += " ";
         }
         screen += "|\n";
@@ -1346,9 +1346,9 @@ public class GUI {
         String screen = headerBlock;
         int numSpaces = 50;
 
-        String balance = "" + (account.getBalance()/100.0) + " DKK";
+        String balance = "" + (account.getBalance() / 100.0) + " DKK";
         screen += "|    Nuværende indestående" + balance;
-        for(int i = 0; i < numSpaces-balance.length(); i++) {
+        for (int i = 0; i < numSpaces - balance.length(); i++) {
             screen += " ";
         }
         screen += "|\n";
@@ -1382,6 +1382,7 @@ public class GUI {
                     result = adminStatusFlow();
                     break;
             }
+            if (isMQ(result)) return result;
         }
     }
 
@@ -1400,7 +1401,6 @@ public class GUI {
                 case "3":
                     return result;
             }
-            if (isMQ(result)) return result;
         }
     }
 
@@ -1498,21 +1498,21 @@ public class GUI {
 
         String cashAmount = "" + (-bank.getAccount(bank.getCashAccountNumber()).getBalance() / 100.0) + " DKK";
         screen += "|    Kontantbeholdning:      " + cashAmount;
-        for(int i = 0; i < numSpaces-cashAmount.length(); i++) {
+        for (int i = 0; i < numSpaces - cashAmount.length(); i++) {
             screen += " ";
         }
         screen += "|\n";
 
         String ownBalance = "" + (bank.getAccount(bank.getOwnAccountNumber()).getBalance() / 100.0) + " DKK";
         screen += "|    Egen konto:             " + ownBalance;
-        for(int i = 0; i < numSpaces-ownBalance.length(); i++) {
+        for (int i = 0; i < numSpaces - ownBalance.length(); i++) {
             screen += " ";
         }
         screen += "|\n";
 
         String interBankBalance = "" + (bank.getAccount(bank.getInterBankAccountNumber()).getBalance() / 100.0) + " DKK";
         screen += "|    Andre bankers konto:    " + interBankBalance;
-        for(int i = 0; i < numSpaces-interBankBalance.length(); i++) {
+        for (int i = 0; i < numSpaces - interBankBalance.length(); i++) {
             screen += " ";
         }
         screen += "|\n";
