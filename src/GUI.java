@@ -453,9 +453,11 @@ public class GUI {
     }
 
     private void customerTransactionToDisplay() {
-        System.out.println("modtager reg+kontonummer");
-        System.out.println("BMQ");
-        //TODO
+
+        System.out.print(headerBlock);
+        System.out.println("|    Hvilken konto vil du overføre til?                                    |");
+        System.out.println("|                                                                          |");
+        System.out.println(backLine+mainLine+endLine+bottom);
     }
 
     private String customerTransactionAmountFlow() {
@@ -508,9 +510,10 @@ public class GUI {
     }
 
     private void customerTransactionAmountDisplay() {
-        System.out.println("Beløb");
-        System.out.println("BMQ");
-        //TODO
+        System.out.print(headerBlock);
+        System.out.println("|    Hvor meget vil du overføre?                                           |");
+        System.out.println("|                                                                          |");
+        System.out.println(backLine+mainLine+endLine+bottom);
     }
 
     private void customerTransactionIllegalOverDraftDisplay() {
