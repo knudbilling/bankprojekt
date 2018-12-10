@@ -311,12 +311,12 @@ public class GUI {
             accountType="Opsparingskonto";
 
         System.out.print(headerBlock);
-        System.out.println("|    Reg. nummer:       "+AccountNumber.getRegistrationNumber(accountNumber)+"|");
-        System.out.println("|    Kontonummer:       "+AccountNumber.getShortNumber(accountNumber)+"|");
-        System.out.println("|    Type:              "+accountType+"|");
-        System.out.printf("|    Indestående:       %20.2f   |%n",account.getBalance()/100.0);
-        System.out.printf("|    Rentesats:         %20.2f   |%n",account.getInterestRate()/100.0);
-        System.out.printf("|    Tilladt overtræk:  %20.2f   |%n",account.getAllowedOverdraft()/100.0);
+        System.out.println("|    Reg. nummer:       "+AccountNumber.getRegistrationNumber(accountNumber)+"                                               |");
+        System.out.println("|    Kontonummer:       "+AccountNumber.getShortNumber(accountNumber)+"                                         |");
+        System.out.println("|    Type:              "+accountType+"                                    |");
+        System.out.printf("|    Indestående:       %20.2f                               |%n",account.getBalance()/100.0);
+        System.out.printf("|    Rentesats:         %20.2f                               |%n",account.getInterestRate()/100.0);
+        System.out.printf("|    Tilladt overtræk:  %20.2f                               |%n",account.getAllowedOverdraft()/100.0);
         System.out.println("|                                                                          |");
         System.out.println(backLine+mainLine+endLine+bottom);
     }
@@ -385,7 +385,7 @@ public class GUI {
     private String customerTransactionFromSavingsGUI() {
         String result;
         List<Account> accountList=bank.getCustomer(customerNumber).accountList;
-        //TODO
+
         while (true) {
             customerTransactionFromSavingsDisplay();
             result = cleanBMQ(scanner.next());
@@ -401,13 +401,23 @@ public class GUI {
     }
 
     private void customerTransactionFromSavingsDisplay() {
+        String accountType;
+
         List<Account> accountList = bank.getCustomer(customerNumber).accountList;
 
+        System.out.print(headerBlock);
+        System.out.println("|    Hvilken af dine konti vil du overføre penge til?                      |");
+        System.out.println("|                                                                          |");
         for (int i = 0; i < accountList.size(); i++) {
-            if (!accountList.get(i).getAccountNumber().equals(accountNumber))
-                System.out.println(accountList.get(i).getAccountNumber() + " " + accountList.get(i).getBalance());
+            if (!accountList.get(i).getAccountNumber().equals(accountNumber)) {
+                if (accountList.get(i) instanceof CurrentAccount) accountType = "lønkonto";
+                else accountType = "opsparingskonto";
+                System.out.printf("|    %s : %20.2f    %15s              |%n", accountList.get(i).getAccountNumber(), accountList.get(i).getBalance() / 100.0, accountType);
+            }
         }
-        System.out.println("BMQ");
+        System.out.println(backLine+mainLine+endLine+bottom);
+
+
     }
 
     private String customerTransactionToFlow() {
@@ -443,9 +453,11 @@ public class GUI {
     }
 
     private void customerTransactionToDisplay() {
-        System.out.println("modtager reg+kontonummer");
-        System.out.println("BMQ");
-        //TODO
+
+        System.out.print(headerBlock);
+        System.out.println("|    Hvilken konto vil du overføre til?                                    |");
+        System.out.println("|                                                                          |");
+        System.out.println(backLine+mainLine+endLine+bottom);
     }
 
     private String customerTransactionAmountFlow() {
@@ -498,9 +510,10 @@ public class GUI {
     }
 
     private void customerTransactionAmountDisplay() {
-        System.out.println("Beløb");
-        System.out.println("BMQ");
-        //TODO
+        System.out.print(headerBlock);
+        System.out.println("|    Hvor meget vil du overføre?                                           |");
+        System.out.println("|                                                                          |");
+        System.out.println(backLine+mainLine+endLine+bottom);
     }
 
     private void customerTransactionIllegalOverDraftDisplay() {
