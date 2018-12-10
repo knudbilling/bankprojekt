@@ -330,6 +330,7 @@ public class GUI {
         while (true) {
             result = customerTransactionFromGUI();
             if (isBMQ(result)) return result;
+            accountNumber=result;
             if (this.bank.getAccount(this.accountNumber) instanceof SavingsAccount) {
                 result = customerTransactionFromSavingsFlow();
             } else {
@@ -372,6 +373,7 @@ public class GUI {
         while (true) {
             result = customerTransactionFromSavingsGUI();
             if (isBMQ(result)) return result;
+            toAccountNumber=result;
             result = customerTransactionAmountFlow();
             if (isMQ(result)) return result;
         }
@@ -379,13 +381,19 @@ public class GUI {
 
     private String customerTransactionFromSavingsGUI() {
         String result;
+        List<Account> accountList=bank.getCustomer(customerNumber).accountList;
         //TODO
         while (true) {
             customerTransactionFromSavingsDisplay();
             result = cleanBMQ(scanner.next());
             scanner.nextLine();
             if (isBMQ(result)) return result;
-            // check its own account
+            if(AccountNumber.isValidFormat(result)){
+                for(int i=0;i<accountList.size();i++){
+                    if(accountList.get(i).getAccountNumber().equals(result))
+                        return result;
+                }
+            }
         }
     }
 
@@ -404,20 +412,36 @@ public class GUI {
         while (true) {
             result = customerTransactionToGUI();
             if (isBMQ(result)) return result;
+            toAccountNumber=result;
             result = customerTransactionAmountFlow();
             if (isMQ(result)) return result;
         }
     }
 
     private String customerTransactionToGUI() {
-        // Check it's not the cash account!
-        // Check the user does not input the interbankaccount!
-        customerTransactionToDisplay();
-        //TODO
-        return "";
+        String result;
+        while(true) {
+            customerTransactionToDisplay();
+            result = cleanBMQ(scanner.next());
+            scanner.nextLine();
+            if (isBMQ(result)) return result;
+            if (AccountNumber.isValidFormat(result)) {
+                if (!result.equals(bank.getCashAccountNumber())) {
+                    if (!result.equals(bank.getInterBankAccountNumber())) {
+                        if (!result.equals(accountNumber)) {
+                            if (AccountNumber.exists(bank, result)) {
+                                return result;
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private void customerTransactionToDisplay() {
+        System.out.println("modtager reg+kontonummer");
+        System.out.println("BMQ");
         //TODO
     }
 
@@ -429,31 +453,50 @@ public class GUI {
             result = customerTransactionAmountGUI();
             if (isBMQ(result)) return result;
 
+            amount=Long.parseLong(result);
+
             try {
                 transaction = new Transaction(bank, accountNumber, toAccountNumber, amount);
             } catch (Exception e) { // Should never execute
                 e.printStackTrace();
+                System.out.println(accountNumber+" "+toAccountNumber+" "+amount);
+                System.exit(1);
             }
             try {
                 bank.addTransaction(transaction);
+                persistence.addTransaction(bank,transaction);
                 customerTransactionSuccessDisplay();
                 return "M";
             } catch (NoOverdraftAllowedException e) {
                 customerTransactionIllegalOverDraftDisplay();
             } catch (Exception e) { // Should never execute
                 e.printStackTrace();
+                System.exit(2);
             }
         }
     }
 
     private String customerTransactionAmountGUI() {
-        // check amount is not negative
-        customerTransactionAmountDisplay();
-        // TODO
-        return "";
+        String result;
+        double amount;
+
+        while(true) {
+            customerTransactionAmountDisplay();
+            result = cleanBMQ(scanner.next());
+            scanner.nextLine();
+            if (isBMQ(result)) return result;
+            try {
+                 amount = Double.parseDouble(result);
+                if(amount>0)
+                    return ""+(long)(amount*100.0);
+            } catch (NumberFormatException ignore) {
+            }
+        }
     }
 
     private void customerTransactionAmountDisplay() {
+        System.out.println("Beløb");
+        System.out.println("BMQ");
         //TODO
     }
 

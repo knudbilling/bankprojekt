@@ -367,6 +367,7 @@ public class MySQLPersistence implements Persistence {
                 "ToAccount varchar(10), " +
                 "Amount bigint, " +
                 "Reference varchar(45), " +
+                "TimeStamp date, "+
                 "primary key (ID) " +
                 ");");
         executeUpdate("create table banks (" +

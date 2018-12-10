@@ -20,9 +20,9 @@ public class Bank {
         this.ownAccountNumber = ownAccountNumber;
         this.cashAccountNumber = cashAccountNumber;
         this.interBankAccountNumber = interBankAccountNumber;
-        this.customerList = new ArrayList<Customer>();
-        this.transactionList = new ArrayList<Transaction>();
-        this.accountList = new ArrayList<Account>();
+        this.customerList = new ArrayList<>();
+        this.transactionList = new ArrayList<>();
+        this.accountList = new ArrayList<>();
 
         Account account = new CurrentAccount(ownAccountNumber);
         account.allowedOverdraft =Long.MAX_VALUE;
