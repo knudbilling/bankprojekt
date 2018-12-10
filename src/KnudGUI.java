@@ -317,9 +317,9 @@ public class KnudGUI {
         System.out.println("|    Reg. nummer:       "+AccountNumber.getRegistrationNumber(accountNumber)+"|");
         System.out.println("|    Kontonummer:       "+AccountNumber.getShortNumber(accountNumber)+"|");
         System.out.println("|    Type:              "+accountType+"|");
-        System.out.printf("|    Indestående:       %f20.2   |%n",account.getBalance()/100.0);
-        System.out.printf("|    Rentesats:         %f20.2   |%n",account.getInterestRate()/100.0);
-        System.out.printf("|    Tilladt overtræk:  %f20.2   |%n",account.getAllowedOverdraft()/100.0);
+        System.out.printf("|    Indestående:       %20.2f   |%n",account.getBalance()/100.0);
+        System.out.printf("|    Rentesats:         %20.2f   |%n",account.getInterestRate()/100.0);
+        System.out.printf("|    Tilladt overtræk:  %20.2f   |%n",account.getAllowedOverdraft()/100.0);
         System.out.println("|                                                                          |");
         System.out.println(backLine+mainLine+endLine+bottom);
     }
@@ -472,6 +472,7 @@ public class KnudGUI {
         while (true) {
             result = customerAccountsGUI();
             if (isBMQ(result)) return result;
+            accountNumber=result;
             result = customerAccountInfoFlow();
             if (isMQ(result)) return result;
         }
@@ -479,13 +480,33 @@ public class KnudGUI {
 
     private String customerAccountsGUI() {
         String result;
-        customerAccountsDisplay();
-        //TODO
-        return "";
+        List<Account> accountList=bank.getCustomer(customerNumber).accountList;
+        boolean validAccount;
+
+        while(true) {
+            validAccount = false;
+            customerAccountsDisplay();
+            result = cleanBMQ(scanner.next());
+            scanner.nextLine();
+            if (isBMQ(result)) return result;
+            if (AccountNumber.isValidFormat(result)) {
+                for (int i = 0; i < accountList.size(); i++) {
+                    if (accountList.get(i).getAccountNumber().equals(result)) {
+                        validAccount = true;
+                    }
+                }
+            }
+            if (validAccount)
+                return result;
+        }
     }
 
     private void customerAccountsDisplay() {
-        //TODO
+        List<Account> accountList = bank.getCustomer(customerNumber).accountList;
+        for(int i=0;i<accountList.size();i++){
+            System.out.println(accountList.get(i).getAccountNumber()+" "+accountList.get(i).getBalance()/100.0);
+        }
+        System.out.println("BMQ");
     }
 
     private String employeeFlow() {
