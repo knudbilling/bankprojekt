@@ -706,6 +706,15 @@ public class GUI {
 
     private void employeeNewCustomerDisplay() {
         //TODO
+        String screen = headerBlock;
+        screen += "|    (tekst her)    \n";
+
+        screen += backLine;
+        screen += mainLine;
+        screen += endLine;
+        screen += bottom;
+
+        System.out.println(screen);
     }
 
     private String employeeSearchNameFlow() {
@@ -797,6 +806,15 @@ public class GUI {
 
     private void employeeSearchMatchesDisplay() {
         //TODO
+        String screen = headerBlock;
+        screen += "|    (tekst her)    \n";
+
+        screen += backLine;
+        screen += mainLine;
+        screen += endLine;
+        screen += bottom;
+
+        System.out.println(screen);
     }
 
     private String employeeSearchCustomerNumberFlow() {
@@ -962,9 +980,10 @@ public class GUI {
         screen += "|\n";
 
         screen += "|                                                                          |\n";
+        screen += "|    Indtast et kontonummer for at se nærmere.                             |\n";
 
         for (int i = 0; i < accountList.size(); i++) {
-            String accLine = "|    Tast \"" + (i + 1) + "\" for Konto: " + accountList.get(i).accountNumber +
+            String accLine = "|        Konto: " + accountList.get(i).accountNumber +
                     "    Indestående: " + accountList.get(i).getBalance() + " DKK";
             String spaces = "";
             for (int j = 0; j < 75 - accLine.length(); j++) {
@@ -1050,7 +1069,7 @@ public class GUI {
         }
         screen += "|\n";
 
-        String interestRate = "" + bank.getAccount(accountNumber).getInterestRate();
+        String interestRate = "" + bank.getAccount(accountNumber).getInterestRate()/100.0;
         screen += "|    Rentesats:          " + interestRate;
         for (int i = 0; i < numSpaces - interestRate.length(); i++) {
             screen += " ";
@@ -1064,11 +1083,11 @@ public class GUI {
         }
         screen += "|\n";
 
-
-        System.out.println("1 rentesats");
-        System.out.println("2 overtræk");
-        System.out.println("3 udbetal");
-        System.out.println("4 indbetal");
+        screen += "|                                                                          |\n";
+        screen += "|    Tast \"1\" for at ændre rentesats.                                      |\n";
+        screen += "|    Tast \"2\" for at ændre tillads overtræk.                               |\n";
+        screen += "|    Tast \"3\" for at udbetale kontanter.                                   |\n";
+        screen += "|    Tast \"4\" for indsætte penge.                                          |\n";
 
         screen += backLine;
         screen += mainLine;
@@ -1111,11 +1130,23 @@ public class GUI {
 
     private void employeeInterestRateDisplay() {
         Account account = bank.getAccount(accountNumber);
-        System.out.println("Nuværende: " + account.getInterestRate() / 100.0);
-        System.out.println("Indtast ny");
-        System.out.println("B Back");
-        System.out.println("M Main");
-        System.out.println("Q Quit");
+        int numSpaces = 49;
+        String screen = headerBlock;
+
+        String interestRate = "" + (account.getInterestRate() / 100.0);
+        screen += "|    Nuværende rentesats: " + interestRate;
+        for(int i = 0; i < numSpaces-interestRate.length(); i++) {
+            screen += " ";
+        }
+        screen += "|\n";
+        screen += "|    Indtast ny rentesats: ________                                        |\n";
+
+        screen += backLine;
+        screen += mainLine;
+        screen += endLine;
+        screen += bottom;
+
+        System.out.println(screen);
     }
 
     private String employeeOverdraftFlow() {
@@ -1153,11 +1184,23 @@ public class GUI {
 
     private void employeeOverdraftDisplay() {
         Account account = bank.getAccount(accountNumber);
-        System.out.println("Nuværende: " + account.getAllowedOverdraft() / 100.0);
-        System.out.println("Indtast ny");
-        System.out.println("B Back");
-        System.out.println("M Main");
-        System.out.println("Q Quit");
+        int numSpaces = 42;
+        String screen = headerBlock;
+
+        String allowedOverdraft = "" + (account.getAllowedOverdraft() / 100.0);
+        screen += "|    Nuværende overtræk tilladt: " + allowedOverdraft;
+        for(int i = 0; i < numSpaces-allowedOverdraft.length(); i++) {
+            screen += " ";
+        }
+        screen += "|\n";
+        screen += "|    Indtast nye tilladte overtræk: ________ DKK                           |\n";
+
+        screen += backLine;
+        screen += mainLine;
+        screen += endLine;
+        screen += bottom;
+
+        System.out.println(screen);
     }
 
     private String employeeWithdrawFlow() {
@@ -1221,11 +1264,24 @@ public class GUI {
 
     private void employeeWithdrawDisplay() {
         Account account = bank.getAccount(accountNumber);
-        System.out.println("Nuværende balance: " + account.getBalance() / 100.0);
-        System.out.println("Indtast beløb at hæve");
-        System.out.println("B Back");
-        System.out.println("M Main");
-        System.out.println("Q Quit");
+        String screen = headerBlock;
+        int numSpaces = 50;
+
+        String balance = "" + (account.getBalance()/100.0) + " DKK";
+        screen += "|    Nuværende indestående" + balance;
+        for(int i = 0; i < numSpaces-balance.length(); i++) {
+            screen += " ";
+        }
+        screen += "|\n";
+
+        screen += "|    Indtast beløb til udbetaling: ________ DKK                       |\n";
+
+        screen += backLine;
+        screen += mainLine;
+        screen += endLine;
+        screen += bottom;
+
+        System.out.println(screen);
     }
 
     private String employeeNoOverdraftAllowedFlow() {
@@ -1260,7 +1316,15 @@ public class GUI {
     }
 
     private void employeeNotEnoughCashDisplay() {
-        //TODO
+        String screen = headerBlock;
+        screen += "|    Dette kan ikke lade sig gøre, da banken ikke har                      |\n";
+        screen += "|    penge tilsvarende dette beløb.                                        |\n";
+        screen += backLine;
+        screen += mainLine;
+        screen += endLine;
+        screen += bottom;
+
+        System.out.println(screen);
     }
 
     private String employeeDepositFlow() {
@@ -1278,7 +1342,25 @@ public class GUI {
     }
 
     private void employeeDepositDisplay() {
-        //TODO
+        Account account = bank.getAccount(accountNumber);
+        String screen = headerBlock;
+        int numSpaces = 50;
+
+        String balance = "" + (account.getBalance()/100.0) + " DKK";
+        screen += "|    Nuværende indestående" + balance;
+        for(int i = 0; i < numSpaces-balance.length(); i++) {
+            screen += " ";
+        }
+        screen += "|\n";
+
+        screen += "|    Indtast beløb til indsættelse: ________ DKK                     |\n";
+
+        screen += backLine;
+        screen += mainLine;
+        screen += endLine;
+        screen += bottom;
+
+        System.out.println(screen);
     }
 
     private String adminFlow() {
@@ -1403,16 +1485,43 @@ public class GUI {
     }
 
     private void adminStatusDisplay() {
-        if (bank.booksAreBalancing())
-            System.out.println("Regnskabet stemmer, alt er OK!");
-        else
-            System.out.println("Regnskabet stemmer ikke. Skynd dig væk inden Finanstilsynet kommer!");
-        System.out.println("Kontantbeholdning: " + (-bank.getAccount(bank.getCashAccountNumber()).getBalance() / 100.0));
-        System.out.println("Egen konto: " + bank.getAccount(bank.getOwnAccountNumber()).getBalance() / 100.0);
-        System.out.println("Andre bankers konto: " + bank.getAccount(bank.getInterBankAccountNumber()).getBalance() / 100.0);
-        System.out.println("BMQ");
+        String screen = headerBlock;
+        int numSpaces = 46;
 
+        if (bank.booksAreBalancing()) {
+            screen += "|    Regnskabet stemmer, alt er OK!                                        |\n";
+        } else {
+            screen += "|    Regnskabet stemmer ikke.                                              |\n";
+            screen += "|    Skynd dig væk inden Finanstilsynet kommer!                            |\n";
+        }
+        screen += "|                                                                          |\n";
 
-        //TODO
+        String cashAmount = "" + (-bank.getAccount(bank.getCashAccountNumber()).getBalance() / 100.0) + " DKK";
+        screen += "|    Kontantbeholdning:      " + cashAmount;
+        for(int i = 0; i < numSpaces-cashAmount.length(); i++) {
+            screen += " ";
+        }
+        screen += "|\n";
+
+        String ownBalance = "" + (bank.getAccount(bank.getOwnAccountNumber()).getBalance() / 100.0) + " DKK";
+        screen += "|    Egen konto:             " + ownBalance;
+        for(int i = 0; i < numSpaces-ownBalance.length(); i++) {
+            screen += " ";
+        }
+        screen += "|\n";
+
+        String interBankBalance = "" + (bank.getAccount(bank.getInterBankAccountNumber()).getBalance() / 100.0) + " DKK";
+        screen += "|    Andre bankers konto:    " + interBankBalance;
+        for(int i = 0; i < numSpaces-interBankBalance.length(); i++) {
+            screen += " ";
+        }
+        screen += "|\n";
+
+        screen += backLine;
+        screen += mainLine;
+        screen += endLine;
+        screen += bottom;
+
+        System.out.println(screen);
     }
 }
