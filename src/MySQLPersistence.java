@@ -66,7 +66,9 @@ public class MySQLPersistence implements Persistence {
             pst.setString(5, AccountNumber.getShortNumber(bank.getInterBankAccountNumber()));
             pst.executeUpdate();
         } catch (SQLException e) {
+            System.out.println("***ERROR: Could not add bank to database***");
             e.printStackTrace();
+            System.exit(5);
         }
     }
 
@@ -82,7 +84,9 @@ public class MySQLPersistence implements Persistence {
             pst.setString(5, bank.getRegNo());
             pst.executeUpdate();
         } catch (SQLException e) {
+            System.out.println("***ERROR: Could not update bank in database***");
             e.printStackTrace();
+            System.exit(6);
         }
     }
 
@@ -99,7 +103,9 @@ public class MySQLPersistence implements Persistence {
             pst.setString(6, customer.phoneNo);
             pst.executeUpdate();
         } catch (SQLException e) {
+            System.out.println("***ERROR: Could not add customer to database***");
             e.printStackTrace();
+            System.exit(7);
         }
     }
 
@@ -116,7 +122,9 @@ public class MySQLPersistence implements Persistence {
             pst.setString(6, bank.getRegNo());
             pst.executeUpdate();
         } catch (SQLException e) {
+            System.out.println("***ERROR: Could not update customer in database***");
             e.printStackTrace();
+            System.exit(8);
         }
     }
 
@@ -133,7 +141,9 @@ public class MySQLPersistence implements Persistence {
             pst.setInt(6, bank.getCustomerNumber(account));
             pst.executeUpdate();
         } catch (SQLException e) {
+            System.out.println("***ERROR: Could not add account to database***");
             e.printStackTrace();
+            System.exit(9);
         }
     }
 
@@ -149,7 +159,9 @@ public class MySQLPersistence implements Persistence {
             pst.setString(5, bank.getRegNo());
             pst.executeUpdate();
         } catch (SQLException e) {
+            System.out.println("***ERROR: Could not update account in database***");
             e.printStackTrace();
+            System.exit(10);
         }
     }
 
@@ -166,7 +178,9 @@ public class MySQLPersistence implements Persistence {
             pst.setString(6, transaction.bankReference);
             pst.executeUpdate();
         } catch (SQLException e) {
+            System.out.println("***ERROR: Could not add transaction to database***");
             e.printStackTrace();
+            System.exit(11);
         }
     }
 
@@ -200,20 +214,21 @@ public class MySQLPersistence implements Persistence {
     }
 
     private void loadTransactions(String registrationNumber, Bank bank) {
-        Transaction transaction=null;
-        ResultSet resultSet = queryRegistrationNumber("select * from transactions where BankRegistrationNumber = ?;",registrationNumber);
+        Transaction transaction = null;
+        ResultSet resultSet = queryRegistrationNumber("select * from transactions where BankRegistrationNumber = ?;", registrationNumber);
 
         try {
             while (resultSet.next()) {
                 try {
                     transaction = new Transaction(bank, bank.getRegNo() + resultSet.getString("FromAccount"), bank.getRegNo() + resultSet.getString("ToAccount"), resultSet.getLong("Amount"));
                 } catch (NegativeAmountException e) {
-                    System.out.println("***ERROR: Negative amoount error***");
+                    System.out.println("***ERROR: Negative amount error***");
                     e.printStackTrace();
-                }
-                catch (IllegalAccountException e){
+                    System.exit(12);
+                } catch (IllegalAccountException e) {
                     System.out.println("***ERROR: Trying to transfer to a non-existing external account***");
                     e.printStackTrace();
+                    System.exit(13);
                 }
                 transaction.timestamp = resultSet.getDate("TimeStamp");
                 transaction.bankReference = resultSet.getString("Reference");
@@ -223,21 +238,26 @@ public class MySQLPersistence implements Persistence {
                 } catch (NegativeAmountException e) {
                     System.out.println("***ERROR: Trying to transfer a negative amount***");
                     e.printStackTrace();
+                    System.exit(14);
                 } catch (NoOverdraftAllowedException e) {
                     System.out.println("***ERROR: Trying to transfer more than allowed***");
                     e.printStackTrace();
+                    System.exit(15);
                 } catch (NotEnoughCashException e) {
                     System.out.println("***ERROR: Cash holding negative***");
                     e.printStackTrace();
+                    System.exit(16);
                 } catch (IllegalAccountException e) {
                     System.out.println("***ERROR: Account error***");
                     e.printStackTrace();
+                    System.exit(17);
                 }
 
             }
         } catch (SQLException e) {
             System.out.println("***ERROR: Failed getting transaction data from database***");
             e.printStackTrace();
+            System.exit(18);
         }
     }
 
@@ -245,7 +265,7 @@ public class MySQLPersistence implements Persistence {
         Account account;
         Customer customer = null;
 
-        ResultSet resultSet=queryRegistrationNumber("select * from accounts where BankRegistrationNumber = ?;",registrationNumber);
+        ResultSet resultSet = queryRegistrationNumber("select * from accounts where BankRegistrationNumber = ?;", registrationNumber);
 
         try {
             while (resultSet.next()) {
@@ -262,14 +282,17 @@ public class MySQLPersistence implements Persistence {
                 } catch (DuplicateAccountException e) {
                     System.out.println("***ERROR: Duplicate account number***");
                     e.printStackTrace();
+                    System.exit(19);
                 } catch (DuplicateCustomerException e) {
                     System.out.println("***ERROR: Duplicate customer number***");
                     e.printStackTrace();
+                    System.exit(20);
                 }
             }
         } catch (SQLException e) {
             System.out.println("***ERROR: Failed getting data from database***");
             e.printStackTrace();
+            System.exit(21);
         }
     }
 
@@ -290,9 +313,11 @@ public class MySQLPersistence implements Persistence {
         } catch (SQLException e) {
             System.out.println("***ERROR: Failed getting data from database***");
             e.printStackTrace();
+            System.exit(22);
         } catch (DuplicateCustomerException e) {
             System.out.println("***ERROR: Duplicate customer***");
             e.printStackTrace();
+            System.exit(23);
         }
     }
 
@@ -305,6 +330,7 @@ public class MySQLPersistence implements Persistence {
         } catch (SQLException e) {
             System.out.println("***ERROR: Failed to query database***");
             e.printStackTrace();
+            System.exit(24);
         }
         return resultSet;
     }
@@ -318,25 +344,27 @@ public class MySQLPersistence implements Persistence {
                 return null;
             bank = new Bank(resultSet.getString("name"),
                     resultSet.getString("registrationnumber"),
-                    registrationNumber+resultSet.getString("ownaccountnumber"),
-                    registrationNumber+resultSet.getString("cashaccountnumber"),
-                    registrationNumber+resultSet.getString("interbankaccountnumber"));
+                    registrationNumber + resultSet.getString("ownaccountnumber"),
+                    registrationNumber + resultSet.getString("cashaccountnumber"),
+                    registrationNumber + resultSet.getString("interbankaccountnumber"));
         } catch (SQLException e) {
             System.out.println("***ERROR: Failed getting data from database***");
             e.printStackTrace();
+            System.exit(25);
         } catch (DuplicateAccountException e) {
             System.out.println("***ERROR: Duplicate account***");
             e.printStackTrace();
+            System.exit(26);
         }
         return bank;
     }
 
     @Override
-    public void resetBank(String registrationNumber){
-        executeUpdate("delete * from transactions where BankRegistrationNumber="+registrationNumber+";");
-        executeUpdate("delete * from accounts where BankRegistrationNumber="+registrationNumber+";");
-        executeUpdate("delete * from customers where BankRegistrationNumber="+registrationNumber+";");
-        executeUpdate("delete * from banks where BankRegistrationNumber="+registrationNumber+";");
+    public void resetBank(String registrationNumber) {
+        executeUpdate("delete * from transactions where BankRegistrationNumber=" + registrationNumber + ";");
+        executeUpdate("delete * from accounts where BankRegistrationNumber=" + registrationNumber + ";");
+        executeUpdate("delete * from customers where BankRegistrationNumber=" + registrationNumber + ";");
+        executeUpdate("delete * from banks where BankRegistrationNumber=" + registrationNumber + ";");
     }
 
     @Override
@@ -369,7 +397,7 @@ public class MySQLPersistence implements Persistence {
                 "ToAccount varchar(10), " +
                 "Amount bigint, " +
                 "Reference varchar(45), " +
-                "TimeStamp date, "+
+                "TimeStamp date, " +
                 "primary key (ID) " +
                 ");");
         executeUpdate("create table banks (" +
@@ -389,6 +417,7 @@ public class MySQLPersistence implements Persistence {
         } catch (SQLException ex) {
             System.out.println("***ERROR: MySQL query did not execute***");
             ex.printStackTrace();
+            System.exit(27);
         }
         return resultSet;
     }
@@ -399,6 +428,7 @@ public class MySQLPersistence implements Persistence {
         } catch (SQLException ex) {
             System.out.println("***ERROR: MySQL update did not execute***");
             ex.printStackTrace();
+            System.exit(28);
         }
     }
 
