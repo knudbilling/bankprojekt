@@ -607,11 +607,15 @@ public class GUI {
     }
 
     private void employeeDisplay() {
-        System.out.println("1 opret kunde");
-        System.out.println("2 søg kunde");
-        System.out.println("B Back");
-        System.out.println("M Main");
-        System.out.println("Q quit");
+        String screen = headerBlock;
+        screen += "|    Tast \"1\" for at oprette ny kunde.                                     | TODO employeeNewCustomerFlow()\n" +
+                  "|    Tast \"2\" for at foretage søgning.                                     |\n";
+        screen += backLine;
+        screen += mainLine;
+        screen += endLine;
+        screen += bottom;
+
+        System.out.println(screen);
     }
 
     private String employeeSearchFlow() {
@@ -630,7 +634,7 @@ public class GUI {
                     result = employeeSearchAccountNumberFlow();
                     break;
             }
-            if (isMQ(result)) return result;
+            if (isBMQ(result)) return result;
         }
     }
 
@@ -652,12 +656,17 @@ public class GUI {
     }
 
     private void employeeSearchDisplay() {
-        System.out.println("1 navn");
-        System.out.println("2 kundenummer");
-        System.out.println("3 kontonummer");
-        System.out.println("B Back");
-        System.out.println("M Main");
-        System.out.println("Q Quit");
+        String screen = headerBlock;
+        screen += "|    Søg på:                                                               |\n"+
+                  "|        Tast \"1\" for navn.                                                |\n" +
+                  "|        Tast \"2\" for kundenummer.                                         |\n" +
+                  "|        Tast \"3\" for kontonummer.                                         |\n";
+        screen += backLine;
+        screen += mainLine;
+        screen += endLine;
+        screen += bottom;
+
+        System.out.println(screen);
     }
 
     private String employeeNewCustomerFlow() {
@@ -696,6 +705,7 @@ public class GUI {
             if (customerList.size() == 0) {
                 result = employeeSearchNoMatchFlow();
             } else if (customerList.size() == 1) {
+                this.customerNumber = customerList.get(0).getidNo();
                 result = employeeCustomerFlow();
             } else { // >1
                 result = employeeSearchMatchesFlow();
@@ -712,25 +722,41 @@ public class GUI {
     }
 
     private void employeeSearchNameDisplay() {
-        System.out.println("Indtast navn");
+        String screen = headerBlock;
+        screen += "|    Indtast navn: ________                                                |\n";
+        screen += bottom;
+
+        System.out.println(screen);
     }
 
     private String employeeSearchNoMatchFlow() {
         String result;
-        result = employeeSearchNoMatchGUI();
-        return result;
-        //TODO
+        while(true) {
+            result = employeeSearchNoMatchGUI();
+            if(isBMQ(result)) return result;
+        }
+
     }
 
     private String employeeSearchNoMatchGUI() {
         String result;
-        employeeSearchNoMatchDisplay();
-        return "";
-        //TODO
+        while(true) {
+            employeeSearchNoMatchDisplay();
+            result = cleanBMQ(scanner.next());
+            scanner.nextLine();
+            if (isBMQ(result)) return result;
+        }
     }
 
     private void employeeSearchNoMatchDisplay() {
-        //TODO
+        String screen = headerBlock;
+        screen += "|    Søgning matchede ingen kunder.                                        |\n";
+        screen += backLine;
+        screen += mainLine;
+        screen += endLine;
+        screen += bottom;
+
+        System.out.println(screen);
     }
 
     private String employeeSearchMatchesFlow() {
@@ -784,27 +810,63 @@ public class GUI {
     }
 
     private void employeeSearchCustomerNumberDisplay() {
-        System.out.println("Indtast kundenummer");
-        System.out.println("B Back");
-        System.out.println("M Main");
-        System.out.println("Q Quit");
+        String screen = headerBlock;
+        screen += "|    Indtast kundenummer: ________                                         |\n";
+        screen += backLine;
+        screen += mainLine;
+        screen += endLine;
+        screen += bottom;
+
+        System.out.println(screen);
     }
 
     private String employeeSearchAccountNumberFlow() {
         String result;
-        result = employeeSearchAccountNumberGUI();
         //TODO
-        return "";
+        while (true) {
+            result = employeeSearchAccountNumberGUI();
+            if (isBMQ(result)) return result;
+            result = employeeAccountFlow();
+            if (isMQ(result)) return result;
+        }
+
     }
 
     private String employeeSearchAccountNumberGUI() {
-        employeeSearchAccountNumberDisplay();
-        //TODO
-        return "";
+        String result;
+        boolean accountFound = true;
+
+        while (true) {
+            employeeSearchAccountNumberDisplay(accountFound);
+            result = cleanBMQ(scanner.next());
+            scanner.nextLine();
+            if (isBMQ(result)) return result;
+
+            try {
+                Long.parseLong(result); //Checking that input is parsable as long.
+                if (bank.getAccount(result) != null) {
+                    this.accountNumber = accountNumber;
+                    return "" + accountNumber;
+                }
+            } catch (NumberFormatException e) {
+            }
+            accountFound = false;
+        }
     }
 
-    private void employeeSearchAccountNumberDisplay() {
-        //TODO
+    private void employeeSearchAccountNumberDisplay(boolean accountFound) {
+        String screen = headerBlock;
+        if(!accountFound) {
+            screen += "|    Kontonummer ikke fundet. Prøv igen.                                   |\n"+
+                      "|                                                                          |\n";
+        }
+        screen += "|    Indtast kontonummer: ________                                         |\n";
+        screen += backLine;
+        screen += mainLine;
+        screen += endLine;
+        screen += bottom;
+
+        System.out.println(screen);
     }
 
     private String employeeCustomerFlow() {
@@ -837,15 +899,61 @@ public class GUI {
     private void employeeCustomerDisplay() {
         Customer customer = bank.getCustomer(customerNumber);
         List<Account> accountList = customer.accountList;
+        int numSpaces = 54;
+        String screen = headerBlock;
 
-        System.out.println(customer.firstName + " " + customer.lastName);
-        for (int i = 0; i < accountList.size(); i++) {
-            System.out.println(accountList.get(i).accountNumber + " " + accountList.get(i).getBalance());
+        screen += "|    Kundenummer:    " + customerNumber;
+        String custNumAsString = ""+customerNumber;
+        for(int i = 0; i < numSpaces-custNumAsString.length(); i++) {
+            screen += " ";
         }
+        screen += "|\n";
+
+        String fullName = customer.firstName + " " + customer.lastName;
+        screen += "|    Navn:           " + fullName;
+        for(int i = 0; i < numSpaces-fullName.length(); i++) {
+            screen += " ";
+        }
+        screen += "|\n";
+
+        String address = customer.address;
+        screen += "|    Addresse:       " + address;
+        for(int i = 0; i < numSpaces-address.length(); i++) {
+            screen += " ";
+        }
+        screen += "|\n";
+
+        String phoneNo = customer.phoneNo;
+        screen += "|    Telefonnummer:  " + phoneNo;
+        for(int i = 0; i < numSpaces-phoneNo.length(); i++) {
+            screen += " ";
+        }
+        screen += "|\n";
+
+        screen += "|                                                                          |\n";
+
+        for (int i = 0; i < accountList.size(); i++) {
+            String accLine = "|    Tast \"" + (i+1) + "\" for Konto: " + accountList.get(i).accountNumber +
+                             "    Indestående: " + accountList.get(i).getBalance() + " DKK";
+            String spaces = "";
+            for(int j = 0; j < 75-accLine.length(); j++) {
+                spaces += " ";
+            }
+            screen += accLine + spaces + "|\n";
+        }
+
+        screen += "|                                                                          |\n";
+
+        screen += "|    Tast \"N\" for at oprette ny konto.                                     |\n";
+
         System.out.println("N Ny konto");
-        System.out.println("B Back");
-        System.out.println("M Main");
-        System.out.println("Q Quit");
+
+        screen += backLine;
+        screen += mainLine;
+        screen += endLine;
+        screen += bottom;
+
+        System.out.println(screen);
     }
 
     private String employeeAccountFlow() {
