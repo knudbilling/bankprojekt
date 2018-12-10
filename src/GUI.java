@@ -357,11 +357,18 @@ public class GUI {
     private void customerTransactionFromDisplay() {
         Customer customer = bank.getCustomer(customerNumber);
         List<Account> accountList = customer.accountList;
+        String accountType;
 
-        for (int i = 0; i < accountList.size(); i++)
-            System.out.println(accountList.get(i).getAccountNumber() + " : " + accountList.get(i).getBalance());
-        System.out.println("kontonummer:");
-        System.out.println("BMQ");
+        System.out.print(headerBlock);
+        System.out.println("|    Hvilken af dine konti vil du overføre penge fra?                      |");
+        System.out.println("|                                                                          |");
+        for (int i = 0; i < accountList.size(); i++) {
+            if(accountList.get(i) instanceof CurrentAccount) accountType="lønkonto";
+            else accountType="opsparingskonto";
+            System.out.printf("|    %s : %20.2f    %15s              |%n", accountList.get(i).getAccountNumber(), accountList.get(i).getBalance() / 100.0,accountType);
+        }
+        System.out.println("|                                                                          |");
+        System.out.println(backLine+mainLine+endLine+bottom);
     }
 
     private String customerTransactionFromSavingsFlow() {
