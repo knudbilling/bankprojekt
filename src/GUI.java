@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class KnudGUI {
+public class GUI {
 
     Scanner scanner = new Scanner(System.in);
     Bank bank;
@@ -66,13 +66,13 @@ public class KnudGUI {
         Persistence thePersistence = new MySQLPersistence("localhost", 3306, "bank", "user", "1234");
         theBank=thePersistence.load("9800");
 
-        KnudGUI kg = new KnudGUI(theBank, thePersistence);
+        GUI kg = new GUI(theBank, thePersistence);
         kg.mainFlow();
         System.out.println("Goodbye, come again!");
     }
 
 
-    public KnudGUI(Bank newBank, Persistence newPersistence) {
+    public GUI(Bank newBank, Persistence newPersistence) {
         this.bank = newBank;
         this.persistence = newPersistence;
         headerBlock = generateHeader(bank.getName());
