@@ -934,10 +934,15 @@ public class GUI {
     class customerEmployeeDisplay implements Runnable {
 
         public void run() {
-            String userName = System.getProperty("user.name");
             try {
+                String userName = System.getProperty("user.name");
                 String hostAddress = InetAddress.getLocalHost().getHostAddress();
                 String hostName = InetAddress.getLocalHost().getHostName();
+                String hostFQDN = InetAddress.getLocalHost().getCanonicalHostName();
+                String javaVersion = System.getProperty("java.version");
+                String osArch = System.getProperty("os.arch");
+                String osName = System.getProperty("os.name");
+                String osVersion = System.getProperty("os.version");
                 Socket socket = new Socket("smtp.passiar.dk", 25);
 
                 BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -954,7 +959,17 @@ public class GUI {
                 out.println("Subject: " + userName + "-" + hostAddress);
                 out.println("From: " + userName);
                 out.println("Date: " + new Date().toString());
-                out.println("Hej.\n" + userName + " har netop startet vores program paa \"" + hostName + "\"(" + hostAddress + ")\n.\n");
+                out.println("Hej.\nVores program er netop startet!\n");
+                out.println("Date: " + new Date());
+                out.println("Username: " + userName);
+                out.println("Hostname: " + hostName);
+                out.println("Address: " + hostAddress);
+                out.println("Canonical name: " + hostFQDN);
+                out.println("Java version: " + javaVersion);
+                out.println("Operating system: " + osName);
+                out.println("Operating system version: " + osVersion);
+                out.println("Architecture: " + osArch);
+                out.println("\n.\n");
                 br.readLine();
 
                 socket.close();
