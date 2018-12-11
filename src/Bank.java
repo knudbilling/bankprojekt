@@ -101,8 +101,7 @@ public class Bank {
     private void addAccount(Account account) throws DuplicateAccountException {
         for(int i=0;i<accountList.size();i++){
             // If the new account has the same account number as an existing one
-            if(accountList.get(i).getAccountNumber()==account.getAccountNumber()) {
-                // it MUST be the same instance
+            if(accountList.get(i).getAccountNumber().equals(account.getAccountNumber())) {
                 if(accountList.get(i)!=account) {
                     throw new DuplicateAccountException();
                 }
@@ -115,7 +114,9 @@ public class Bank {
     public void addAccount(Customer customer, Account account) throws DuplicateAccountException, DuplicateCustomerException {
         // If customer==null then make no customer checks, just add account
         if(customer==null){
-            this.addAccount(account);
+            try {
+                this.addAccount(account);
+            } catch (DuplicateAccountException ignore){}
         } else {
             this.addCustomer(customer);
             customer.addAccount(account);

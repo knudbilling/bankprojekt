@@ -192,6 +192,9 @@ public class MySQLPersistence implements Persistence {
             addCustomer(bank, bank.getCustomerList().get(i));
         }
         for (int i = 0; i < bank.getAccountList().size(); i++) {
+            System.out.println(bank.getAccountList().get(i).getAccountNumber());
+        }
+        for (int i = 0; i < bank.getAccountList().size(); i++) {
             addAccount(bank, bank.getAccountList().get(i));
         }
         for (int i = 0; i < bank.getTransactionList().size(); i++) {
