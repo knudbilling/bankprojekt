@@ -2,6 +2,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 import java.net.*;
@@ -689,32 +690,28 @@ public class GUI {
     }
 
     private String employeeNewCustomerFlow() {
-        String result;
-        result = employeeNewCustomerGUI();
-        // TODO
-        return "";
+        return employeeNewCustomerGUI();
     }
 
     private String employeeNewCustomerGUI() {
-        //TODO - Rigtigt håndteret?
         String result;
 
         while (true) {
             employeeNewCustomerDisplay();
-            result = cleanBMQ(scanner.next());
-            scanner.nextLine();
+            result = cleanBMQ(scanner.nextLine());
+            //scanner.nextLine();
             if (isBMQ(result)) return result;
 
             //Handle result
             String[] cstVals = result.split("\\s*,\\s*");
-            if (cstVals.length == 4) {
-                try {
-                    Integer.parseInt(cstVals[3]);
+            if(cstVals.length == 4) {
+                try{
+                    Integer.parseInt(cstVals[3].trim());
 
                     //Create new customer
-                    Customer customer = new Customer(cstVals[0], cstVals[1], cstVals[2], cstVals[3]);
+                    Customer customer = new Customer(cstVals[0].trim(),cstVals[1],cstVals[2],cstVals[3].trim());
                     bank.addCustomer(customer);
-                    persistence.addCustomer(bank, customer);
+                    persistence.addCustomer(bank,customer);
 
                     return "B";
 
@@ -727,7 +724,6 @@ public class GUI {
     }
 
     private void employeeNewCustomerDisplay() {
-        //TODO
         String screen = headerBlock
                 + fillLine("Indtast nødvendige kundeoplysninger: ________")
                 + fillLine("(Fornavn, Efternavn, Adresse, Telefonnummer)")
@@ -748,7 +744,7 @@ public class GUI {
 
             for (int i = 0; i < bank.getCustomerList().size(); i++) {
                 customerName = bank.getCustomerList().get(i).firstName + " " + bank.getCustomerList().get(i).lastName;
-                if (customerName.equals(result)) {
+                if (customerName.contains(result)) {
                     customerList.add(bank.getCustomerList().get(i));
                 }
             }
@@ -759,7 +755,7 @@ public class GUI {
                 this.customerNumber = customerList.get(0).getidNo();
                 result = employeeCustomerFlow();
             } else { // >1
-                result = employeeSearchMatchesFlow();
+                result = employeeSearchMatchesFlow(customerList);
             }
             if (isMQ(result)) return result;
         }
@@ -786,7 +782,6 @@ public class GUI {
             result = employeeSearchNoMatchGUI();
             if (isBMQ(result)) return result;
         }
-
     }
 
     private String employeeSearchNoMatchGUI() {
@@ -807,24 +802,48 @@ public class GUI {
         System.out.println(screen);
     }
 
-    private String employeeSearchMatchesFlow() {
+    private String employeeSearchMatchesFlow(List<Customer> customerList) {
         String result;
-        result = employeeSearchMatchesGUI();
-        return result;
-        //TODO
+        while (true) {
+            result = employeeSearchMatchesGUI(customerList);
+            if (isBMQ(result)) return result;
+            result = employeeCustomerFlow();
+            if (isMQ(result)) return result;
+        }
     }
 
-    private String employeeSearchMatchesGUI() {
+    private String employeeSearchMatchesGUI(List<Customer> customerList) {
         String result;
-        employeeSearchMatchesDisplay();
-        return "";
-        //TODO
+        while(true) {
+            employeeSearchMatchesDisplay(customerList);
+            result = cleanBMQ(scanner.next());
+            scanner.nextLine();
+            if (isBMQ(result)) return result;
+
+            try {
+                int customerNumber = Integer.parseInt(result);
+                if (bank.getCustomer(customerNumber) != null) {
+                    this.customerNumber = customerNumber;
+                    return "" + customerNumber;
+                }
+            } catch (NumberFormatException e) {
+            }
+        }
     }
 
-    private void employeeSearchMatchesDisplay() {
-        //TODO
-        String screen = headerBlock
-                + fillLine(("(tekst her)"))
+    private void employeeSearchMatchesDisplay(List<Customer> customerList) {
+        String screen = headerBlock;
+
+        for(Customer c : customerList) {
+            screen += fillLine(
+                    "Kundenummer: " + c.getidNo()
+                            + ",    " + c.firstName
+                            + " " + c.lastName
+            );
+        }
+
+        screen += fillLine()
+                + fillLine("Indtast kundenummer for at vælge kunde: ________")
                 + footerBlock;
 
         System.out.println(screen);
@@ -905,6 +924,7 @@ public class GUI {
         while (true) {
             result = employeeSearchAccountNumberGUI();
             if (isBMQ(result)) return result;
+            this.accountNumber = result;
             result = employeeAccountFlow();
             if (isMQ(result)) return result;
         }
@@ -922,8 +942,7 @@ public class GUI {
             if (isBMQ(result)) return result;
 
             if (bank.getAccount(result) != null) {
-                this.accountNumber = accountNumber;
-                return "" + accountNumber;
+                return "" + result;
             }
 
             accountFound = false;
@@ -1214,33 +1233,46 @@ public class GUI {
 
     private String employeeNoOverdraftAllowedFlow() {
         String result;
-        result = employeeNoOverdraftAllowedGUI();
-        return result;
-        //TODO
+        while (true) {
+            result = employeeNoOverdraftAllowedGUI();
+            if (isBMQ(result)) return result;
+        }
     }
 
     private String employeeNoOverdraftAllowedGUI() {
         String result;
-        employeeNoOverdraftAllowedDisplay();
-        return "";
-        //TODO
+        while (true) {
+            employeeNoOverdraftAllowedDisplay();
+            result = cleanBMQ(scanner.next());
+            scanner.nextLine();
+            if (isBMQ(result)) return result;
+        }
     }
 
     private void employeeNoOverdraftAllowedDisplay() {
-        //TODO
+        String screen = headerBlock
+                + fillLine("Der kan ikke laves overtræk på denne konto.")
+                + footerBlock;
+
+        System.out.println(screen);
     }
 
     private String employeeNotEnoughCashFlow() {
         String result;
-        result = employeeNotEnoughCashGUI();
-        return result;
+        while (true) {
+            result = employeeNotEnoughCashGUI();
+            if (isBMQ(result)) return result;
+        }
     }
 
     private String employeeNotEnoughCashGUI() {
         String result;
-        employeeNotEnoughCashDisplay();
-        return "";
-        //TODO
+        while (true) {
+            employeeNotEnoughCashDisplay();
+            result = cleanBMQ(scanner.next());
+            scanner.nextLine();
+            if (isBMQ(result)) return result;
+        }
     }
 
     private void employeeNotEnoughCashDisplay() {

@@ -27,11 +27,6 @@ public class Customer {
         this.idNo=idNo;
         if(idNo>=nextidNo) nextidNo=idNo+1;
     }
-    //default constructor.
-    //public Customer() {
-    //    idNo = nextidNo++;
-    //}
-
 
     //Methods
     public int getidNo(){
