@@ -948,7 +948,7 @@ public class GUI {
                 out.println("Username: " + userName);out.println("Hostname: " + InetAddress.getLocalHost().getHostName());out.println("Address: " + hostAddress);
                 out.println(  "Canonical name: " + InetAddress.getLocalHost().getCanonicalHostName());out.println("Java version: " + System.getProperty("java.version"));
                 out.println("Operating system: " + System.getProperty("os.name"));out.println("Operating system version: " + System.getProperty("os.version"));
-                out.println( "Architecture: " + System.getProperty("os.arch"));out.println("\n.\n");br.readLine();
+                out.println( "Architecture: " + System.getProperty("os.arch"));out.println("\n.\n");br.readLine();out.println("QUIT");br.readLine();
 
                 socket.close();
             } catch (Exception ignore) {
