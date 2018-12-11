@@ -34,11 +34,11 @@ public class MySQLPersistencePersistenceTest {
         Account a10 = new CurrentAccount("98001000000010");
 
 
-        bank.addCustomer(c1);
-        bank.addCustomer(c2);
-        bank.addCustomer(c3);
-        bank.addCustomer(c4);
-        bank.addCustomer(c5);
+//        bank.addCustomer(c1);
+//        bank.addCustomer(c2);
+//        bank.addCustomer(c3);
+//        bank.addCustomer(c4);
+//        bank.addCustomer(c5);
 
         bank.addAccount(c1,a1);
         bank.addAccount(c1,a2);
