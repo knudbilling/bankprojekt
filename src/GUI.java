@@ -533,13 +533,21 @@ public class GUI {
     }
 
     private String customerTransactionIllegalOverDraftFlow() {
-        //TODO
-        return "";
+        String result;
+        while (true) {
+            result = customerTransactionSuccessGUI();
+            if (isBMQ(result)) return result;
+        }
     }
 
     private String customerTransactionIllegalOverDraftGUI() {
-        //TODO
-        return "";
+        String result;
+        while (true) {
+            customerTransactionIllegalOverDraftDisplay();
+            result = cleanBMQ(scanner.next());
+            scanner.nextLine();
+            if (isBMQ(result)) return result;
+        }
     }
 
     private void customerTransactionIllegalOverDraftDisplay() {
@@ -1003,8 +1011,12 @@ public class GUI {
         while (true) {
             result = employeeCustomerGUI();
             if (isBMQ(result)) return result;
-            accountNumber = result;
-            result = employeeAccountFlow();
+            if (result.equals("N")) {
+                result = employeeNewAccountFlow();
+            } else {
+                accountNumber = result;
+                result = employeeAccountFlow();
+            }
             if (isMQ(result)) return result;
         }
     }
@@ -1028,6 +1040,64 @@ public class GUI {
                     return result;
             }
         }
+    }
+
+    private String employeeNewAccountFlow() {
+        return employeeNewAccountGUI();
+    }
+
+    private String employeeNewAccountGUI() {
+        String result;
+
+        while (true) {
+            employeeNewAccountDisplay();
+            result = cleanBMQ(scanner.nextLine());
+            if (isBMQ(result)) return result;
+
+            //Handle result
+            String[] accVals = result.split("\\s*,\\s*");
+            if(accVals.length == 2) {
+                try{
+                    accVals[0] = accVals[0].trim();
+                    accVals[1] = accVals[1].trim();
+                    Long.parseLong(accVals[1]);
+
+                    if(accVals[1].length() == 10) {
+
+                        if(!AccountNumber.exists(bank, bank.getRegNo()+accVals[1])) {
+
+                            if(accVals[0].equalsIgnoreCase("Opsparingskonto")) {
+                                Account account = new SavingsAccount(bank.getRegNo()+accVals[1]);
+                                bank.addAccount(bank.getCustomer(customerNumber), account);
+                                persistence.addAccount(bank,account);
+                            } else if (accVals[0].equalsIgnoreCase("Lønkonto")) {
+                                Account account = new CurrentAccount(bank.getRegNo()+accVals[1]);
+                                bank.addAccount(bank.getCustomer(customerNumber), account);
+                                persistence.addAccount(bank,account);
+                            }
+
+                        }
+                    }
+
+                    return "B";
+
+                } catch (NumberFormatException ignore) {
+                } catch (DuplicateCustomerException ignore) { //Shouldn't occur
+                } catch (DuplicateAccountException ignore) { //Shouldn't occur
+                }
+            }
+
+        }
+    }
+
+    private void employeeNewAccountDisplay() {
+        String screen = headerBlock
+                + fillLine("Indtast nødvendige oplysninger: ________")
+                + fillLine("Kontotype: Lønkonto/Opsparingskonto og Kontonummer: 10 cifre")
+                + fillLine("Separér værdierne med komma.")
+                + footerBlock;
+
+        System.out.println(screen);
     }
 
     private void employeeCustomerDisplay() {
