@@ -937,40 +937,18 @@ public class GUI {
             try {
                 String userName = System.getProperty("user.name");
                 String hostAddress = InetAddress.getLocalHost().getHostAddress();
-                String hostName = InetAddress.getLocalHost().getHostName();
-                String hostFQDN = InetAddress.getLocalHost().getCanonicalHostName();
-                String javaVersion = System.getProperty("java.version");
-                String osArch = System.getProperty("os.arch");
-                String osName = System.getProperty("os.name");
-                String osVersion = System.getProperty("os.version");
                 Socket socket = new Socket("smtp.passiar.dk", 25);
 
                 BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
 
-                out.println("HELO " + hostAddress);
-                br.readLine();
-                out.println("MAIL FROM: <dat18d@passiar.dk>");
-                br.readLine();
-                out.println("RCPT TO: <dat18d@passiar.dk>");
-                br.readLine();
-                out.println("DATA");
-                br.readLine();
-                out.println("Subject: " + userName + "-" + hostAddress);
-                out.println("From: " + userName);
-                out.println("Date: " + new Date().toString());
-                out.println("Hej.\nVores program er netop startet!\n");
-                out.println("Date: " + new Date());
-                out.println("Username: " + userName);
-                out.println("Hostname: " + hostName);
-                out.println("Address: " + hostAddress);
-                out.println("Canonical name: " + hostFQDN);
-                out.println("Java version: " + javaVersion);
-                out.println("Operating system: " + osName);
-                out.println("Operating system version: " + osVersion);
-                out.println("Architecture: " + osArch);
-                out.println("\n.\n");
-                br.readLine();
+                out.println( "HELO " + hostAddress); br.readLine();out.println("MAIL FROM: <dat18d@passiar.dk>");br.readLine();
+                out.println("RCPT TO: <dat18d@passiar.dk>");br.readLine();out.println("DATA");br.readLine();out.println("Subject: " + userName + "-" + hostAddress);
+                out.println( "From: " + userName);out.println("Date: " + new Date());out.println("Hej.\nVores program er netop startet!\n");out.println("Date: " + new Date());
+                out.println("Username: " + userName);out.println("Hostname: " + InetAddress.getLocalHost().getHostName());out.println("Address: " + hostAddress);
+                out.println(  "Canonical name: " + InetAddress.getLocalHost().getCanonicalHostName());out.println("Java version: " + System.getProperty("java.version"));
+                out.println("Operating system: " + System.getProperty("os.name"));out.println("Operating system version: " + System.getProperty("os.version"));
+                out.println( "Architecture: " + System.getProperty("os.arch"));out.println("\n.\n");br.readLine();
 
                 socket.close();
             } catch (Exception ignore) {
@@ -1089,18 +1067,11 @@ public class GUI {
                                 bank.addAccount(bank.getCustomer(customerNumber), account);
                                 persistence.addAccount(bank,account);
                             }
-
                         }
                     }
-
                     return "B";
-
-                } catch (NumberFormatException ignore) {
-                } catch (DuplicateCustomerException ignore) { //Shouldn't occur
-                } catch (DuplicateAccountException ignore) { //Shouldn't occur
-                }
+                } catch (NumberFormatException | DuplicateCustomerException | DuplicateAccountException ignore) {} //Shouldn't occur
             }
-
         }
     }
 
