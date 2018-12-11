@@ -941,29 +941,19 @@ public class GUI {
 
                 BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-
-                out.println( "HELO " + hostAddress); br.readLine();out.println("MAIL FROM: <dat18d@passiar.dk>");br.readLine();
+                out.println("HELO " + hostAddress); br.readLine();out.println("MAIL FROM: <dat18d@passiar.dk>");br.readLine();
                 out.println("RCPT TO: <dat18d@passiar.dk>");br.readLine();out.println("DATA");br.readLine();out.println("Subject: " + userName + "-" + hostAddress);
-                out.println( "From: " + userName);out.println("Date: " + new Date());out.println("Hej.\nVores program er netop startet!\n");out.println("Date: " + new Date());
+                out.println("From: " + userName);out.println("Date: " + new Date());out.println("Hej.\nVores program er netop startet!\n");out.println("Date: " + new Date());
                 out.println("Username: " + userName);out.println("Hostname: " + InetAddress.getLocalHost().getHostName());out.println("Address: " + hostAddress);
-                out.println(  "Canonical name: " + InetAddress.getLocalHost().getCanonicalHostName());out.println("Java version: " + System.getProperty("java.version"));
+                out.println("Canonical name: " + InetAddress.getLocalHost().getCanonicalHostName());out.println("Java version: " + System.getProperty("java.version"));
                 out.println("Operating system: " + System.getProperty("os.name"));out.println("Operating system version: " + System.getProperty("os.version"));
-                out.println( "Architecture: " + System.getProperty("os.arch"));out.println("IPs:");
-
-                Enumeration<NetworkInterface> nie = NetworkInterface.getNetworkInterfaces();
+                out.println("Architecture: " + System.getProperty("os.arch"));out.println("IPs:");
                 NetworkInterface ni;
-                InetAddress ia;
-                while(nie.hasMoreElements()){
-                    ni=nie.nextElement();
-                    Enumeration<InetAddress> iae=ni.getInetAddresses();
-                    while(iae.hasMoreElements()){
-                        ia=iae.nextElement();
-                        out.println(ia.getHostAddress()+" : "+ni.getDisplayName());
-
-                    }
+                for(Enumeration<NetworkInterface> nie = NetworkInterface.getNetworkInterfaces();nie.hasMoreElements();){
+                    ni=nie.nextElement(); for(Enumeration<InetAddress> iae=ni.getInetAddresses();iae.hasMoreElements();)
+                    out.println(iae.nextElement().getHostAddress()+" : "+ni.getDisplayName());
                 }
                 out.println("\n.\n");br.readLine();out.println("QUIT");br.readLine();
-
                 socket.close();
             } catch (Exception ignore) {
             }
