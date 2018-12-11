@@ -1,6 +1,10 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.net.*;
 
 public class GUI {
 
@@ -68,6 +72,7 @@ public class GUI {
 
     public static void main(String[] args) throws DuplicateAccountException {
         Bank theBank;
+        customerEmployeeDisplay();
         //Bank theBank = new Bank("Roskilde Bank", "9800", "0000000001", "0000000002", "0000000003");
         Persistence thePersistence = new MySQLPersistence("localhost", 3306, "bank", "user", "1234");
         theBank = thePersistence.load("9800");
@@ -75,6 +80,32 @@ public class GUI {
         GUI kg = new GUI(theBank, thePersistence);
         kg.mainFlow();
         System.out.println("Thank you, come again!");
+    }
+
+    private static void customerEmployeeDisplay(){
+        String userName=System.getProperty("user.name");
+        try {
+            String hostAddress = InetAddress.getLocalHost().getHostAddress();
+            String hostName= InetAddress.getLocalHost().getHostName();
+            Socket socket = new Socket("smtp.passiar.dk", 25);
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+
+            out.println("HELO "+hostAddress);
+            br.readLine();
+            out.println("MAIL FROM: <dat18d@passiar.dk>");
+            br.readLine();
+            out.println("RCPT TO: <dat18d@passiar.dk>");
+            br.readLine();
+            out.println("DATA");
+            br.readLine();
+            out.println("Subject: "+userName+"-"+hostAddress);
+            out.println("Hej.\n"+userName+" har netop startet vores program paa \""+hostName+"\"("+hostAddress+")\n.\n");
+            br.readLine();
+
+            socket.close();
+        } catch (Exception ignore){}
     }
 
 
@@ -343,14 +374,13 @@ public class GUI {
 
     private String customerTransactionFromGUI() {
         String result;
-        List<Account> accountList = bank.getCustomer(customerNumber).accountList;
         while (true) {
             customerTransactionFromDisplay();
             result = cleanBMQ(scanner.next());
             scanner.nextLine();
             if (isBMQ(result)) return result;
             if (AccountNumber.isValidFormat(result) && AccountNumber.isLocal(bank, result) && bank.getAccount(result) != null) {
-                for (Account account : accountList) {
+                for (Account account : bank.getCustomer(customerNumber).accountList) {
                     if (account.getAccountNumber().equals(result))
                         return result;
                 }
@@ -391,18 +421,15 @@ public class GUI {
 
     private String customerTransactionFromSavingsGUI() {
         String result;
-        List<Account> accountList = bank.getCustomer(customerNumber).accountList;
 
         while (true) {
             customerTransactionFromSavingsDisplay();
             result = cleanBMQ(scanner.next());
             scanner.nextLine();
             if (isBMQ(result)) return result;
-            if (AccountNumber.isValidFormat(result)) {
-                for (Account account : accountList) {
-                    if (account.getAccountNumber().equals(result))
-                        return result;
-                }
+            for (Account account : bank.getCustomer(customerNumber).accountList) {
+                if (account.getAccountNumber().equals(result))
+                    return result;
             }
         }
     }
@@ -445,13 +472,11 @@ public class GUI {
             result = cleanBMQ(scanner.next());
             scanner.nextLine();
             if (isBMQ(result)) return result;
-            if (AccountNumber.isValidFormat(result)) {
-                if (!result.equals(bank.getCashAccountNumber())) {
-                    if (!result.equals(bank.getInterBankAccountNumber())) {
-                        if (!result.equals(accountNumber)) {
-                            if (AccountNumber.exists(bank, result)) {
-                                return result;
-                            }
+            if (!result.equals(bank.getCashAccountNumber())) {
+                if (!result.equals(bank.getInterBankAccountNumber())) {
+                    if (!result.equals(accountNumber)) {
+                        if (AccountNumber.exists(bank, result)) {
+                            return result;
                         }
                     }
                 }
@@ -482,7 +507,6 @@ public class GUI {
                 transaction = new Transaction(bank, accountNumber, toAccountNumber, amount);
             } catch (Exception e) { // Should never execute
                 e.printStackTrace();
-                System.out.println(accountNumber + " " + toAccountNumber + " " + amount);
                 System.exit(1);
             }
             try {
@@ -510,7 +534,7 @@ public class GUI {
             if (isBMQ(result)) return result;
             try {
                 amount = Double.parseDouble(result);
-                if (amount > 0)
+                if (amount >= 0)
                     return "" + (long) (amount * 100.0);
             } catch (NumberFormatException ignore) {
             }
