@@ -685,14 +685,10 @@ public class GUI {
     }
 
     private String employeeNewCustomerFlow() {
-        String result;
-        result = employeeNewCustomerGUI();
-        // TODO
-        return "";
+        return employeeNewCustomerGUI();
     }
 
     private String employeeNewCustomerGUI() {
-        //TODO - Rigtigt håndteret?
         String result;
 
         while (true) {
@@ -702,20 +698,27 @@ public class GUI {
             if (isBMQ(result)) return result;
 
             //Handle result
-            String[] cstVals = result.split("\\s*,\\s*");
+            String[] cstVals = result.split(",");
             if(cstVals.length == 4) {
                 try{
-                    Integer.parseInt(cstVals[3]);
+                    Integer.parseInt(cstVals[3].trim());
+
+                    System.out.println(cstVals[0].trim());
+                    System.out.println(cstVals[1].trim());
+                    System.out.println(cstVals[2].trim());
+                    System.out.println(cstVals[3].trim());
 
                     //Create new customer
-                    Customer customer = new Customer(cstVals[0],cstVals[1],cstVals[2],cstVals[3]);
+                    Customer customer = new Customer(cstVals[0].trim(),cstVals[1].trim(),cstVals[2].trim(),cstVals[3].trim());
                     bank.addCustomer(customer);
                     persistence.addCustomer(bank,customer);
 
                     return "B";
 
                 } catch (NumberFormatException ignore) {
+                    System.out.println("Ping");
                 } catch (DuplicateCustomerException ignore) { //Shouldn't occur
+                    System.out.println("Pong");
                 }
             }
 
@@ -900,6 +903,7 @@ public class GUI {
         while (true) {
             result = employeeSearchAccountNumberGUI();
             if (isBMQ(result)) return result;
+            this.accountNumber = result;
             result = employeeAccountFlow();
             if (isMQ(result)) return result;
         }
@@ -917,8 +921,7 @@ public class GUI {
             if (isBMQ(result)) return result;
 
             if (bank.getAccount(result) != null) {
-                this.accountNumber = accountNumber;
-                return "" + accountNumber;
+                return "" + result;
             }
 
             accountFound = false;
