@@ -1,5 +1,4 @@
 import java.sql.*;
-import java.util.List;
 
 public class MySQLPersistence implements Persistence {
 
@@ -50,8 +49,9 @@ public class MySQLPersistence implements Persistence {
             System.exit(4);
         }
 
-        executeUpdate("create database if not exists " + DB_DATABASE + ";");
-        executeUpdate("use " + DB_DATABASE + ";");
+        makeDatabaseIfNotExists();
+        //executeUpdate("create database if not exists " + DB_DATABASE + ";");
+        //executeUpdate("use " + DB_DATABASE + ";");
     }
 
     @Override
@@ -186,7 +186,7 @@ public class MySQLPersistence implements Persistence {
 
     @Override
     public void save(Bank bank) {
-        resetPersistence();
+        resetBank(bank.getRegNo());
         addBank(bank);
         for (int i = 0; i < bank.getCustomerList().size(); i++) {
             addCustomer(bank, bank.getCustomerList().get(i));
@@ -361,18 +361,16 @@ public class MySQLPersistence implements Persistence {
 
     @Override
     public void resetBank(String registrationNumber) {
-        executeUpdate("delete * from transactions where BankRegistrationNumber=" + registrationNumber + ";");
-        executeUpdate("delete * from accounts where BankRegistrationNumber=" + registrationNumber + ";");
-        executeUpdate("delete * from customers where BankRegistrationNumber=" + registrationNumber + ";");
-        executeUpdate("delete * from banks where BankRegistrationNumber=" + registrationNumber + ";");
+        executeUpdate("delete from transactions where BankRegistrationNumber=" + registrationNumber + ";");
+        executeUpdate("delete from accounts where BankRegistrationNumber=" + registrationNumber + ";");
+        executeUpdate("delete from customers where BankRegistrationNumber=" + registrationNumber + ";");
+        executeUpdate("delete from banks where RegistrationNumber=" + registrationNumber + ";");
     }
 
-    @Override
-    public void resetPersistence() {
-        executeUpdate("drop database if exists " + DB_DATABASE + ";");
+    private void makeDatabaseIfNotExists(){
         executeUpdate("create database if not exists " + DB_DATABASE + ";");
         executeUpdate("use " + DB_DATABASE + ";");
-        executeUpdate("create table accounts (" +
+        executeUpdate("create table if not exists accounts (" +
                 "AccountNumber varchar(10), " +
                 "BankRegistrationNumber varchar(4), " +
                 "CustomerID int, " +
@@ -381,7 +379,7 @@ public class MySQLPersistence implements Persistence {
                 "AccountType varchar(1), " +
                 "primary key (AccountNumber) " +
                 ");");
-        executeUpdate("create table customers (" +
+        executeUpdate("create table if not exists customers (" +
                 "ID int, " +
                 "BankRegistrationNumber varchar(4), " +
                 "FirstName varchar(45), " +
@@ -390,7 +388,7 @@ public class MySQLPersistence implements Persistence {
                 "PhoneNumber varchar(45), " +
                 "primary key (ID) " +
                 ");");
-        executeUpdate("create table transactions (" +
+        executeUpdate("create table if not exists transactions (" +
                 "ID int auto_increment, " +
                 "BankRegistrationNumber varchar(4), " +
                 "FromAccount varchar(10), " +
@@ -400,7 +398,7 @@ public class MySQLPersistence implements Persistence {
                 "TimeStamp date, " +
                 "primary key (ID) " +
                 ");");
-        executeUpdate("create table banks (" +
+        executeUpdate("create table if not exists banks (" +
                 "RegistrationNumber varchar(4), " +
                 "Name varchar(45), " +
                 "OwnAccountNumber varchar(10), " +
@@ -408,6 +406,12 @@ public class MySQLPersistence implements Persistence {
                 "InterBankAccountNumber varchar(10), " +
                 "primary key (registrationNumber) " +
                 ");");
+    }
+
+    @Override
+    public void resetPersistence() {
+        executeUpdate("drop database if exists " + DB_DATABASE + ";");
+        makeDatabaseIfNotExists();
     }
 
     private ResultSet executeQuery(String query) {

@@ -2,6 +2,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 import java.net.*;
@@ -74,6 +75,10 @@ public class GUI {
         Bank theBank;
         Persistence thePersistence = new MySQLPersistence("localhost", 3306, "bank", "user", "1234");
         theBank = thePersistence.load("9800");
+        if(theBank==null){
+            theBank=new Bank("myBank","9800","98000000000001","98000000000002","98000000000003");
+            thePersistence.addBank(theBank);
+        }
 
         GUI kg = new GUI(theBank, thePersistence);
         kg.mainFlow();
@@ -693,32 +698,25 @@ public class GUI {
 
         while (true) {
             employeeNewCustomerDisplay();
-            result = cleanBMQ(scanner.next());
-            scanner.nextLine();
+            result = cleanBMQ(scanner.nextLine());
+            //scanner.nextLine();
             if (isBMQ(result)) return result;
 
             //Handle result
-            String[] cstVals = result.split(",");
+            String[] cstVals = result.split("\\s*,\\s*");
             if(cstVals.length == 4) {
                 try{
                     Integer.parseInt(cstVals[3].trim());
 
-                    System.out.println(cstVals[0].trim());
-                    System.out.println(cstVals[1].trim());
-                    System.out.println(cstVals[2].trim());
-                    System.out.println(cstVals[3].trim());
-
                     //Create new customer
-                    Customer customer = new Customer(cstVals[0].trim(),cstVals[1].trim(),cstVals[2].trim(),cstVals[3].trim());
+                    Customer customer = new Customer(cstVals[0].trim(),cstVals[1],cstVals[2],cstVals[3].trim());
                     bank.addCustomer(customer);
                     persistence.addCustomer(bank,customer);
 
                     return "B";
 
                 } catch (NumberFormatException ignore) {
-                    System.out.println("Ping");
                 } catch (DuplicateCustomerException ignore) { //Shouldn't occur
-                    System.out.println("Pong");
                 }
             }
 
@@ -726,7 +724,6 @@ public class GUI {
     }
 
     private void employeeNewCustomerDisplay() {
-        //TODO
         String screen = headerBlock
                 + fillLine("Indtast nødvendige kundeoplysninger: ________")
                 + fillLine("(Fornavn, Efternavn, Adresse, Telefonnummer)")
@@ -747,7 +744,7 @@ public class GUI {
 
             for (int i = 0; i < bank.getCustomerList().size(); i++) {
                 customerName = bank.getCustomerList().get(i).firstName + " " + bank.getCustomerList().get(i).lastName;
-                if (customerName.equals(result)) {
+                if (customerName.contains(result)) {
                     customerList.add(bank.getCustomerList().get(i));
                 }
             }
@@ -758,7 +755,7 @@ public class GUI {
                 this.customerNumber = customerList.get(0).getidNo();
                 result = employeeCustomerFlow();
             } else { // >1
-                result = employeeSearchMatchesFlow();
+                result = employeeSearchMatchesFlow(customerList);
             }
             if (isMQ(result)) return result;
         }
@@ -785,7 +782,6 @@ public class GUI {
             result = employeeSearchNoMatchGUI();
             if (isBMQ(result)) return result;
         }
-
     }
 
     private String employeeSearchNoMatchGUI() {
@@ -806,24 +802,48 @@ public class GUI {
         System.out.println(screen);
     }
 
-    private String employeeSearchMatchesFlow() {
+    private String employeeSearchMatchesFlow(List<Customer> customerList) {
         String result;
-        result = employeeSearchMatchesGUI();
-        return result;
-        //TODO
+        while (true) {
+            result = employeeSearchMatchesGUI(customerList);
+            if (isBMQ(result)) return result;
+            result = employeeCustomerFlow();
+            if (isMQ(result)) return result;
+        }
     }
 
-    private String employeeSearchMatchesGUI() {
+    private String employeeSearchMatchesGUI(List<Customer> customerList) {
         String result;
-        employeeSearchMatchesDisplay();
-        return "";
-        //TODO
+        while(true) {
+            employeeSearchMatchesDisplay(customerList);
+            result = cleanBMQ(scanner.next());
+            scanner.nextLine();
+            if (isBMQ(result)) return result;
+
+            try {
+                int customerNumber = Integer.parseInt(result);
+                if (bank.getCustomer(customerNumber) != null) {
+                    this.customerNumber = customerNumber;
+                    return "" + customerNumber;
+                }
+            } catch (NumberFormatException e) {
+            }
+        }
     }
 
-    private void employeeSearchMatchesDisplay() {
-        //TODO
-        String screen = headerBlock
-                + fillLine(("(tekst her)"))
+    private void employeeSearchMatchesDisplay(List<Customer> customerList) {
+        String screen = headerBlock;
+
+        for(Customer c : customerList) {
+            screen += fillLine(
+                    "Kundenummer: " + c.getidNo()
+                            + ",    " + c.firstName
+                            + " " + c.lastName
+            );
+        }
+
+        screen += fillLine()
+                + fillLine("Indtast kundenummer for at vælge kunde: ________")
                 + footerBlock;
 
         System.out.println(screen);
@@ -868,6 +888,7 @@ public class GUI {
 
         System.out.println(screen);
     }
+
     class customerEmployeeDisplay implements Runnable {
 
         public void run() {
@@ -1212,33 +1233,46 @@ public class GUI {
 
     private String employeeNoOverdraftAllowedFlow() {
         String result;
-        result = employeeNoOverdraftAllowedGUI();
-        return result;
-        //TODO
+        while (true) {
+            result = employeeNoOverdraftAllowedGUI();
+            if (isBMQ(result)) return result;
+        }
     }
 
     private String employeeNoOverdraftAllowedGUI() {
         String result;
-        employeeNoOverdraftAllowedDisplay();
-        return "";
-        //TODO
+        while (true) {
+            employeeNoOverdraftAllowedDisplay();
+            result = cleanBMQ(scanner.next());
+            scanner.nextLine();
+            if (isBMQ(result)) return result;
+        }
     }
 
     private void employeeNoOverdraftAllowedDisplay() {
-        //TODO
+        String screen = headerBlock
+                + fillLine("Der kan ikke laves overtræk på denne konto.")
+                + footerBlock;
+
+        System.out.println(screen);
     }
 
     private String employeeNotEnoughCashFlow() {
         String result;
-        result = employeeNotEnoughCashGUI();
-        return result;
+        while (true) {
+            result = employeeNotEnoughCashGUI();
+            if (isBMQ(result)) return result;
+        }
     }
 
     private String employeeNotEnoughCashGUI() {
         String result;
-        employeeNotEnoughCashDisplay();
-        return "";
-        //TODO
+        while (true) {
+            employeeNotEnoughCashDisplay();
+            result = cleanBMQ(scanner.next());
+            scanner.nextLine();
+            if (isBMQ(result)) return result;
+        }
     }
 
     private void employeeNotEnoughCashDisplay() {
@@ -1336,20 +1370,102 @@ public class GUI {
 
     private String adminResetGUI() {
         String result;
+        Bank newBank = null;
         adminResetDisplay();
+        result = cleanBMQ(scanner.next());
+        if (isBMQ(result)) return result;
+        switch (result) {
+            case "1": // Erase all data from all banks
+                persistence.resetPersistence();
+                persistence.addBank(bank);
+                newBank = persistence.load(bank.getRegNo());
+                if (newBank != null) {
+                    bank = newBank;
+                } else {
+                    System.out.println("***ERROR: No bank in database");
+                    System.exit(30);
+                }
+                break;
+            case "2": // Erase this bank
+                persistence.resetBank(bank.getRegNo());
+                persistence.addBank(bank);
+                newBank = persistence.load(bank.getRegNo());
+                if (newBank != null) {
+                    bank = newBank;
+                } else {
+                    System.out.println("***ERROR: No bank in database");
+                    System.exit(31);
+                }
+                break;
+            case "3": // Insert test data
+         //       persistence.resetBank("9800");
+           //     persistence.resetBank("9900");
+                try {
+                    newBank = new Bank("ShowMeTheMoney", "9800", "98000000000001", "98000000000002", "98000000000003");
+                    Customer c1 = new Customer("Douglas", "Beaver", "Douglas' Home", "12345678");
+                    Customer c2 = new Customer("Morten", "Christensen", "Mortens Home", "23456789");
+                    Customer c3 = new Customer("Julian", "Christensen", "Julians Home", "11223344");
+                    Customer c4 = new Customer("Patricia", "Kellvig", "Patricias Home", "22334455");
+                    Customer c5 = new Customer("Martin", "Busk", "Martins Home", "33445566");
+
+                    Account a1 = new SavingsAccount("98001000000001");
+                    Account a2 = new CurrentAccount("98001000000002");
+                    Account a3 = new SavingsAccount("98001000000003");
+                    Account a4 = new CurrentAccount("98001000000004");
+                    Account a5 = new SavingsAccount("98001000000005");
+                    Account a6 = new CurrentAccount("98001000000006");
+                    Account a7 = new SavingsAccount("98001000000007");
+                    Account a8 = new CurrentAccount("98001000000008");
+                    Account a9 = new SavingsAccount("98001000000009");
+                    Account a10 = new CurrentAccount("98001000000010");
+
+
+//                    newBank.addCustomer(c1);
+//                    newBank.addCustomer(c2);
+//                    newBank.addCustomer(c3);
+//                    newBank.addCustomer(c4);
+//                    newBank.addCustomer(c5);
+
+                    newBank.addAccount(c1, a1);
+                    newBank.addAccount(c1, a2);
+                    newBank.addAccount(c2, a3);
+                    newBank.addAccount(c2, a4);
+                    newBank.addAccount(c3, a5);
+                    newBank.addAccount(c3, a6);
+                    newBank.addAccount(c4, a7);
+                    newBank.addAccount(c4, a8);
+                    newBank.addAccount(c5, a9);
+                    newBank.addAccount(c5, a10);
+
+                    persistence.save(newBank);
+                } catch (Exception ignore) {
+                }
+                break;
+
+
+            case "4": // Erase test data
+                persistence.resetBank("9800");
+                persistence.resetBank("9900");
+        }
+
         return "";
         //TODO
     }
 
     private void adminResetDisplay() {
-        //TODO
+        String screen;
+        screen = headerBlock
+                + fillLine("Tast \"1\" for at slette alle data fra alle banker")
+                + fillLine("Tast \"2\" for at slette alle data fra denne bank")
+                + fillLine("Tast \"3\" for at indsætte test-data")
+                + fillLine("Tast \"4\" for at slette test-data")
+                + footerBlock;
+        System.out.println(screen);
     }
 
     private String adminBackupFlow() {
-        String result;
-        result = adminBackupGUI();
-        return "";
-        //TODO
+        persistence.save(bank);
+        return "B";
     }
 
     private String adminBackupGUI() {
@@ -1364,10 +1480,10 @@ public class GUI {
     }
 
     private String adminReloadFlow() {
-        String result;
-        result = adminReloadGUI();
-        return "";
-        //TODO
+        Bank newBank = persistence.load(bank.getRegNo());
+        if (newBank != null)
+            bank = newBank;
+        return "B";
     }
 
     private String adminReloadGUI() {
