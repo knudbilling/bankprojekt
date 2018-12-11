@@ -532,14 +532,51 @@ public class GUI {
         System.out.println(screen);
     }
 
+    private String customerTransactionIllegalOverDraftFlow() {
+        //TODO
+        return "";
+    }
+
+    private String customerTransactionIllegalOverDraftGUI() {
+        //TODO
+        return "";
+    }
+
     private void customerTransactionIllegalOverDraftDisplay() {
-        System.out.println("Fejl i beløb. For stort?");
-        //TODO - Formatering?
+        String screen = headerBlock
+                + fillLine("Der kan ikke laves overtræk på denne konto.")
+                + footerBlock;
+
+        System.out.println(screen);
+    }
+
+    private String customerTransactionSuccessFlow() {
+        String result;
+        while (true) {
+            result = customerTransactionSuccessGUI();
+            if (isMQ(result)) return result;
+        }
+    }
+
+    private String customerTransactionSuccessGUI() {
+        String result;
+        while (true) {
+            customerTransactionSuccessDisplay();
+            result = cleanBMQ(scanner.next());
+            scanner.nextLine();
+            if (isMQ(result)) return result;
+        }
     }
 
     private void customerTransactionSuccessDisplay() {
-        System.out.println("Overførsel gennemført");
-        //TODO - Formatering?
+        String screen = headerBlock
+                + fillLine("Overførsel gennemført.")
+                + fillLine()
+                + mainLine
+                + endLine
+                + bottom;
+
+        System.out.println(screen);
     }
 
 
@@ -706,7 +743,7 @@ public class GUI {
             String[] cstVals = result.split("\\s*,\\s*");
             if(cstVals.length == 4) {
                 try{
-                    Integer.parseInt(cstVals[3].trim());
+                    Long.parseLong(cstVals[3].trim());
 
                     //Create new customer
                     Customer customer = new Customer(cstVals[0].trim(),cstVals[1],cstVals[2],cstVals[3].trim());
@@ -966,6 +1003,7 @@ public class GUI {
         while (true) {
             result = employeeCustomerGUI();
             if (isBMQ(result)) return result;
+            accountNumber = result;
             result = employeeAccountFlow();
             if (isMQ(result)) return result;
         }
@@ -1174,7 +1212,7 @@ public class GUI {
             amount = Long.parseLong(result);
 
             try {
-                transaction = new Transaction(bank, accountNumber, toAccountNumber, amount);
+                transaction = new Transaction(bank, accountNumber, bank.getCashAccountNumber(), amount);
             } catch (Exception e) {  // Should never happen
                 e.printStackTrace();
             }
@@ -1286,16 +1324,62 @@ public class GUI {
 
     private String employeeDepositFlow() {
         String result;
-        result = employeeDepositGUI();
-        return result;
-        //TODO
+        Transaction transaction = null;
+        int error;
+
+        while (true) {
+            error = 0;
+            result = employeeDepositGUI();
+            if (isBMQ(result)) return result;
+            amount = Long.parseLong(result);
+
+            try {
+                transaction = new Transaction(bank, bank.getCashAccountNumber(), accountNumber, amount);
+            } catch (Exception e) {  // Should never happen
+                e.printStackTrace();
+            }
+
+            try {
+                bank.addTransaction(transaction);
+            } catch (NoOverdraftAllowedException e) {
+                error = 1;
+            } catch (NotEnoughCashException e) {
+                error = 2;
+            } catch (Exception e) { // Should never happen
+                e.printStackTrace();
+            }
+            switch (error) {
+                case 0:
+                    persistence.addTransaction(bank, transaction);
+                    return "B";
+                case 1:
+                    result = employeeNoOverdraftAllowedFlow();
+                    break;
+                case 2:
+                    result = employeeNotEnoughCashFlow();
+                    break;
+            }
+            if (isMQ(result)) return result;
+        }
     }
 
     private String employeeDepositGUI() {
         String result;
-        employeeDepositDisplay();
-        return "";
-        //TODO
+        double doubleResult;
+
+        while (true) {
+            employeeDepositDisplay();
+            result = cleanBMQ(scanner.next());
+            scanner.nextLine();
+            if (isBMQ(result)) return result;
+            try {
+                doubleResult = Double.parseDouble(result) * 100.0;
+                if (doubleResult > 0)
+                    return "" + ((long) doubleResult);
+            } catch (NumberFormatException e) {
+            }
+        }
+
     }
 
     private void employeeDepositDisplay() {
