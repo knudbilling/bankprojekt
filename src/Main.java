@@ -16,14 +16,10 @@ public class Main {
         Persistence persistence = new MySQLPersistence(DB_HOST,DB_PORT,DB_DATABASE,DB_USER,DB_PASSWORD);
         Bank bank = persistence.load(REGISTRATION_NUMBER);
         if (bank == null) {
-            bank = new Bank("Britta og Steins Bank", REGISTRATION_NUMBER
+            bank = new Bank("KEA Bank", REGISTRATION_NUMBER
                     , REGISTRATION_NUMBER + OWN_ACCOUNT_NUMBER
                     , REGISTRATION_NUMBER + CASH_ACCOUNT_NUMBER
                     , REGISTRATION_NUMBER + INTER_BANK_ACCOUNT_NUMBER);
-            if(bank==null){
-                System.out.println("***ERROR: Could not create bank***");
-                return;
-            }
             persistence.addBank(bank);
         }
 
