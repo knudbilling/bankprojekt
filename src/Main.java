@@ -1,11 +1,12 @@
 public class Main {
 
-    private static final String REGISTRATION_NUMBER = "9800";
     private static final String DB_HOST= "localhost";
     private static final int DB_PORT = 3306;
     private static final String DB_DATABASE = "bank";
     private static final String DB_USER = "user";
     private static final String DB_PASSWORD = "1234";
+
+    private static final String REGISTRATION_NUMBER = "9800";
     private static final String OWN_ACCOUNT_NUMBER = "0000000001";
     private static final String CASH_ACCOUNT_NUMBER = "0000000002";
     private static final String INTER_BANK_ACCOUNT_NUMBER = "0000000003";
