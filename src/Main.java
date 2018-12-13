@@ -21,7 +21,7 @@ public class Main {
                     , REGISTRATION_NUMBER + INTER_BANK_ACCOUNT_NUMBER);
             if(bank==null){
                 System.out.println("***ERROR: Could not create bank***");
-                System.exit(31);
+                return;
             }
             persistence.addBank(bank);
         }
