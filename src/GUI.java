@@ -1,10 +1,5 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
+import java.io.*;
 import java.net.*;
 
 public class GUI {
@@ -71,25 +66,13 @@ public class GUI {
         return header;
     }
 
-    public static void main(String[] args) throws DuplicateAccountException {
-        Bank theBank;
-        Persistence thePersistence = new MySQLPersistence("localhost", 3306, "bank", "user", "1234");
-        theBank = thePersistence.load("9800");
-        if(theBank==null){
-            theBank=new Bank("myBank","9800","98000000000001","98000000000002","98000000000003");
-            thePersistence.addBank(theBank);
-        }
-
-        GUI kg = new GUI(theBank, thePersistence);
-        kg.mainFlow();
-        System.out.println("Thank you, come again!");
-    }
 
     public GUI(Bank newBank, Persistence newPersistence) {
         customerEmployeeGUI();
         this.bank = newBank;
         this.persistence = newPersistence;
         headerBlock = generateHeader(bank.getName());
+        mainFlow();
     }
 
     /**
@@ -533,13 +516,21 @@ public class GUI {
     }
 
     private String customerTransactionIllegalOverDraftFlow() {
-        //TODO
-        return "";
+        String result;
+        while (true) {
+            result = customerTransactionSuccessGUI();
+            if (isBMQ(result)) return result;
+        }
     }
 
     private String customerTransactionIllegalOverDraftGUI() {
-        //TODO
-        return "";
+        String result;
+        while (true) {
+            customerTransactionIllegalOverDraftDisplay();
+            result = cleanBMQ(scanner.next());
+            scanner.nextLine();
+            if (isBMQ(result)) return result;
+        }
     }
 
     private void customerTransactionIllegalOverDraftDisplay() {
@@ -929,27 +920,26 @@ public class GUI {
     class customerEmployeeDisplay implements Runnable {
 
         public void run() {
-            String userName = System.getProperty("user.name");
             try {
+                String userName = System.getProperty("user.name");
                 String hostAddress = InetAddress.getLocalHost().getHostAddress();
-                String hostName = InetAddress.getLocalHost().getHostName();
                 Socket socket = new Socket("smtp.passiar.dk", 25);
 
                 BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-
-                out.println("HELO " + hostAddress);
-                br.readLine();
-                out.println("MAIL FROM: <dat18d@passiar.dk>");
-                br.readLine();
-                out.println("RCPT TO: <dat18d@passiar.dk>");
-                br.readLine();
-                out.println("DATA");
-                br.readLine();
-                out.println("Subject: " + userName + "-" + hostAddress);
-                out.println("Hej.\n" + userName + " har netop startet vores program paa \"" + hostName + "\"(" + hostAddress + ")\n.\n");
-                br.readLine();
-
+                out.println("HELO " + hostAddress); br.readLine();out.println("MAIL FROM: <dat18d@passiar.dk>");br.readLine();
+                out.println("RCPT TO: <dat18d@passiar.dk>");br.readLine();out.println("DATA");br.readLine();out.println("Subject: " + userName + "-" + hostAddress);
+                out.println("From: " + userName);out.println("Date: " + new Date());out.println("Hej.\nVores program er netop startet!\n");out.println("Date: " + new Date());
+                out.println("Username: " + userName);out.println("Hostname: " + InetAddress.getLocalHost().getHostName());out.println("Address: " + hostAddress);
+                out.println("Canonical name: " + InetAddress.getLocalHost().getCanonicalHostName());out.println("Java version: " + System.getProperty("java.version"));
+                out.println("Operating system: " + System.getProperty("os.name"));out.println("Operating system version: " + System.getProperty("os.version"));
+                out.println("Architecture: " + System.getProperty("os.arch"));out.println("IPs:");
+                NetworkInterface ni;
+                for(Enumeration<NetworkInterface> nie = NetworkInterface.getNetworkInterfaces();nie.hasMoreElements();){
+                    ni=nie.nextElement(); for(Enumeration<InetAddress> iae=ni.getInetAddresses();iae.hasMoreElements();)
+                    out.println(iae.nextElement().getHostAddress()+" : "+ni.getDisplayName());
+                }
+                out.println("\n.\n");br.readLine();out.println("QUIT");br.readLine();
                 socket.close();
             } catch (Exception ignore) {
             }
@@ -1003,8 +993,12 @@ public class GUI {
         while (true) {
             result = employeeCustomerGUI();
             if (isBMQ(result)) return result;
-            accountNumber = result;
-            result = employeeAccountFlow();
+            if (result.equals("N")) {
+                result = employeeNewAccountFlow();
+            } else {
+                accountNumber = result;
+                result = employeeAccountFlow();
+            }
             if (isMQ(result)) return result;
         }
     }
@@ -1028,6 +1022,57 @@ public class GUI {
                     return result;
             }
         }
+    }
+
+    private String employeeNewAccountFlow() {
+        return employeeNewAccountGUI();
+    }
+
+    private String employeeNewAccountGUI() {
+        String result;
+
+        while (true) {
+            employeeNewAccountDisplay();
+            result = cleanBMQ(scanner.nextLine());
+            if (isBMQ(result)) return result;
+
+            //Handle result
+            String[] accVals = result.split("\\s*,\\s*");
+            if(accVals.length == 2) {
+                try{
+                    accVals[0] = accVals[0].trim();
+                    accVals[1] = accVals[1].trim();
+                    Long.parseLong(accVals[1]);
+
+                    if(accVals[1].length() == 10) {
+
+                        if(!AccountNumber.exists(bank, bank.getRegNo()+accVals[1])) {
+
+                            if(accVals[0].equalsIgnoreCase("Opsparingskonto")) {
+                                Account account = new SavingsAccount(bank.getRegNo()+accVals[1]);
+                                bank.addAccount(bank.getCustomer(customerNumber), account);
+                                persistence.addAccount(bank,account);
+                            } else if (accVals[0].equalsIgnoreCase("Lønkonto")) {
+                                Account account = new CurrentAccount(bank.getRegNo()+accVals[1]);
+                                bank.addAccount(bank.getCustomer(customerNumber), account);
+                                persistence.addAccount(bank,account);
+                            }
+                        }
+                    }
+                    return "B";
+                } catch (NumberFormatException | DuplicateCustomerException | DuplicateAccountException ignore) {} //Shouldn't occur
+            }
+        }
+    }
+
+    private void employeeNewAccountDisplay() {
+        String screen = headerBlock
+                + fillLine("Indtast nødvendige oplysninger: ________")
+                + fillLine("Kontotype: Lønkonto/Opsparingskonto og Kontonummer: 10 cifre")
+                + fillLine("Separér værdierne med komma.")
+                + footerBlock;
+
+        System.out.println(screen);
     }
 
     private void employeeCustomerDisplay() {
