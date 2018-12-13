@@ -68,8 +68,14 @@ public class Bank {
                 // and the balance gets below the allowed overdraft
                 if(transaction.fromAccount.getBalance()-transaction.amount<-transaction.fromAccount.allowedOverdraft){
                     // then make a transaction with a fee payable to the banks own account
-                    Transaction feeTransaction = new Transaction(this,transaction.fromAccount.getAccountNumber(),this.getOwnAccountNumber(),SERVICE_CHARGE);
-                    this.addTransaction(feeTransaction);
+                    Transaction overdraftFeeTransaction = new Transaction(this,transaction.fromAccount.getAccountNumber(),this.getOwnAccountNumber(),SERVICE_CHARGE);
+                    this.addTransaction(overdraftFeeTransaction);
+                }
+                // or it's to another bank
+                if(transaction.toAccount==this.getAccount(this.getInterBankAccountNumber())){
+                    // then make a transaction with a fee payable to the banks own account
+                    Transaction interBankFeeTransaction= new Transaction(this,transaction.fromAccount.getAccountNumber(),this.getOwnAccountNumber(),SERVICE_CHARGE);
+                    this.addTransaction(interBankFeeTransaction);
                 }
             }
         }
