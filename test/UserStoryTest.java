@@ -6,7 +6,7 @@ import java.util.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-public class TestBank {
+public class UserStoryTest {
 
     @Test
     public void canMakeNewCustomer() throws Exception {
@@ -64,30 +64,18 @@ public class TestBank {
     public void canPrintAccountStatus() throws Exception {
         Bank bank = new Bank("MinBank", "1234", "12345678901234", "12340000000002", "12340000000009");
         Customer customer = new Customer("firstname", "lastname", "address", "phone");
-        bank.addCustomer(customer);
 
-        Account account = new SavingsAccount("12345678901234");
-        customer.addAccount(account);
+        Account account = new SavingsAccount("12345678901235");
+        account.interestRate = 20;
+        bank.addAccount(customer,account);
 
-        customer.accountList.get(0).interestRate = 20;
+        assertEquals("0", account.getAccountStatus());
 
-        Customer c = (Customer) bank.getCustomerList().get(0);
-        Account a = (SavingsAccount) c.accountList.get(0);
+        account.deposit(10000);
+        assertEquals("10000", account.getAccountStatus());
 
-        assertEquals("0", a.getAccountStatus());
-
-        a.deposit(10000);
-        assertEquals("10000", a.getAccountStatus());
-
-        a.withdraw(4000);
-        assertEquals("6000", a.getAccountStatus());
-
-        Transaction testTransaction = new Transaction(bank,account.getAccountNumber(), account.getAccountNumber(), 1000);
-        bank.addTransaction(testTransaction);
-
-        List<Transaction> tl = bank.getTransactionList(account);
-
-        assertEquals("12345678901234 12345678901234 1000", tl.get(0).toString());
+        account.withdraw(4000);
+        assertEquals("6000", account.getAccountStatus());
     }
 
     @Test
