@@ -1,7 +1,5 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.util.*;
+import java.io.*;
 import java.net.*;
 
 public class GUI {
@@ -68,25 +66,13 @@ public class GUI {
         return header;
     }
 
-    public static void main(String[] args) throws DuplicateAccountException {
-        Bank theBank;
-        Persistence thePersistence = new MySQLPersistence("localhost", 3306, "bank", "user", "1234");
-        theBank = thePersistence.load("9800");
-        if(theBank==null){
-            theBank=new Bank("myBank","9800","98000000000001","98000000000002","98000000000003");
-            thePersistence.addBank(theBank);
-        }
-
-        GUI kg = new GUI(theBank, thePersistence);
-        kg.mainFlow();
-        System.out.println("Thank you, come again!");
-    }
 
     public GUI(Bank newBank, Persistence newPersistence) {
         customerEmployeeGUI();
         this.bank = newBank;
         this.persistence = newPersistence;
         headerBlock = generateHeader(bank.getName());
+        mainFlow();
     }
 
     /**
