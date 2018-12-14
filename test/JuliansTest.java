@@ -30,7 +30,7 @@ public class JuliansTest {
             System.out.println("Task 10: ErrorTest");
             fail();
         }
-        assertEquals(0, account.getBalance());
+        assertEquals(-10000, account.getBalance()); // transfer fee
         assertEquals(5000, bank.getAccount(bank.getInterBankAccountNumber()).getBalance());
     }
 
@@ -53,7 +53,7 @@ public class JuliansTest {
             System.out.println("Task 11: ErrorTest");
             fail();
         }
-        assertEquals(-5000, account.getBalance());
+        assertEquals(-15000, account.getBalance()); // including transfer fee
         assertEquals(10000, bank.getAccount(bank.getInterBankAccountNumber()).getBalance());
     }
 
