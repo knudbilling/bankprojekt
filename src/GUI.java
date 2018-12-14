@@ -1528,12 +1528,12 @@ public class GUI {
                 break;
             case "3": // Insert test data
                 try {
-                    newBank = new Bank("ShowMeTheMoney", "9800", "98000000000001", "98000000000002", "98000000000003");
-                    Customer c1 = new Customer("Douglas", "Beaver", "Douglas' Home", "12345678");
-                    Customer c2 = new Customer("Morten", "Christensen", "Mortens Home", "23456789");
-                    Customer c3 = new Customer("Julian", "Christensen", "Julians Home", "11223344");
-                    Customer c4 = new Customer("Patricia", "Kellvig", "Patricias Home", "22334455");
-                    Customer c5 = new Customer("Martin", "Busk", "Martins Home", "33445566");
+                    newBank = new Bank("UFP Bank", "9800", "98000000000001", "98000000000002", "98000000000003");
+                    Customer c1 = new Customer("Leonard", "McCoy", "McCoy Home", "12345678");
+                    Customer c2 = new Customer("Katherine", "Pulaski", "Pulaski Home", "23456789");
+                    Customer c3 = new Customer("Julian", "Bashir", "Bashir Home", "11223344");
+                    Customer c4 = new Customer("Beverly", "Crusher", "Copernicus, Luna", "22334455");
+                    Customer c5 = new Customer("Doc", "Zimmerman", "Sickbay", "33445566");
 
                     newBank.addAccount(c1, new SavingsAccount("98001000000001"));
                     newBank.addAccount(c1, new CurrentAccount("98001000000002"));
